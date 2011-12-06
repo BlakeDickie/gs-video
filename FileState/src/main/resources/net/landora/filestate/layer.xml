@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
+<filesystem>
+ 
+    <folder name="OptionsDialog">
+        <file name="SharedDirectories.instance">
+            <attr name="instanceCreate" methodvalue="org.netbeans.spi.options.OptionsCategory.createCategory"/>
+            <attr name="title" bundlevalue="net.landora.filestate.config.Bundle#OptionsCategory_Name_SharedDirectories"/>
+            <attr name="categoryName" bundlevalue="net.landora.filestate.config.Bundle#OptionsCategory_Name_SharedDirectories"/>
+            <attr name="iconBase" stringvalue="net/landora/filestate/config/folder-saved-search.png"/>
+            <attr name="advancedOptionsFolder" stringvalue="OptionsDialog/SharedDirectories"/>
+            <attr name="keywords" bundlevalue="net.landora.filestate.config.Bundle#OptionsCategory_Keywords_SharedDirectories"/>
+            <attr name="keywordsCategory" stringvalue="SharedDirectories"/>
+            <attr name="description" bundlevalue="net.landora.filestate.config.Bundle#OptionsCategory_Name_SharedDirectories"/>
+            <attr name="position" intvalue="20"/>
+        </file>
+    </folder>
+</filesystem>

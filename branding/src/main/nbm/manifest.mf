@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: GS Video Manager Branding
+OpenIDE-Module-Display-Category: GS Video Manager
+OpenIDE-Module-Short-Description: GUI branding for the GS Video Manager program.
+OpenIDE-Module-Localizing-Bundle: net/landora/gsvideomanager/branding/Bundle.properties

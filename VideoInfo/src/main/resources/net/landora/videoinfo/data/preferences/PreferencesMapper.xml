@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="net.landora.videoinfo.data.preferences.PreferencesMapper">
+
+    <cache />
+
+    <select id="getVideoExtensions" resultType="String">
+        Select
+        extension
+        From PrefExtensions
+    </select>
+
+
+    <delete id="deleteVideoExtensions">
+        Delete From PrefExtensions
+    </delete>
+
+    <insert id="insertVideoExtension" parameterType="String">
+        Insert Into PrefExtensions (
+            extension
+        ) Values (
+            #{0,jdbcType=VARCHAR}
+        );
+    </insert>
+
+
+
+    <select id="getPreferences" resultType="HashMap" parameterType="String">
+        Select
+        prefvalue, prefname
+        From Preferences
+        Where context = #{0,jdbcType=VARCHAR}
+    </select>
+    
+    <update id="updatePreference" parameterType="list">
+        Update
+        Preferences
+        Set
+        prefvalue = #{2,jdbcType=VARCHAR} 
+        Where context = #{0,jdbcType=VARCHAR}
+        AND prefname = #{1,jdbcType=VARCHAR}
+    </update>
+    
+    <insert id="insertPreference" parameterType="list">
+        Insert Into
+        Preferences (context, prefname, prefvalue)
+        Values(
+        #{0,jdbcType=VARCHAR},
+        #{1,jdbcType=VARCHAR},
+        #{2,jdbcType=VARCHAR}
+        )
+    </insert>
+
+</mapper>

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Install: net/landora/videofilerenaming/Installer.class
+OpenIDE-Module-Name: Video File Renaming
+OpenIDE-Module-Display-Category: GS Video Manager
+OpenIDE-Module-Short-Description: Added support automatically renaming files.
+OpenIDE-Module-Localizing-Bundle: net/landora/videofilerenaming/Bundle.properties
+OpenIDE-Module-Layer: net/landora/videofilerenaming/layer.xml

@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Install: net/landora/thetvdbinfo/Installer.class
+OpenIDE-Module-Localizing-Bundle: net/landora/thetvdbinfo/Bundle.properties
+OpenIDE-Module-Layer: net/landora/thetvdbinfo/layer.xml
