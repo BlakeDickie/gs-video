@@ -1,0 +1,24 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.landora.thetvdbinfo;
+
+import net.landora.thetvdbinfo.api.TVDBAPI;
+import org.openide.modules.ModuleInstall;
+
+/**
+ * Manages a module's lifecycle. Remember that an installer is optional and
+ * often not needed at all.
+ */
+public class Installer extends ModuleInstall {
+
+    @Override
+    public void restored() {
+        TVDBAPI.getInstance();
+        
+        if (TVDBInfoPreference.LastRefreshed.getLong() == 0) {
+            TVDBInfoPreference.LastRefreshed.setLong(TVDBAPI.getInstance().getCurrentUpdateTime());
+        }
+    }
+}
