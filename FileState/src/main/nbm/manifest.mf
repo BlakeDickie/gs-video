@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Install: net/landora/filestate/Installer.class
-OpenIDE-Module-Localizing-Bundle: net/landora/filestate/Bundle.properties
-OpenIDE-Module-Layer: net/landora/filestate/layer.xml
-OpenIDE-Module-Requires: org.openide.windows.WindowManager

@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Install: net/landora/animeinfo/Installer.class
-OpenIDE-Module-Name: Anime Video Information
-OpenIDE-Module-Display-Category: GS Video Manager
-OpenIDE-Module-Requires: org.openide.windows.WindowManager
-OpenIDE-Module-Short-Description: Added support for Anime Video information from AniDB.
-OpenIDE-Module-Localizing-Bundle: net/landora/animeinfo/Bundle.properties
-OpenIDE-Module-Layer: net/landora/animeinfo/layer.xml

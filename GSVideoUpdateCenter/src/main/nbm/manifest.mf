@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: net/landora/gsvideoupdatecenter/Bundle.properties
-OpenIDE-Module-Layer: net/landora/gsvideoupdatecenter/layer.xml

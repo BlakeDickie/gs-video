@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Install: net/landora/videoinfomodule/Installer.class
-OpenIDE-Module-Name: GS Video Information
-OpenIDE-Module-Display-Category: GS Video Manager
-OpenIDE-Module-Short-Description: Parses information about video files.
-OpenIDE-Module-Localizing-Bundle: net/landora/videoinfomodule/Bundle.properties
-OpenIDE-Module-Layer: net/landora/videoinfomodule/layer.xml
-OpenIDE-Module-Requires: org.openide.windows.WindowManager

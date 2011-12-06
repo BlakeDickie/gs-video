@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: GS Video Manager Utils
-OpenIDE-Module-Display-Category: GS Video Manager
-OpenIDE-Module-Short-Description: Support Functions for GS Video Manager.
-OpenIDE-Module-Localizing-Bundle: net/landora/gsuiutils/Bundle.properties
-OpenIDE-Module-Layer: net/landora/gsuiutils/layer.xml

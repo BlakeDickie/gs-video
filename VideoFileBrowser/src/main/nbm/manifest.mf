@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: Video File Browser
-OpenIDE-Module-Display-Category: GS Video Manager
-OpenIDE-Module-Short-Description: Added support for browsing videos by files.
-OpenIDE-Module-Localizing-Bundle: net/landora/videofilebrowser/Bundle.properties
-OpenIDE-Module-Layer: net/landora/videofilebrowser/layer.xml
-OpenIDE-Module-Requires: org.openide.windows.WindowManager

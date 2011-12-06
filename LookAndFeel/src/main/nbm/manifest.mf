@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: Substance Look and Feel
-OpenIDE-Module-Display-Category: GS Video Manager
-OpenIDE-Module-Short-Description: Substance look and feel.
-OpenIDE-Module-Install: net/landora/substancelookandfeel/Installer.class
-OpenIDE-Module-Localizing-Bundle: net/landora/substancelookandfeel/Bundle.properties
-OpenIDE-Module-Layer: net/landora/substancelookandfeel/layer.xml
