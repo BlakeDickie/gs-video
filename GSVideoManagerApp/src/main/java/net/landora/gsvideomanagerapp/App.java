@@ -1,6 +1,7 @@
 package net.landora.gsvideomanagerapp;
 
-import net.landora.videomanager.VideoManagerApp;
+import java.io.IOException;
+import net.landora.video.VideoManagerApp;
 
 /**
  * Hello world!
@@ -8,7 +9,7 @@ import net.landora.videomanager.VideoManagerApp;
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws IOException
     {
         VideoManagerApp.launch(VideoManagerApp.class, args);
     }
