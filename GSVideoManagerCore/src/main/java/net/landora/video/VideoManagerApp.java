@@ -4,6 +4,7 @@
  */
 package net.landora.video;
 
+import java.io.PrintWriter;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import net.landora.video.info.data.preferences.FileSyncProperties;
@@ -45,13 +46,6 @@ public class VideoManagerApp extends Application {
         return scheduledExecutor;
     }
     
-    
-    
-    @Override
-    protected void startup() {
-        
-    }
-    
     private boolean guiMode;
     private boolean daemonMode;
     private boolean systemTray;
@@ -71,6 +65,11 @@ public class VideoManagerApp extends Application {
     
     
     @Override
+    protected void startup() {
+        
+    }
+    
+    @Override
     protected void initialize(String[] args) {
         Options options = new Options();
         options.addOption("h", "help", false, "Display this help message.");
@@ -78,7 +77,7 @@ public class VideoManagerApp extends Application {
         options.addOption("t", "tray", false, "Show system tray icon when in daemon mode.");
         CommandLineParser parser = new PosixParser();
         
-        boolean showHelp = false;
+        boolean showHelp = true;
         String message = null;
         
         
@@ -98,9 +97,9 @@ public class VideoManagerApp extends Application {
         
         if (showHelp) {
             HelpFormatter formatter = new HelpFormatter();
-            if (message != null)
-                System.err.println(message);
-            formatter.printHelp( "gsvideomanager", options );
+            PrintWriter writer = new PrintWriter(System.err);
+            formatter.printHelp(writer, 60,  "gsvideomanager", message, options, 2, 3, null );
+            writer.flush();
             
             guiMode = false;
             daemonMode = false;
