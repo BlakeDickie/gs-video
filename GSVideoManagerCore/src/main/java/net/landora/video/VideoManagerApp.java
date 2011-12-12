@@ -8,6 +8,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import net.landora.video.info.data.preferences.FileSyncProperties;
 import net.landora.video.utils.NamedThreadFactory;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 import org.jdesktop.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +51,62 @@ public class VideoManagerApp extends Application {
     protected void startup() {
         
     }
+    
+    private boolean guiMode;
+    private boolean daemonMode;
+    private boolean systemTray;
 
+    public boolean isGuiMode() {
+        return guiMode;
+    }
+
+    public boolean isDaemonMode() {
+        return daemonMode;
+    }
+
+    public boolean isSystemTray() {
+        return systemTray;
+    }
+
+    
+    
     @Override
     protected void initialize(String[] args) {
+        Options options = new Options();
+        options.addOption("h", "help", false, "Display this help message.");
+        options.addOption("d", "daemon", false, "Start in background daemon mode.");
+        options.addOption("t", "tray", false, "Show system tray icon when in daemon mode.");
+        CommandLineParser parser = new PosixParser();
+        
+        boolean showHelp = false;
+        String message = null;
+        
+        
+        try {
+            CommandLine line = parser.parse(options, args);
+            if (line.hasOption("h"))
+                showHelp = true;
+            
+            daemonMode = line.hasOption("d");
+            guiMode = daemonMode;
+            systemTray = line.hasOption("t");
+            
+        } catch (ParseException e) {
+            message = e.getLocalizedMessage();
+            showHelp = true;
+        }
+        
+        if (showHelp) {
+            HelpFormatter formatter = new HelpFormatter();
+            if (message != null)
+                System.err.println(message);
+            formatter.printHelp( "gsvideomanager", options );
+            
+            guiMode = false;
+            daemonMode = false;
+            return;
+        }
+        
     }
 
     @Override
