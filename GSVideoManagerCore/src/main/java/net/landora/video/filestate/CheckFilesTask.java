@@ -16,7 +16,7 @@ import net.landora.video.filestate.data.SharedDirectoryDBA;
 import net.landora.video.utils.NBTask;
 import net.landora.video.utils.Touple;
 import net.landora.video.utils.UIUtils;
-import net.landora.videofilerenaming.api.RenamingManager;
+import net.landora.video.renaming.api.RenamingManager;
 import net.landora.video.info.ExtensionUtils;
 import net.landora.video.info.MetadataProvidersManager;
 import net.landora.video.info.VideoMetadata;
