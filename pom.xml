@@ -10,6 +10,7 @@
     <module>GSVideoManagerApp</module>
     <module>GSVideoManagerCore</module>
     <module>GSVideoManagerAPI</module>
+    <module>ED2KHasher</module>
   </modules>
   
     <properties>

@@ -13,7 +13,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import net.landora.video.VideoManagerApp;
-import net.landora.video.utils.GSUtilities;
+import net.landora.video.utils.ComparisionUtils;
 import org.jdesktop.application.Application;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +83,7 @@ public class FileSyncProperties {
     
     public synchronized void setValue(String name, String value) {
         String oldValue = values.put(name, value);
-        if (!GSUtilities.equals(oldValue, value))
+        if (!ComparisionUtils.equals(oldValue, value))
             changedValues.add(name);
     }
     
