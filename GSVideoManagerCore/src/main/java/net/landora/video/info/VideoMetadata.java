@@ -19,6 +19,7 @@ public interface VideoMetadata {
     public ViewListManager getListManager();
     public String getTypeDescription();
     public boolean isAnime();
+    public String getNfoUrl();
     
     public boolean isAdult();
 }

@@ -4,8 +4,8 @@
  */
 package net.landora.video.filestate;
 
-import net.landora.video.utils.NBTask;
-import net.landora.video.utils.PeriodicTask;
+import net.landora.video.tasks.NBTask;
+import net.landora.video.tasks.PeriodicTask;
 
 
 /**

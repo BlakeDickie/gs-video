@@ -38,6 +38,11 @@ public class TestSeriesMetadata extends TestMetadata implements SeriesMetadata {
     protected void addContentObjectsImpl(Collection<Object> addTo) {
         
     }
+
+    public boolean sameSeries(SeriesMetadata other) {
+        return false;
+    }
+    
     
     
 }

@@ -5,6 +5,9 @@
 package net.landora.video.info.file;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,4 +83,20 @@ public class FileManager {
         
         return true;
     }
+    
+    private List<CheckFileExtension> checkFileExtensions = new ArrayList<CheckFileExtension>();
+    
+    public void addCheckFileExtension(CheckFileExtension e) {
+        checkFileExtensions.add(e);
+    }
+    
+    public void removeCheckFileExtension(CheckFileExtension e) {
+        checkFileExtensions.remove(e);
+    }
+
+    public Collection<CheckFileExtension> getCheckFileExtensions() {
+        return checkFileExtensions;
+    }
+    
+    
 }

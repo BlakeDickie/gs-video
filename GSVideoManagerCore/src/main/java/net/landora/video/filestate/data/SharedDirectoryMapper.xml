@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="net.landora.video.filestate.data.SharedDirectoryMapper">
+
+    <cache />
+    
+    <!-- Shared Directories -->
+    
+    <insert id="insertSharedDirectory" parameterType="SharedDirectory" useGeneratedKeys="true" keyProperty="directoryId">
+        Insert Into SharedDirectory (
+            directoryUuid,
+            directoryName,
+            directoryDefaultPath,
+            renameNewFiles
+        ) Values (
+            #{uuid,jdbcType=VARCHAR},
+            #{name,jdbcType=VARCHAR},
+            #{defaultPath,jdbcType=VARCHAR},
+            #{renameNewFiles,jdbcType=BOOLEAN}
+        );
+    </insert>
+
+    <update id="updateSharedDirectory" parameterType="SharedDirectory">
+        Update SharedDirectory Set
+            directoryUuid = #{uuid,jdbcType=VARCHAR},
+            directoryName = #{name,jdbcType=VARCHAR},
+            directoryDefaultPath = #{defaultPath,jdbcType=VARCHAR},
+            renameNewFiles = #{renameNewFiles,jdbcType=BOOLEAN}
+        Where directoryId = #{directoryId}
+    </update>
+
+    <sql id="SharedDirectoryTables">
+        SharedDirectory As SD
+    </sql>
+
+    <sql id="SharedDirectoryColumns">
+        SD.directoryId As SharedDirectory_directoryId,
+        SD.directoryUuid As SharedDirectory_uuid,
+        SD.directoryName As SharedDirectory_name,
+        SD.directoryDefaultPath As SharedDirectory_defaultPath,
+        SD.renameNewFiles As SharedDirectory_renameNewFiles
+        
+    </sql>
+
+    <resultMap id="SharedDirectoryResult" type="SharedDirectory">
+        <id property="directoryId" column="SharedDirectory_directoryId"/>
+        <result property="uuid" column="SharedDirectory_uuid"/>
+        <result property="name" column="SharedDirectory_name"/>
+        <result property="defaultPath" column="SharedDirectory_defaultPath"/>
+        <result property="renameNewFiles" column="SharedDirectory_renameNewFiles"/>
+        
+    </resultMap>
+    
+    <select id="selectSharedDirectoryByUUID" parameterType="String" resultMap="SharedDirectoryResult">
+        Select
+        <include refid="SharedDirectoryColumns"/>
+        From 
+        <include refid="SharedDirectoryTables"/>
+        Where SD.directoryUuid = #{id}
+    </select>
+    
+    <select id="selectSharedDirectoryByDirectoryId" parameterType="int" resultMap="SharedDirectoryResult">
+        Select
+        <include refid="SharedDirectoryColumns"/>
+        From 
+        <include refid="SharedDirectoryTables"/>
+        Where SD.directoryId = #{id}
+    </select>
+    
+    <select id="selectAllSharedDirectories" resultMap="SharedDirectoryResult">
+        Select
+        <include refid="SharedDirectoryColumns"/>
+        From 
+        <include refid="SharedDirectoryTables"/>
+    </select>
+    
+    
+    
+    <!-- Shared File -->
+    
+    <insert id="insertFileRecord" parameterType="FileRecord" useGeneratedKeys="true" keyProperty="fileId">
+        Insert Into SharedFile (
+            directoryId,
+            subpath,
+            autoRename,
+            filename,
+            fileSize,
+            ed2k,
+            metadata_source,
+            metadata_id,
+            last_modified
+        ) Values (
+            #{directory.directoryId,jdbcType=INTEGER},
+            #{subPath,jdbcType=VARCHAR},
+            #{rename,jdbcType=BOOLEAN},
+            #{filename,jdbcType=VARCHAR},
+            #{fileSize,jdbcType=INTEGER},
+            #{e2dkHash,jdbcType=VARCHAR},
+            #{metadataSource,jdbcType=VARCHAR},
+            #{metadataId,jdbcType=VARCHAR},
+            #{lastModifiedDate,jdbcType=TIMESTAMP}
+        );
+    </insert>
+
+    <update id="updateFileRecord" parameterType="FileRecord">
+        Update SharedFile Set
+            directoryId = #{directory.directoryId,jdbcType=INTEGER},
+            subpath = #{subPath,jdbcType=VARCHAR},
+            autoRename = #{rename,jdbcType=BOOLEAN},
+            filename = #{filename,jdbcType=VARCHAR},
+            fileSize = #{fileSize,jdbcType=INTEGER},
+            ed2k = #{e2dkHash,jdbcType=VARCHAR},
+            metadata_source = #{metadataSource,jdbcType=VARCHAR},
+            metadata_id = #{metadataId,jdbcType=VARCHAR},
+            last_modified = #{lastModifiedDate,jdbcType=TIMESTAMP}
+        Where fileId = #{fileId}
+    </update>
+
+    <delete id="deleteFileRecord" parameterType="FileRecord">
+        Delete From SharedFile
+        Where fileId = #{fileId}
+    </delete>
+
+    <sql id="FileRecordTables">
+        SharedFile As SF
+        Inner Join <include refid="SharedDirectoryTables"/>
+        ON SF.directoryId = SD.directoryId
+    </sql>
+
+    <sql id="FileRecordColumns">
+        SF.fileId As FileRecord_fileId,
+        SF.subpath As FileRecord_subpath,
+        SF.filename As FileRecord_filename,
+        SF.fileSize As FileRecord_fileSize,
+        SF.ed2k As FileRecord_ed2k,
+        SF.metadata_source As FileRecord_metadata_source,
+        SF.metadata_id As FileRecord_metadata_id,
+        SF.last_modified As FileRecord_last_modified,
+        SF.autoRename As FileRecord_autoRename,
+        
+        
+        <include refid="SharedDirectoryColumns"/>
+        
+    </sql>
+
+    <resultMap id="FileRecordResult" type="FileRecord">
+        <id property="fileId" column="FileRecord_fileId"/>
+        <result property="subPath" column="FileRecord_subpath"/>
+        <result property="filename" column="FileRecord_filename"/>
+        <result property="fileSize" column="FileRecord_fileSize"/>
+        <result property="e2dkHash" column="FileRecord_ed2k"/>
+        <result property="metadataSource" column="FileRecord_metadata_source"/>
+        <result property="metadataId" column="FileRecord_metadata_id"/>
+        <result property="lastModifiedDate" column="FileRecord_last_modified" jdbcType="TIMESTAMP"/>
+        <result property="rename" column="FileRecord_autoRename"/>
+        
+        <association property="directory" javaType="SharedDirectory" resultMap="SharedDirectoryResult"/>
+    </resultMap>
+    
+    
+    
+    <select id="selectFileRecordByPath" parameterType="list" resultMap="FileRecordResult">
+        Select
+        <include refid="FileRecordColumns"/>
+        From 
+        <include refid="FileRecordTables"/>
+        Where SF.directoryId = #{0} AND SF.subpath = #{1}
+    </select>
+    
+    
+    
+    <select id="selectFileRecordsInDirectory" parameterType="list" resultMap="FileRecordResult">
+        Select
+        <include refid="FileRecordColumns"/>
+        From 
+        <include refid="FileRecordTables"/>
+        Where SF.directoryId = #{0}
+    </select>
+    
+    
+    
+    <select id="selectFileRecordsByProviders" parameterType="list" resultMap="FileRecordResult">
+        Select
+        <include refid="FileRecordColumns"/>
+        From 
+        <include refid="FileRecordTables"/>
+        Where SF.metadata_source = #{0}
+        Order By SF.subpath
+    </select>
+    
+    
+</mapper>

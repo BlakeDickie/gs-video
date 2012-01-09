@@ -1,0 +1,7 @@
+net.landora.video.preferences.PreferencesAddon
+net.landora.video.data.DataAddons
+net.landora.video.ui.UIAddon
+net.landora.video.filebrowser.FileBrowserAddon
+net.landora.video.infopanel.VideoInfoAddon
+net.landora.video.actions.ActionsAddon
+net.landora.video.filerenaming.RenamingAddon

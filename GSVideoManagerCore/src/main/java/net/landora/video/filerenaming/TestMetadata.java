@@ -20,6 +20,10 @@ public abstract class TestMetadata extends AbstractVideoMetadata {
     protected TestMetadata(boolean adult) {
         this.adult = adult;
     }
+
+    public String getNfoUrl() {
+        return null;
+    }
     
     
     

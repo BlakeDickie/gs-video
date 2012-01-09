@@ -14,5 +14,5 @@ public interface SeriesMetadata extends VideoMetadata {
     public String getEpisodeName();
     public String getEpisodeNumber();
     
-    
+    public boolean sameSeries(SeriesMetadata other);
 }

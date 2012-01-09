@@ -55,8 +55,8 @@ public class RenameScriptManager {
             StringBuilder str = new StringBuilder();
             
             
-            str.append(getRenameScript("RenameScript.py"));
-            
+            str.append(getClassScript("RenameScript.py"));
+            str.append("\n");
             str.append(createScript("findFolderName", folderScript));
             str.append("\n");
             str.append(createScript("findFilename", fileScript));
@@ -115,14 +115,29 @@ public class RenameScriptManager {
     }
     private static final String CHARSET = "UTF-8";
 
+    private String getClassScript(String filename) {
+        InputStream is = null;
+        try {
+            is = getClass().getResourceAsStream(filename);
+            return IOUtils.toString(is, CHARSET);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).error("Error getting class script.", e);
+            return "return None";
+        } finally {
+            if (is != null) {
+                IOUtils.closeQuietly(is);
+            }
+        }
+    }
+    
     private String getRenameScript(String filename) {
         InputStream is = null;
         try {
             is = Application.getInstance().getContext().getLocalStorage().openInputFile(filename);
             return IOUtils.toString(is, CHARSET);
         } catch (Exception e) {
-            LoggerFactory.getLogger(getClass()).error("Error getting rename script.", e);
-            return "return None";
+//            LoggerFactory.getLogger(getClass()).error("Error getting rename script.", e);
+            return getClassScript(filename);
         } finally {
             if (is != null) {
                 IOUtils.closeQuietly(is);

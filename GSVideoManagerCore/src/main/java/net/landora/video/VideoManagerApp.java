@@ -7,7 +7,9 @@ package net.landora.video;
 import java.io.PrintWriter;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import net.landora.video.info.data.preferences.FileSyncProperties;
+import javax.swing.JFrame;
+import net.landora.video.addons.AddonManager;
+import net.landora.video.preferences.FileSyncProperties;
 import net.landora.video.utils.NamedThreadFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -77,9 +79,8 @@ public class VideoManagerApp extends Application {
         options.addOption("t", "tray", false, "Show system tray icon when in daemon mode.");
         CommandLineParser parser = new PosixParser();
         
-        boolean showHelp = true;
+        boolean showHelp = false;
         String message = null;
-        
         
         try {
             CommandLine line = parser.parse(options, args);
@@ -87,7 +88,7 @@ public class VideoManagerApp extends Application {
                 showHelp = true;
             
             daemonMode = line.hasOption("d");
-            guiMode = daemonMode;
+            guiMode = !daemonMode;
             systemTray = line.hasOption("t");
             
         } catch (ParseException e) {
@@ -106,11 +107,30 @@ public class VideoManagerApp extends Application {
             return;
         }
         
+        
+        AddonManager.getInstance().startAddons();
+        
     }
 
     @Override
     protected void ready() {
         
+        if (!guiMode && !daemonMode)
+            return;
+        
+        AddonManager.getInstance().readyAddons();
+//        Server server = new Server(8080);
+//        Context root = new Context(server,"/",Context.SESSIONS);
+//        ServletHolder holder = new ServletHolder(HessianServlet.class);
+//        holder.setInitParameter("home-api", TestAPI.class.getName());
+//        holder.setInitParameter("home-class", TestImpl.class.getName());
+//        root.addServlet(holder, "/Hessian");
+//        try {
+//            server.start();
+//            
+//        } catch (Exception ex) {
+//            java.util.logging.Logger.getLogger(VideoManagerApp.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     

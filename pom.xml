@@ -11,6 +11,8 @@
     <module>GSVideoManagerCore</module>
     <module>GSVideoManagerAPI</module>
     <module>ED2KHasher</module>
+    <module>AniDBModule</module>
+    <module>XBMCSupport</module>
   </modules>
   
     <properties>

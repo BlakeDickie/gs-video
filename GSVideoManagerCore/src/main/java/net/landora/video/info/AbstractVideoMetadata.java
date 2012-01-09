@@ -7,12 +7,14 @@ package net.landora.video.info;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
+import net.landora.video.ui.ContextProducer;
+import net.landora.video.utils.UIUtils;
 
 /**
  *
  * @author bdickie
  */
-public abstract class AbstractVideoMetadata implements VideoMetadata {
+public abstract class AbstractVideoMetadata implements VideoMetadata, ContextProducer {
 
     @Override
     public boolean isMovie() {
@@ -74,6 +76,14 @@ public abstract class AbstractVideoMetadata implements VideoMetadata {
     
     protected abstract void addContentObjectsImpl(Collection<Object> addTo);
 
+    public void addContentObjects(Collection<Object> addTo) {
+        addTo.add(this);
+        UIUtils.addContentObject(getViewListState(), addTo);
+        addContentObjectsImpl(addTo);
+    }
+
+    
+    
     @Override
     public String toString() {
         if (isSeries()) {

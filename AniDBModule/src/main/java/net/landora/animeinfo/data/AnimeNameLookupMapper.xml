@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="net.landora.animeinfo.data.AnimeNameLookupMapper">
+
+    <!-- <cache /> -->
+
+    <insert id="insertAnime" parameterType="AnimeNameLookupSummary">
+        Insert Into AnimeNameLookupSummary (
+            anime_id,
+            name_main,
+            name_english
+        ) Values (
+            #{animeId},
+            #{nameMain,jdbcType=VARCHAR},
+            #{nameEnglish,jdbcType=VARCHAR}
+        );
+    </insert>
+
+
+    <sql id="animeColumns">
+        A.anime_id As anime_animeId,
+        A.name_main As anime_nameMain,
+        A.name_english as anime_nameEnglish
+    </sql>
+
+    <resultMap id="animeStubResult" type="AnimeNameLookupSummary">
+        <id property="animeId" column="anime_animeId"/>
+        <result property="nameMain" column="anime_nameMain"/>
+        <result property="nameEnglish" column="anime_nameEnglish"/>
+    </resultMap>
+
+    <select id="selectAnimeStub" parameterType="int" resultMap="animeStubResult">
+        Select
+        <include refid="animeColumns"/>
+        From AnimeNameLookupSummary As A
+        Where A.anime_id = #{id}
+    </select>
+    
+    <delete id="deleteAnimeNames">
+        Delete From AnimeNameLookupSummary
+    </delete>
+    
+    <insert id="insertAnimeName" parameterType="AnimeNameLookup">
+        Insert Into AnimeNameLookup (
+            anime_id,
+            anime_name,
+            name_type,
+            name_lang,
+            anime_name_escaped
+        ) Values (
+            #{anime.animeId,jdbcType=INTEGER},
+            #{name,jdbcType=VARCHAR},
+            #{type,jdbcType=VARCHAR},
+            #{language,jdbcType=VARCHAR},
+            #{nameEscaped,jdbcType=VARCHAR}
+        );
+    </insert>
+    
+    
+    <sql id="animeNameColumns">
+        AN.anime_id As AnimeName_animeId,
+        AN.anime_name As AnimeName_name,
+        AN.name_type As AnimeName_type,
+        AN.name_lang As AnimeName_lang
+    </sql>
+
+    <resultMap id="animeNameResult" type="AnimeNameLookup">
+        <result property="name" column="AnimeName_name"/>
+        <result property="type" column="AnimeName_type"/>
+        <result property="language" column="AnimeName_lang"/>
+        
+        <association property="anime" column="AnimeName_animeId" javaType="AnimeNameLookupSummary" select="selectAnimeStub"/>
+    </resultMap>
+
+
+    <select id="selectAnimeNames" parameterType="int" resultMap="animeNameResult">
+        Select
+        <include refid="animeNameColumns"/>
+        From AnimeNameLookup As AN
+        Where AN.anime_id = #{id}
+    </select>
+
+
+    <select id="selectNames" parameterType="String" resultMap="animeNameResult">
+        Select
+        <include refid="animeNameColumns"/>
+        From AnimeNameLookup As AN
+        Where 
+            ( AN.anime_name = #{name}
+            OR AN.anime_name_escaped = #{name} )
+            AND AN.name_lang in ('en', 'ja', 'x-jat')
+    </select>
+
+
+    <select id="selectNamesFull" parameterType="String" resultMap="animeNameResult">
+        Select
+        <include refid="animeNameColumns"/>
+        From AnimeNameLookup As AN
+        Where AN.anime_name = #{name}
+    </select>
+
+
+    <select id="searchNames" parameterType="list" resultMap="animeNameResult">
+        Select
+        <include refid="animeNameColumns"/>
+        From AnimeNameLookup As AN
+        <where>
+            AN.anime_name LIKE #{0}
+            AND AN.name_lang in ('en', 'ja', 'x-jat')
+
+        </where>
+    </select>
+
+
+    <select id="searchNamesFull" parameterType="list" resultMap="animeNameResult">
+        Select
+        <include refid="animeNameColumns"/>
+        From AnimeNameLookup As AN
+        <where>
+            AN.anime_name LIKE #{0}
+        </where>
+    </select>
+    
+    <update id="updateExistingAnimeMainName">
+        Update anime A Set name_main = AN.name_main, name_english = AN.name_english From animenamelookupsummary AN
+        where AN.anime_id = A.anime_id AND 
+        (A.name_main &lt;&gt; AN.name_main OR A.name_english &lt;&gt; AN.name_english)
+    </update>
+    
+    
+    
+    <delete id="deleteCoreAnimeNames">
+        Delete From animename
+    </delete>
+    
+    <insert id="insertExistingAnimeMainName">
+        Insert Into animename(anime_id, anime_name, name_type, name_lang)
+        Select anime_id, anime_name, name_type, name_lang From animenamelookup Where anime_id in (Select anime_id from anime)
+    </insert>
+    
+    
+
+</mapper>

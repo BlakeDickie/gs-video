@@ -13,18 +13,20 @@ import net.landora.video.filestate.data.FileRecord;
 import net.landora.video.filestate.data.LocalPathManager;
 import net.landora.video.filestate.data.SharedDirectory;
 import net.landora.video.filestate.data.SharedDirectoryDBA;
-import net.landora.video.utils.NBTask;
+import net.landora.video.tasks.NBTask;
 import net.landora.video.utils.Touple;
 import net.landora.video.utils.UIUtils;
-import net.landora.video.renaming.api.RenamingManager;
+import net.landora.video.filerenaming.RenamingManager;
 import net.landora.video.info.ExtensionUtils;
 import net.landora.video.info.MetadataProvidersManager;
 import net.landora.video.info.VideoMetadata;
 import net.landora.video.info.ViewListManager;
 import net.landora.video.info.ViewListState;
+import net.landora.video.info.file.CheckFileExtension;
 import net.landora.video.info.file.FileInfo;
 import net.landora.video.info.file.FileInfoManager;
 import net.landora.video.info.file.FileManager;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -55,6 +57,8 @@ public class CheckFilesTask extends NBTask<Object, Object> {
         }
         
         Collections.sort(filesToCheck, UIUtils.LEXICAL_SORTER);
+        
+        Collection<CheckFileExtension> extensions = FileManager.getInstance().getCheckFileExtensions();
         
         switchToDeterminate(filesToCheck.size());
         for (int i = 0; i < filesToCheck.size(); i++) {
@@ -87,6 +91,8 @@ public class CheckFilesTask extends NBTask<Object, Object> {
             }
             
             if (md != null) {
+                File currentFileLocation = file;
+                
                 if (fileRecord.isRename()) {
                     File outputFile = RenamingManager.getInstance().getOutputFile(file, md);
 
@@ -95,7 +101,8 @@ public class CheckFilesTask extends NBTask<Object, Object> {
                             System.err.println("File already exists: " + outputFile);
                         } else {
                             System.err.println("Move File: " + file + "   to   " + outputFile);
-                            FileManager.getInstance().moveFile(file, outputFile);
+                            if (FileManager.getInstance().moveFile(file, outputFile))
+                                currentFileLocation = outputFile;
                         }
                     }
 
@@ -115,6 +122,9 @@ public class CheckFilesTask extends NBTask<Object, Object> {
                     }
                 }
             }
+            
+            for(CheckFileExtension extension: extensions)
+                extension.checkFile(file, md, info);
         }
         
         switchToIndeterminate();

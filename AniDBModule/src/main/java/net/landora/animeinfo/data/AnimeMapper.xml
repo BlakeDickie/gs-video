@@ -1,0 +1,965 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="net.landora.animeinfo.data.AnimeMapper">
+
+    <cache />
+
+    <!-- Anime -->
+
+    <insert id="insertAnime" parameterType="Anime">
+        Insert Into Anime (
+            anime_id,
+            last_loaded,
+            name_main,
+            name_english,
+            episode_count,
+            type,
+            description,
+            start_date,
+            end_date,
+            rating_permanent,
+            rating_permanent_votes,
+            rating_temp,
+            rating_temp_votes,
+            hentai,
+            picture_filename
+        ) Values (
+            #{animeId},
+            #{lastLoaded,jdbcType=TIMESTAMP},
+            #{nameMain,jdbcType=VARCHAR},
+            #{nameEnglish,jdbcType=VARCHAR},
+            #{episodeCount,jdbcType=INTEGER},
+            #{type,jdbcType=VARCHAR},
+            #{description,jdbcType=CLOB},
+            #{startDate,jdbcType=DATE},
+            #{endDate,jdbcType=DATE},
+            #{ratingPermanent,jdbcType=NUMERIC},
+            #{ratingPermanentVotes,jdbcType=INTEGER},
+            #{ratingTemporary,jdbcType=NUMERIC},
+            #{ratingTemporaryVotes,jdbcType=INTEGER},
+            #{hentai,jdbcType=BOOLEAN},
+            #{pictureFileName,jdbcType=VARCHAR}
+
+        );
+    </insert>
+
+    <update id="updateAnime" parameterType="Anime">
+		Update Anime Set
+		
+			last_loaded = #{lastLoaded,jdbcType=TIMESTAMP},
+			name_main = #{nameMain,jdbcType=VARCHAR},
+			name_english = #{nameEnglish,jdbcType=VARCHAR},
+			episode_count = #{episodeCount,jdbcType=INTEGER},
+			type = #{type,jdbcType=VARCHAR},
+			description = #{description,jdbcType=CLOB},
+			start_date = #{startDate,jdbcType=DATE},
+			end_date = #{endDate,jdbcType=DATE},
+			rating_permanent = #{ratingPermanent,jdbcType=NUMERIC},
+			rating_permanent_votes = #{ratingPermanentVotes,jdbcType=INTEGER},
+			rating_temp = #{ratingTemporary,jdbcType=NUMERIC},
+			rating_temp_votes = #{ratingTemporaryVotes,jdbcType=INTEGER},
+			hentai = #{hentai,jdbcType=BOOLEAN},
+			picture_filename = #{pictureFileName,jdbcType=VARCHAR}
+        Where anime_id = #{animeId}
+    </update>
+
+    <update id="deleteAnime" parameterType="AnimeStub">
+		Delete From Anime
+        Where anime_id = #{animeId}
+    </update>
+
+    <update id="deleteAnimeById" parameterType="int">
+		Delete From Anime
+        Where anime_id = #{animeId}
+    </update>
+
+    <sql id="animeColumns">
+        A.anime_id As anime_animeId,
+        A.last_loaded As anime_lastLoaded,
+        A.name_main As anime_nameMain,
+        A.name_english as anime_nameEnglish,
+        A.episode_count as anime_episodeCount,
+        A.type As anime_type,
+        A.description As anime_description,
+        A.start_date As anime_start_date,
+        A.end_date As anime_end_date,
+        A.rating_permanent As anime_rating_permanent,
+        A.rating_permanent_votes As anime_rating_permanent_votes,
+        A.rating_temp As anime_rating_temp,
+        A.rating_temp_votes As anime_rating_temp_votes,
+        A.hentai As anime_hentai,
+        A.picture_filename As anime_picture_filename
+    </sql>
+
+    <resultMap id="animeStubResult" type="AnimeStub">
+        <id property="animeId" column="anime_animeId"/>
+        <result property="nameMain" column="anime_nameMain"/>
+        <result property="nameEnglish" column="anime_nameEnglish"/>
+        <result property="lastLoaded" column="anime_lastLoaded" jdbcType="TIMESTAMP"/>
+        <result property="episodeCount" column="anime_episodeCount"/>
+        <result property="type" column="anime_type"/>
+        <result property="description" column="anime_description"/>
+        <result property="startDate" column="anime_start_date" jdbcType="DATE"/>
+        <result property="endDate" column="anime_end_date" jdbcType="DATE"/>
+        <result property="ratingPermanent" column="anime_rating_permanent"/>
+        <result property="ratingPermanentVotes" column="anime_rating_permanent_votes"/>
+        <result property="ratingTemporary" column="anime_rating_temp"/>
+        <result property="ratingTemporaryVotes" column="anime_rating_temp_votes"/>
+        <result property="hentai" column="anime_hentai"/>
+        <result property="pictureFileName" column="anime_picture_filename"/>
+    </resultMap>
+
+    <resultMap id="animeResult" type="Anime" extends="animeStubResult">
+
+        <collection property="names" resultMap="animeNameResult"/>
+        <collection property="categories" select="selectCategoriesForAnime" column="anime_animeId"/>
+        <collection property="relations" select="selectAnimeRelationForAnime" column="anime_animeId"/>
+    </resultMap>
+
+    <select id="selectAnimeStub" parameterType="int" resultMap="animeStubResult">
+        Select
+        <include refid="animeColumns"/>
+        From Anime As A
+        Where A.anime_id = #{id}
+    </select>
+
+
+
+    <select id="selectAnime" parameterType="int" resultMap="animeResult">
+        Select
+        <include refid="animeColumns"/>,
+        <include refid="animeNameColumns"/>
+
+        From Anime As A
+		Left Outer Join AnimeName as AN
+			ON AN.anime_id = A.anime_id
+        Where A.anime_id = #{id}
+    </select>
+
+    
+    <insert id="deleteAnimeNames" parameterType="AnimeStub">
+        Delete From AnimeName
+        Where anime_id = #{animeId}
+    </insert>
+    
+    <insert id="insertAnimeName" parameterType="AnimeName">
+        Insert Into AnimeName (
+            anime_id,
+            anime_name,
+            name_type,
+            name_lang
+        ) Values (
+            #{anime.animeId,jdbcType=INTEGER},
+            #{name,jdbcType=VARCHAR},
+            #{type,jdbcType=VARCHAR},
+            #{language,jdbcType=VARCHAR}
+        );
+    </insert>
+    
+    
+    <sql id="animeNameColumns">
+        AN.anime_id As AnimeName_animeId,
+        AN.anime_name As AnimeName_name,
+        AN.name_type As AnimeName_type,
+        AN.name_lang As AnimeName_lang
+    </sql>
+
+    <resultMap id="animeNameResult" type="AnimeName">
+        <result property="name" column="AnimeName_name"/>
+        <result property="type" column="AnimeName_type"/>
+        <result property="language" column="AnimeName_lang"/>
+        
+        <association property="anime" column="AnimeName_animeId" javaType="AnimeStub" select="selectAnime"/>
+    </resultMap>
+
+
+    <!-- Anime Category Mapping -->
+
+    <insert id="deleteAnimeCategoryWeight" parameterType="AnimeStub">
+        Delete From AnimeCategoryMapping
+        Where anime_id = #{animeId}
+    </insert>
+
+    <insert id="insertAnimeCategoryWeight" parameterType="AnimeCategoryWeight">
+        Insert Into AnimeCategoryMapping (
+            anime_id,
+            category_id,
+            weight
+        ) Values (
+            #{anime.animeId,jdbcType=INTEGER},
+            #{category.id,jdbcType=INTEGER},
+            #{weight,jdbcType=INTEGER}
+        );
+    </insert>
+
+    <sql id="animeCategoryWeightColumns">
+        ACM.anime_id As AnimeCategoryWeight_animeId,
+        ACM.category_id As AnimeCategoryWeight_categoryId,
+        ACM.weight As AnimeCategoryWeight_weight
+    </sql>
+
+    <resultMap id="animeCategoryWeightResult" type="AnimeCategoryWeight">
+        <result property="weight" column="AnimeCategoryWeight_weight"/>
+
+        <association property="anime" column="AnimeCategoryWeight_animeId" javaType="AnimeStub" select="selectAnime"/>
+        <association property="category" column="AnimeCategoryWeight_categoryId" javaType="AnimeCategory" select="selectCategory"/>
+    </resultMap>
+
+
+    <select id="selectCategoriesForAnime" parameterType="int" resultMap="animeCategoryWeightResult">
+        Select
+            <include refid="animeCategoryWeightColumns"/>
+        From AnimeCategoryMapping ACM
+        Where ACM.anime_id = #{id}
+        Order By ACM.weight
+    </select>
+
+
+    <!-- Anime Relations -->
+
+    <insert id="deleteAnimeRelations" parameterType="AnimeStub">
+        Delete From AnimeRelation
+        Where anime_id = #{animeId}
+    </insert>
+
+    <insert id="insertAnimeRelation" parameterType="AnimeRelation">
+        Insert Into AnimeRelation (
+            anime_id,
+            related_anime_id,
+            relation_type_id
+        ) Values (
+            #{anime.animeId,jdbcType=INTEGER},
+            #{relatedAnimeId,jdbcType=INTEGER},
+            #{relationTypeId,jdbcType=INTEGER}
+        );
+    </insert>
+
+    <sql id="animeRelationColumns">
+        AR.anime_id As AnimeRelation_animeId,
+        AR.related_anime_id As AnimeRelation_relatedAnimeId,
+        AR.relation_type_id As AnimeRelation_relationTypeId
+    </sql>
+
+    <resultMap id="animeRelationResult" type="AnimeRelation">
+        <result property="relationTypeId" column="AnimeRelation_relationTypeId"/>
+        <result property="relatedAnimeId" column="AnimeRelation_relatedAnimeId"/>
+
+        <association property="anime" column="AnimeRelation_animeId" javaType="AnimeStub" select="selectAnime"/>
+    </resultMap>
+
+
+    <select id="selectAnimeRelationForAnime" parameterType="int" resultMap="animeRelationResult">
+        Select
+            <include refid="animeRelationColumns"/>
+        From AnimeRelation AR
+        Where AR.anime_id = #{id}
+    </select>
+
+
+
+
+    <!-- Anime Categories -->
+
+    <insert id="insertCategory" parameterType="AnimeCategory">
+        Insert Into AnimeCategory (
+            category_id,
+            category_name,
+            category_desc,
+            hentai,
+            parent_category_id
+        ) Values (
+            #{id,jdbcType=INTEGER},
+            #{name,jdbcType=VARCHAR},
+            #{description,jdbcType=VARCHAR},
+            #{hentai,jdbcType=BOOLEAN},
+            #{parentCategory.id,jdbcType=INTEGER}
+        );
+    </insert>
+
+    <update id="updateCategory" parameterType="AnimeCategory">
+		Update AnimeCategory Set
+                
+                category_name = #{name,jdbcType=VARCHAR},
+                category_desc = #{description,jdbcType=CLOB},
+                hentai = #{hentai,jdbcType=BOOLEAN},
+                parent_category_id = #{parentCategory.id,jdbcType=INTEGER}
+
+        Where category_id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+    <sql id="animeCategoryColumns">
+        AC.category_id As AnimeCategory_id,
+        AC.category_name As AnimeCategory_name,
+        AC.category_desc As AnimeCategory_description,
+        AC.hentai As AnimeCategory_hentai,
+        AC.parent_category_id As AnimeCategory_parentCategory
+    </sql>
+
+    <resultMap id="categoryResult" type="AnimeCategory">
+        <id property="id" column="AnimeCategory_id"/>
+        <result property="name" column="AnimeCategory_name"/>
+        <result property="description" column="AnimeCategory_description"/>
+        <result property="hentai" column="AnimeCategory_hentai"/>
+
+        <association property="parentCategory" column="AnimeCategory_parentCategory" jdbcType="NUMERIC" javaType="AnimeCategory" select="selectCategory"/>
+    </resultMap>
+
+    <select id="selectCategory" parameterType="int" resultMap="categoryResult">
+        Select
+        <include refid="animeCategoryColumns"/>
+        From AnimeCategory As AC
+        Where AC.category_id = #{id}
+    </select>
+
+
+    <!-- Anime Episodes -->
+
+    <insert id="insertEpisode" parameterType="AnimeEpisode">
+        Insert Into AnimeEpisode (
+            episode_id,
+            anime_id,
+            episode_number,
+            length,
+            rating,
+            rating_votes,
+            name_english,
+            name_romaji,
+            name_kanji,
+            air_date,
+            normal_episode_number
+        ) Values (
+            #{episodeId,jdbcType=INTEGER},
+            #{anime.animeId,jdbcType=INTEGER},
+            #{episodeNumber,jdbcType=VARCHAR},
+            #{length,jdbcType=INTEGER},
+            #{rating,jdbcType=NUMERIC},
+            #{ratingVotes,jdbcType=INTEGER},
+            #{nameEnglish,jdbcType=VARCHAR},
+            #{nameRomaji,jdbcType=VARCHAR},
+            #{nameKanji,jdbcType=VARCHAR},
+            #{airDate,jdbcType=DATE},
+            #{normalEpisodeNumber,jdbcType=INTEGER}
+            
+        );
+    </insert>
+
+    <update id="updateEpisode" parameterType="AnimeEpisode">
+        Update AnimeEpisode Set
+                anime_id = #{anime.animeId,jdbcType=INTEGER},
+                episode_number = #{episodeNumber,jdbcType=VARCHAR},
+                length = #{length,jdbcType=INTEGER},
+                rating = #{rating,jdbcType=NUMERIC},
+                rating_votes = #{ratingVotes,jdbcType=INTEGER},
+                name_english = #{nameEnglish,jdbcType=VARCHAR},
+                name_romaji = #{nameRomaji,jdbcType=VARCHAR},
+                name_kanji = #{nameKanji,jdbcType=VARCHAR},
+                air_date = #{airDate,jdbcType=DATE},
+                normal_episode_number = #{normalEpisodeNumber,jdbcType=INTEGER}
+        Where episode_id = #{episodeId,jdbcType=INTEGER}
+    </update>
+
+
+    <sql id="episodeColumns">
+        AE.episode_id As AnimeEpisode_episodeId,
+        AE.anime_id As AnimeEpisode_animeId,
+        AE.episode_number As AnimeEpisode_episodeNumber,
+        AE.length As AnimeEpisode_length,
+        AE.rating As AnimeEpisode_rating,
+        AE.rating_votes As AnimeEpisode_ratingVotes,
+        AE.name_english As AnimeEpisode_nameEnglish,
+        AE.name_romaji As AnimeEpisode_nameRomaji,
+        AE.name_kanji As AnimeEpisode_nameKanji,
+        AE.air_date As AnimeEpisode_airDate
+    </sql>
+
+    <resultMap id="episodeResult" type="AnimeEpisode">
+        <id property="episodeId" column="AnimeEpisode_episodeId"/>
+        <result property="episodeNumber" column="AnimeEpisode_episodeNumber"/>
+        <result property="length" column="AnimeEpisode_length"/>
+        <result property="rating" column="AnimeEpisode_rating"/>
+        <result property="ratingVotes" column="AnimeEpisode_ratingVotes"/>
+        <result property="nameEnglish" column="AnimeEpisode_nameEnglish"/>
+        <result property="nameRomaji" column="AnimeEpisode_nameRomaji"/>
+        <result property="nameKanji" column="AnimeEpisode_nameKanji"/>
+        <result property="airDate" column="AnimeEpisode_airDate" jdbcType="DATE"/>
+
+        <association property="anime" column="AnimeEpisode_animeId" javaType="AnimeStub" select="selectAnimeStub"/>
+    </resultMap>
+
+    <select id="selectEpisode" parameterType="int" resultMap="episodeResult">
+        Select
+        <include refid="episodeColumns"/>
+        From AnimeEpisode As AE
+        Where episode_id = #{id}
+    </select>
+
+    <select id="findEpisode" parameterType="list" resultMap="episodeResult">
+        Select
+        <include refid="episodeColumns"/>
+        From AnimeEpisode As AE
+        Where anime_id = #{0}
+        AND normal_episode_number = #{1}
+    </select>
+
+    <select id="findEpisodeFullEpisodeNumber" parameterType="list" resultMap="episodeResult">
+        Select
+        <include refid="episodeColumns"/>
+        From AnimeEpisode As AE
+        Where anime_id = #{0}
+        AND episode_number = #{1}
+    </select>
+
+
+
+
+
+    <!-- Anime Group -->
+
+    <insert id="insertGroup" parameterType="AnimeGroup">
+        Insert Into AnimeGroup (
+            group_id,
+            name_short,
+            name_long,
+            group_url,
+            group_full
+        ) Values (
+            #{groupId,jdbcType=INTEGER},
+            #{shortName,jdbcType=VARCHAR},
+            #{lostName,jdbcType=VARCHAR},
+            #{url,jdbcType=VARCHAR},
+            #{fullyLoaded,jdbcType=BOOLEAN}
+        );
+    </insert>
+
+    <update id="updateGroup" parameterType="AnimeGroup">
+        Update AnimeGroup Set
+                name_short = #{shortName,jdbcType=VARCHAR},
+                name_long = #{lostName,jdbcType=VARCHAR},
+                group_url = #{url,jdbcType=VARCHAR},
+                group_full = #{fullyLoaded,jdbcType=BOOLEAN}
+        Where group_id = #{groupId,jdbcType=INTEGER}
+    </update>
+
+    <sql id="groupColumns">
+        AG.group_id AS AnimeEpisode_groupId,
+        AG.name_short AS AnimeEpisode_shortName,
+        AG.name_long AS AnimeEpisode_lostName,
+        AG.group_url AS AnimeEpisode_url,
+        AG.group_full AS AnimeEpisode_full
+    </sql>
+
+    <resultMap id="groupResult" type="AnimeGroup">
+        <id property="groupId" column="AnimeEpisode_groupId"/>
+        <result property="shortName" column="AnimeEpisode_shortName"/>
+        <result property="lostName" column="AnimeEpisode_lostName"/>
+        <result property="url" column="AnimeEpisode_url"/>
+        <result property="fullyLoaded" column="AnimeEpisode_full"/>
+    </resultMap>
+
+    <select id="selectGroup" parameterType="int" resultMap="groupResult">
+        Select
+        <include refid="groupColumns"/>
+        From AnimeGroup As AG
+        Where AG.group_id = #{id}
+    </select>
+
+
+
+
+
+    <!-- Anime File -->
+
+    <insert id="insertFile" parameterType="AnimeFile">
+        Insert Into AnimeFile (
+            file_id,
+            episode_id,
+            group_id,
+            ed2k,
+            file_length,
+            crc_valid,
+            version,
+            censored,
+            source,
+            videoCodec,
+            videoResolution,
+            fileType,
+            save_revision,
+            generic_file
+        ) Values (
+            #{fileId,jdbcType=INTEGER},
+            #{episode.episodeId,jdbcType=INTEGER},
+            #{group.groupId,jdbcType=INTEGER},
+            #{ed2k,jdbcType=VARCHAR},
+            #{size,jdbcType=BIGINT},
+            #{crcValid,jdbcType=BOOLEAN},
+            #{version,jdbcType=INTEGER},
+            #{censored,jdbcType=BOOLEAN},
+            #{source,jdbcType=VARCHAR},
+            #{videoCodec,jdbcType=VARCHAR},
+            #{videoResolution,jdbcType=VARCHAR},
+            #{fileType,jdbcType=VARCHAR},
+            #{currentSaveRevision,jdbcType=INTEGER},
+            #{generic,jdbcType=BOOLEAN}
+        );
+    </insert>
+
+    <update id="updateFile" parameterType="AnimeFile">
+        Update AnimeFile Set
+                episode_id = #{episode.episodeId,jdbcType=INTEGER},
+                group_id = #{group.groupId,jdbcType=INTEGER},
+                ed2k = #{ed2k,jdbcType=VARCHAR},
+                file_length = #{size,jdbcType=BIGINT},
+                crc_valid = #{crcValid,jdbcType=BOOLEAN},
+                version = #{version,jdbcType=INTEGER},
+                censored = #{censored,jdbcType=BOOLEAN},
+                source = #{source,jdbcType=VARCHAR},
+                videoCodec = #{videoCodec,jdbcType=VARCHAR},
+                videoResolution = #{videoResolution,jdbcType=VARCHAR},
+                fileType = #{fileType,jdbcType=VARCHAR},
+                save_revision = #{currentSaveRevision,jdbcType=INTEGER},
+                generic_file = #{generic,jdbcType=BOOLEAN}
+        Where file_id = #{fileId,jdbcType=INTEGER}
+    </update>
+
+    <sql id="fileColumns">
+        AF.file_id As AnimeFile_fileId,
+        AF.ed2k As AnimeFile_ed2k,
+        AF.file_length As AnimeFile_size,
+        AF.crc_valid As AnimeFile_crcValid,
+        AF.version As AnimeFile_version,
+        AF.censored As AnimeFile_censored,
+        AF.source As AnimeFile_source,
+        AF.videoCodec As AnimeFile_videoCodec,
+        AF.videoResolution As AnimeFile_videoResolution,
+        AF.fileType As AnimeFile_fileType,
+        AF.save_revision AS AnimeFile_save_revision,
+        AF.generic_file As AnimeFile_generic
+    </sql>
+
+    <resultMap id="fileResult" type="AnimeFile">
+        <id property="fileId" column="AnimeFile_fileId"/>
+        <result property="ed2k" column="AnimeFile_ed2k"/>
+        <result property="size" column="AnimeFile_size"/>
+        <result property="crcValid" column="AnimeFile_crcValid"/>
+        <result property="version" column="AnimeFile_version"/>
+        <result property="censored" column="AnimeFile_censored"/>
+        <result property="source" column="AnimeFile_source"/>
+        <result property="videoCodec" column="AnimeFile_videoCodec"/>
+        <result property="videoResolution" column="AnimeFile_videoResolution"/>
+        <result property="fileType" column="AnimeFile_fileType"/>
+        <result property="currentSaveRevision" column="AnimeFile_save_revision"/>
+        <result property="generic" column="AnimeFile_generic"/>
+
+        <association property="episode" javaType="AnimeEpisode" resultMap="episodeResult"/>
+        <association property="group" javaType="AnimeGroup" resultMap="groupResult"/>
+    </resultMap>
+
+    <select id="selectFile" parameterType="int" resultMap="fileResult">
+        Select
+        <include refid="fileColumns"/>,
+        <include refid="groupColumns"/>,
+        <include refid="episodeColumns"/>
+        From AnimeFile As AF
+        Left Outer Join AnimeGroup As AG
+            On AF.group_id = AG.group_id
+        Inner Join AnimeEpisode As AE
+            On AF.episode_id = AE.episode_id
+        Where AF.file_id = #{id}
+    </select>
+
+    <select id="selectFileByED2K" parameterType="list" resultMap="fileResult">
+        Select
+        <include refid="fileColumns"/>,
+        <include refid="groupColumns"/>,
+        <include refid="episodeColumns"/>
+        From AnimeFile As AF
+        Left Outer Join AnimeGroup As AG
+            On AF.group_id = AG.group_id
+        Inner Join AnimeEpisode As AE
+            On AF.episode_id = AE.episode_id
+        Where AF.ed2k = #{0}
+        AND AF.file_length = #{1}
+    </select>
+
+    <select id="selectGenericFile" parameterType="AnimeEpisode" resultMap="fileResult">
+        Select
+        <include refid="fileColumns"/>,
+        <include refid="groupColumns"/>,
+        <include refid="episodeColumns"/>
+        From AnimeFile As AF
+        Left Outer Join AnimeGroup As AG
+            On AF.group_id = AG.group_id
+        Inner Join AnimeEpisode As AE
+            On AF.episode_id = AE.episode_id
+        Where AF.episode_id = #{episodeId,jdbcType=INTEGER}
+        AND generic_file = TRUE
+    </select>
+
+
+
+
+
+    <!-- Anime MyList -->
+
+    <insert id="insertListItem" parameterType="AnimeListItem">
+        Insert Into AnimeMyList (
+            file_id,
+            state,
+            file_state,
+            added_date,
+            view_date,
+            storage,
+            source,
+            other
+        ) Values (
+            #{file.fileId,jdbcType=INTEGER},
+            #{state.stateId,jdbcType=INTEGER},
+            #{fileState.stateId,jdbcType=INTEGER},
+            #{addedDate,jdbcType=TIMESTAMP},
+            #{viewDate,jdbcType=TIMESTAMP},
+            #{storage,jdbcType=VARCHAR},
+            #{source,jdbcType=VARCHAR},
+            #{other,jdbcType=VARCHAR}
+        );
+    </insert>
+
+    <update id="updateListItem" parameterType="AnimeListItem">
+        Update AnimeMyList Set
+                state = #{state.stateId,jdbcType=INTEGER},
+                file_state = #{fileState.stateId,jdbcType=INTEGER},
+                added_date = #{addedDate,jdbcType=TIMESTAMP},
+                view_date = #{viewDate,jdbcType=TIMESTAMP},
+                storage = #{storage,jdbcType=VARCHAR},
+                source = #{source,jdbcType=VARCHAR},
+                other = #{other,jdbcType=VARCHAR}
+        Where file_id = #{file.fileId,jdbcType=INTEGER}
+    </update>
+
+    <sql id="myListColumns">
+        AL.state As AnimeMyList_stateId,
+        AL.file_state As AnimeMyList_fileStateId,
+        AL.added_date As AnimeMyList_addedDate,
+        AL.view_date As AnimeMyList_viewDate,
+        AL.storage As AnimeMyList_storage,
+        AL.source As AnimeMyList_source,
+        AL.other As AnimeMyList_other,
+        <include refid="fileColumns"/>,
+        <include refid="groupColumns"/>,
+        <include refid="episodeColumns"/>
+    </sql>
+
+    <sql id="myListTables">
+        AnimeMyList As AL
+        Inner Join AnimeFile As AF
+            On AL.file_id = AF.file_id
+        Inner Join AnimeEpisode As AE
+            On AF.episode_id = AE.episode_id
+        Left Outer Join AnimeGroup As AG
+            On AF.group_id = AG.group_id
+    </sql>
+
+    <resultMap id="mylistResult" type="AnimeListItem">
+        <result property="stateId" column="AnimeMyList_stateId"/>
+        <result property="fileStateId" column="AnimeMyList_fileStateId"/>
+        <result property="addedDate" column="AnimeMyList_addedDate" jdbcType="TIMESTAMP"/>
+        <result property="viewDate" column="AnimeMyList_viewDate" jdbcType="TIMESTAMP"/>
+        <result property="storage" column="AnimeMyList_storage"/>
+        <result property="source" column="AnimeMyList_source"/>
+        <result property="other" column="AnimeMyList_other"/>
+
+        <association property="file" javaType="AnimeFile" resultMap="fileResult"/>
+    </resultMap>
+
+
+    <select id="selectListByFileId" parameterType="int" resultMap="mylistResult">
+        Select
+        <include refid="myListColumns"/>
+        From 
+        <include refid="myListTables"/>
+        Where AL.file_id = #{id}
+    </select>
+
+
+
+    <!-- Anime Notifications -->
+
+    <insert id="insertAnimeNotification" parameterType="AnimeNotification">
+        Insert Into AnimeNotification (
+            file_id,
+            added_date,
+            view_date,
+            removed_date,
+            type_id
+        ) Values (
+            #{file.fileId,jdbcType=INTEGER},
+            #{addedDate,jdbcType=TIMESTAMP},
+            #{viewDate,jdbcType=TIMESTAMP},
+            #{removedDate,jdbcType=TIMESTAMP},
+            #{typeId,jdbcType=INTEGER}
+        );
+    </insert>
+
+    <update id="updateAnimeNotification" parameterType="AnimeNotification">
+        Update AnimeNotification Set
+                added_date = #{addedDate,jdbcType=TIMESTAMP},
+                view_date = #{viewDate,jdbcType=TIMESTAMP},
+                removed_date = #{removedDate,jdbcType=TIMESTAMP},
+                type_id = #{typeId,jdbcType=INTEGER}
+        Where file_id = #{file.fileId,jdbcType=INTEGER}
+    </update>
+
+    <sql id="AnimeNotificationTables">
+        AnimeNotification As AN
+        Inner Join AnimeFile As AF
+            On AN.file_id = AF.file_id
+        Inner Join AnimeEpisode As AE
+            On AF.episode_id = AE.episode_id
+        Left Outer Join AnimeGroup As AG
+            On AF.group_id = AG.group_id
+    </sql>
+
+    <sql id="AnimeNotificationColumns">
+        AN.file_id as AnimeNotification_fileId,
+        AN.added_date As AnimeNotification_addedDate,
+        AN.view_date As AnimeNotification_viewDate,
+        AN.removed_date As AnimeNotification_removed_date,
+        AN.type_id AS AnimeNotification_type_id,
+        <include refid="fileColumns"/>,
+        <include refid="groupColumns"/>,
+        <include refid="episodeColumns"/>
+    </sql>
+
+    <resultMap id="AnimeNotificationResult" type="AnimeNotification">
+        
+        <id property="fileId" column="AnimeNotification_fileId"/>
+        <result property="addedDate" column="AnimeNotification_addedDate" jdbcType="TIMESTAMP"/>
+        <result property="viewDate" column="AnimeNotification_viewDate" jdbcType="TIMESTAMP"/>
+        <result property="removedDate" column="AnimeNotification_removed_date" jdbcType="TIMESTAMP"/>
+        <result property="typeId" column="AnimeNotification_type_id"/>
+
+        <association property="file" javaType="AnimeFile" resultMap="fileResult"/>
+    </resultMap>
+
+
+    <select id="selectAnimeNotificationByFileId" parameterType="int" resultMap="AnimeNotificationResult">
+        Select
+        <include refid="AnimeNotificationColumns"/>
+        From 
+        <include refid="AnimeNotificationTables"/>
+        Where AN.file_id = #{id}
+    </select>
+
+
+    <select id="selectWaitingAnimeNotification" resultMap="AnimeNotificationResult">
+        Select
+        <include refid="AnimeNotificationColumns"/>
+        From 
+        <include refid="AnimeNotificationTables"/>
+        Where AN.removed_date Is Null
+    </select>
+
+    <select id="selectAnimeWithWaitingNotification" resultMap="animeStubResult">
+        Select
+        <include refid="animeColumns"/>
+        From Anime As A
+        Where 
+        A.anime_id in (
+        Select AE.anime_id From
+        AnimeNotification As AN
+        Inner Join AnimeFile As AF
+            On AN.file_id = AF.file_id
+        Inner Join AnimeEpisode As AE
+            On AF.episode_id = AE.episode_id
+        Where AN.removed_date Is Null
+        )
+    </select>
+    
+    <update id="markDownloadedEpisodesAsCompleted">
+        Update AnimeNotification Set removed_date = current_timestamp
+        From 
+         
+        AnimeFile AF
+        
+        INNER JOIN AnimeFile AF2
+        ON AF.episode_id = AF2.episode_id
+        INNER JOIN AnimeMyList ML
+        ON ML.file_id = AF2.file_id
+        WHERE
+        AF.file_id = AnimeNotification.file_id AND AnimeNotification.removed_date IS NULL
+    </update>
+
+    <select id="selectEpisodesForNotifications" parameterType="int" resultMap="episodeResult">
+        Select
+        <include refid="episodeColumns"/>
+        From AnimeEpisode As AE
+        Where AE.anime_id = #{id} AND
+        episode_id IN (
+            Select AF.episode_id From
+            AnimeNotification As AN
+            Inner Join AnimeFile As AF
+                On AN.file_id = AF.file_id
+            Where AN.removed_date Is Null
+        )
+    </select>
+
+    <select id="selectNotificationsForEpisode" parameterType="int" resultMap="AnimeNotificationResult">
+        Select
+        <include refid="AnimeNotificationColumns"/>
+        From 
+        <include refid="AnimeNotificationTables"/>
+        Where AN.removed_date Is Null AND AE.episode_id = #{id}
+    </select>
+    
+    
+    <!-- Anime Messages -->
+
+    <insert id="insertAnimeMessage" parameterType="AnimeMessage">
+        Insert Into AnimeMessage (
+            messageId,
+            msg_date,
+            removed_date,
+            type_id,
+            from_user,
+            title,
+            body
+        ) Values (
+            #{messageId,jdbcType=INTEGER},
+            #{date,jdbcType=TIMESTAMP},
+            #{removedDate,jdbcType=TIMESTAMP},
+            #{typeId,jdbcType=INTEGER},
+            #{fromUser,jdbcType=VARCHAR},
+            #{title,jdbcType=VARCHAR},
+            #{body,jdbcType=VARCHAR}
+        );
+    </insert>
+
+    <update id="updateAnimeMessage" parameterType="AnimeMessage">
+        Update AnimeMessage Set
+                msg_date = #{date,jdbcType=TIMESTAMP},
+                removed_date = #{removedDate,jdbcType=TIMESTAMP},
+                type_id = #{typeId,jdbcType=INTEGER},
+                from_user = #{fromUser,jdbcType=VARCHAR},
+                title = #{title,jdbcType=VARCHAR},
+                body = #{body,jdbcType=VARCHAR}
+        Where messageId = #{messageId,jdbcType=INTEGER}
+    </update>
+
+    <sql id="AnimeMessageTables">
+        AnimeMessage as AM
+    </sql>
+
+    <sql id="AnimeMessageColumns">
+        AM.messageId As AnimeMessage_messageId,
+        AM.msg_date As AnimeMessage_msg_date,
+        AM.removed_date As AnimeMessage_removed_date,
+        AM.from_user As AnimeMessage_from_user,
+        AM.title As AnimeMessage_title,
+        AM.body As AnimeMessage_body,
+        AM.type_id AS AnimeMessage_type_id
+    </sql>
+
+    <resultMap id="AnimeMessageResult" type="AnimeMessage">
+        <id property="messageId" column="AnimeMessage_messageId"/>
+        <result property="date" column="AnimeMessage_msg_date" jdbcType="TIMESTAMP"/>
+        <result property="removedDate" column="AnimeMessage_removed_date" jdbcType="TIMESTAMP"/>
+        <result property="typeId" column="AnimeMessage_type_id"/>
+        <result property="fromUser" column="AnimeMessage_from_user"/>
+        <result property="title" column="AnimeMessage_title"/>
+        <result property="body" column="AnimeMessage_body"/>
+    </resultMap>
+
+
+    <select id="selectAnimeMessageByMessageId" parameterType="int" resultMap="AnimeMessageResult">
+        Select
+        <include refid="AnimeMessageColumns"/>
+        From 
+        <include refid="AnimeMessageTables"/>
+        Where AM.messageId = #{id}
+    </select>
+
+
+    <select id="selectWaitingAnimeMessage" resultMap="AnimeMessageResult">
+        Select
+        <include refid="AnimeMessageColumns"/>
+        From 
+        <include refid="AnimeMessageTables"/>
+        Where AM.removed_date Is Null
+    </select>
+
+    <!-- Anime Episode ED2K Caching -->
+
+    <select id="findCachedED2K" parameterType="list" resultMap="episodeResult">
+        Select
+        <include refid="episodeColumns"/>
+        From AnimeED2KCaching AS AnimeED2KCaching
+        INNER JOIN AnimeEpisode As AE on AE.episode_id = AnimeED2KCaching.episode_id
+        Where AnimeED2KCaching.ed2k = #{0}
+        AND AnimeED2KCaching.file_length = #{1}
+    </select>
+
+
+    <insert id="addCachedED2K" parameterType="list">
+        Insert Into AnimeED2KCaching (
+            ed2k,
+            file_length,
+            episode_id
+        ) Values (
+            #{0,jdbcType=VARCHAR},
+            #{1,jdbcType=BIGINT},
+            #{2,jdbcType=INTEGER}
+        );
+    </insert>
+
+
+
+    <!-- Anime File ED2K Lookup Failure Caching -->
+
+    <select id="findCachedED2KFileFailure" parameterType="list" resultType="int">
+        Select
+        count(*)
+        From AnimeED2KLookupFailureCaching AS AnimeED2KCaching
+        Where AnimeED2KCaching.ed2k = #{0}
+        AND AnimeED2KCaching.file_length = #{1}
+    </select>
+
+
+    <insert id="addCachedED2KFileFailure" parameterType="list">
+        Insert Into AnimeED2KLookupFailureCaching (
+            ed2k,
+            file_length,
+            last_attempt
+        ) Values (
+            #{0,jdbcType=VARCHAR},
+            #{1,jdbcType=BIGINT},
+            current_timestamp
+        );
+    </insert>
+
+    <delete id="clearOldCachedED2KFileFailure" parameterType="map">
+        Delete From AnimeED2KLookupFailureCaching
+        Where last_attempt &lt; #{date,jdbcType=TIMESTAMP,javaType=java.util.Calendar}
+        OR (ed2k, file_length) in (select ed2k, file_length from animefile)
+    </delete>
+    
+    
+    
+    <!-- Anime Picture Caching -->
+    <select id="getAnimePicture" parameterType="String" resultType="map">
+        Select
+        image_data
+        From AnimePictures
+        Where filename = #{0,jdbcType=VARCHAR}
+    </select>
+    
+    <insert id="insertAnimePicture" parameterType="list">
+        Insert Into AnimePictures (
+            filename,
+            image_data
+        ) Values (
+            #{0,jdbcType=VARCHAR},
+            #{1,jdbcType=BLOB}
+        );
+    </insert>
+    
+</mapper>

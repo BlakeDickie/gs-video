@@ -6,7 +6,7 @@ package net.landora.video.filestate.data;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.landora.video.info.data.AbstractDataManager;
+import net.landora.video.data.AbstractDataManager;
 
 /**
  *

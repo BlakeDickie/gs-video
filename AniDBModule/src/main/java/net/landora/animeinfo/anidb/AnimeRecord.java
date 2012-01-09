@@ -1,0 +1,269 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.landora.animeinfo.anidb;
+
+import net.landora.animeinfo.data.RelationType;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ *
+ * @author bdickie
+ */
+public class AnimeRecord {
+
+    private int aid;
+    private String type;
+    private List<Relation> relatedAnime = new ArrayList<Relation>();
+    private List<Category> category = new ArrayList<Category>();
+    private int episodes;
+    private int normalEpisodes;
+    private int specialEpisodes;
+    private Calendar airDate;
+    private Calendar endDate;
+    private String picName;
+    private int rating;
+    private int ratingCount;
+    private int tempRating;
+    private int tempRatingCount;
+    private long lastUpdated;
+    private int specialsCount;
+    private int creditsCount;
+    private int otherCount;
+    private int trailerCount;
+    private int parodyCount;
+    private boolean adultOnly;
+
+    public AnimeRecord() {
+    }
+
+    public int getAid() {
+        return aid;
+    }
+
+    public void setAid(int aid) {
+        this.aid = aid;
+    }
+
+    public Calendar getAirDate() {
+        return airDate;
+    }
+
+    public void setAirDate(Calendar airDate) {
+        this.airDate = airDate;
+    }
+
+    public int getCreditsCount() {
+        return creditsCount;
+    }
+
+    public void setCreditsCount(int creditsCount) {
+        this.creditsCount = creditsCount;
+    }
+
+    public Calendar getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Calendar endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getEpisodes() {
+        return episodes;
+    }
+
+    public void setEpisodes(int episodes) {
+        this.episodes = episodes;
+    }
+
+    public long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(long lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public int getNormalEpisodes() {
+        return normalEpisodes;
+    }
+
+    public void setNormalEpisodes(int normalEpisodes) {
+        this.normalEpisodes = normalEpisodes;
+    }
+
+    public int getOtherCount() {
+        return otherCount;
+    }
+
+    public void setOtherCount(int otherCount) {
+        this.otherCount = otherCount;
+    }
+
+    public int getParodyCount() {
+        return parodyCount;
+    }
+
+    public void setParodyCount(int parodyCount) {
+        this.parodyCount = parodyCount;
+    }
+
+    public String getPicName() {
+        return picName;
+    }
+
+    public void setPicName(String picName) {
+        this.picName = picName;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
+
+    public List<Relation> getRelatedAnime() {
+        return relatedAnime;
+    }
+
+    public void setRelatedAnime(List<Relation> relatedAnime) {
+        this.relatedAnime = relatedAnime;
+    }
+
+    public int getSpecialEpisodes() {
+        return specialEpisodes;
+    }
+
+    public void setSpecialEpisodes(int specialEpisodes) {
+        this.specialEpisodes = specialEpisodes;
+    }
+
+    public int getSpecialsCount() {
+        return specialsCount;
+    }
+
+    public void setSpecialsCount(int specialsCount) {
+        this.specialsCount = specialsCount;
+    }
+
+    public int getTempRating() {
+        return tempRating;
+    }
+
+    public void setTempRating(int tempRating) {
+        this.tempRating = tempRating;
+    }
+
+    public int getTempRatingCount() {
+        return tempRatingCount;
+    }
+
+    public void setTempRatingCount(int tempRatingCount) {
+        this.tempRatingCount = tempRatingCount;
+    }
+
+    public int getTrailerCount() {
+        return trailerCount;
+    }
+
+    public void setTrailerCount(int trailerCount) {
+        this.trailerCount = trailerCount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isAdultOnly() {
+        return adultOnly;
+    }
+
+    public void setAdultOnly(boolean adultOnly) {
+        this.adultOnly = adultOnly;
+    }
+
+
+    public List<Category> getCategory() {
+        return category;
+    }
+
+    public void setCategory(List<Category> category) {
+        this.category = category;
+    }
+
+    
+
+    public static class Relation {
+
+        private int aid;
+        private RelationType type;
+
+        public Relation(int aid, RelationType type) {
+            this.aid = aid;
+            this.type = type;
+        }
+
+        public int getAid() {
+            return aid;
+        }
+
+        public void setAid(int aid) {
+            this.aid = aid;
+        }
+
+        public RelationType getType() {
+            return type;
+        }
+
+        public void setType(RelationType type) {
+            this.type = type;
+        }
+    }
+
+    public static class Category {
+
+        private int categoryId;
+        private int weight;
+
+        public Category(int categoryId, int weight) {
+            this.categoryId = categoryId;
+            this.weight = weight;
+        }
+
+        public int getCategoryId() {
+            return categoryId;
+        }
+
+        public void setCategoryId(int categoryId) {
+            this.categoryId = categoryId;
+        }
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public void setWeight(int weight) {
+            this.weight = weight;
+        }
+
+        
+    }
+}

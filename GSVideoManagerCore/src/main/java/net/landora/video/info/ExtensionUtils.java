@@ -37,6 +37,16 @@ public class ExtensionUtils {
         return filename.substring(index + 1);
     }
     
+    
+    public static String getFilenameWithoutExtension(File file) {
+        String filename = file.getName();
+        int index = filename.lastIndexOf('.');
+        if (index <= 0)
+            return filename;
+        
+        return filename.substring(0, index);
+    }
+    
     public static boolean isVideoExtension(File file) {
         return isVideoExtension(getExtension(file));
     }

@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.zip.CheckedOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import javax.swing.event.EventListenerList;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -65,6 +66,10 @@ public class FileInfoManager {
 
 
     public FileInfo getFileInfo(File file) {
+        return getFileInfo(file, false);
+    }
+    
+    public FileInfo getFileInfo(File file, boolean cachedOnly) {
         if (!file.exists())
             throw new IllegalArgumentException("Unable to find file.");
 
@@ -73,9 +78,14 @@ public class FileInfoManager {
             cache = getDirectoryCacheItem(file.getParentFile());
         }
         FileInfo info = cache.getFileInfo(file.getName());
+        
+        if (cachedOnly)
+            return info;
+        
         if (info != null && info.getLastModified() == file.lastModified() && info.getFileSize() == file.length()) {
             if (MetadataProvidersManager.getInstance().checkForMetadataUpdate(info)) {
                 cache.setFileInfo(file.getName(), info);
+                fireFileChanged(file, info);
             }
             return info;
         }
@@ -83,6 +93,7 @@ public class FileInfoManager {
         synchronized(this) {
             info = createInfo(file);
             cache.setFileInfo(file.getName(), info);
+            fireFileChanged(file, info);
         }
 
         return info;
@@ -93,6 +104,7 @@ public class FileInfoManager {
         synchronized(this) {
             cache = getDirectoryCacheItem(file.getParentFile());
             cache.removeFileInfo(file.getName());
+            fireFileRemoved(file, null);
         }
     }
     
@@ -101,6 +113,7 @@ public class FileInfoManager {
         synchronized(this) {
             cache = getDirectoryCacheItem(file.getParentFile());
             cache.setFileInfo(file.getName(), info);
+            fireFileChanged(file, info);
         }
     }
 
@@ -326,4 +339,37 @@ public class FileInfoManager {
             updateDirectoryCache(this, filename);
         }
     }
+    
+    
+    
+    // ************ Listener Support ***********************
+    private EventListenerList listenerList = new EventListenerList();
+    
+    public void addFileInfoChangedListener(FileInfoChangedListener l) {
+        listenerList.add(FileInfoChangedListener.class, l);
+    }
+    
+    public void removeFileInfoChangedListener(FileInfoChangedListener l) {
+        listenerList.remove(FileInfoChangedListener.class, l);
+    }
+    
+    private void fireFileChanged(File file, FileInfo info) {
+        FileInfoChangedEvent e = null;
+        for(FileInfoChangedListener l: listenerList.getListeners(FileInfoChangedListener.class)) {
+            if (e == null)
+                e = new FileInfoChangedEvent(file, info, this);
+            l.fileChanged(e);
+        }
+    }
+    
+    private void fireFileRemoved(File file, FileInfo info) {
+        FileInfoChangedEvent e = null;
+        for(FileInfoChangedListener l: listenerList.getListeners(FileInfoChangedListener.class)) {
+            if (e == null)
+                e = new FileInfoChangedEvent(file, info, this);
+            l.fileRemoved(e);
+        }
+    }
+    
+    
 }

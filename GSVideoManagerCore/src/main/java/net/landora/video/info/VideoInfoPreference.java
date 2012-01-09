@@ -6,8 +6,8 @@ package net.landora.video.info;
 
 import java.util.List;
 import java.util.UUID;
-import net.landora.video.info.data.preferences.LocalPreferenceObject;
-import net.landora.video.info.data.preferences.PreferenceObject;
+import net.landora.video.preferences.LocalPreferenceObject;
+import net.landora.video.preferences.PreferenceObject;
 
 /**
  *

@@ -6,6 +6,7 @@ package net.landora.video.filerenaming;
 
 import java.util.Collection;
 import net.landora.video.info.MultiSeasonSeriesMetadata;
+import net.landora.video.info.SeriesMetadata;
 
 /**
  *
@@ -46,4 +47,10 @@ public class TestMultiSeasonSeriesMetadata extends TestMetadata implements Multi
     protected void addContentObjectsImpl(Collection<Object> addTo) {
         
     }
+
+    public boolean sameSeries(SeriesMetadata other) {
+        return false;
+    }
+    
+    
 }

@@ -5,8 +5,8 @@
 package net.landora.video.filestate;
 
 import java.util.List;
-import net.landora.video.info.data.preferences.LocalPreferenceObject;
-import net.landora.video.info.data.preferences.PreferenceObject;
+import net.landora.video.preferences.LocalPreferenceObject;
+import net.landora.video.preferences.PreferenceObject;
 
 /**
  *
