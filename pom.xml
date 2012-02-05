@@ -20,4 +20,31 @@
         <hibernate-core-version>3.6.8.Final</hibernate-core-version>
         <hibernate-validator-version>3.1.0.GA</hibernate-validator-version>
     </properties>
+    
+    
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://landora.net/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>http://landora.net/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
