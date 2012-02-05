@@ -99,11 +99,11 @@ final class FileRenamingPanel extends javax.swing.JPanel {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(FileRenamingPanel.class, "FileRenamingPanel.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Folder Rename");
         jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         txtFolderScript.setColumns(20);
-        txtFolderScript.setFont(new java.awt.Font("Monospaced", 0, 10)); // NOI18N
+        txtFolderScript.setFont(new java.awt.Font("Monospaced", 0, 10));
         txtFolderScript.setRows(5);
         txtFolderScript.setTabSize(3);
         jScrollPane1.setViewportView(txtFolderScript);
@@ -115,11 +115,11 @@ final class FileRenamingPanel extends javax.swing.JPanel {
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(FileRenamingPanel.class, "FileRenamingPanel.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "File Rename");
         jPanel2.add(jLabel2, java.awt.BorderLayout.PAGE_START);
 
         txtFileScript.setColumns(20);
-        txtFileScript.setFont(new java.awt.Font("Monospaced", 0, 10)); // NOI18N
+        txtFileScript.setFont(new java.awt.Font("Monospaced", 0, 10));
         txtFileScript.setRows(5);
         txtFileScript.setTabSize(3);
         jScrollPane2.setViewportView(txtFileScript);
