@@ -14,13 +14,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 import net.landora.video.filestate.data.LocalPathManager;
 import net.landora.video.filestate.data.SharedDirectory;
 import net.landora.video.ui.ContentPanel;
@@ -53,12 +49,12 @@ public class FileBrowserPanel extends ContentPanel<VideoFile> {
         }
         
         treeFiles.setModel(new DefaultTreeModel(rootNode));
+        treeFiles.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         LazyTreeLoadingManager.getInstance().setup(treeFiles);
         
         tableModel = new FileTableModel();
         
         tblFiles.setModel(tableModel);
-        tblFiles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         tblFiles.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 

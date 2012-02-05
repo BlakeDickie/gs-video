@@ -103,17 +103,20 @@ public abstract class NBTask<R,I> {
 
     protected void switchToDeterminate(int workunits, long estimate) {
         progress.progressDeterminate(workunits, estimate);
+        this.estimate = estimate;
     }
 
     protected void switchToDeterminate(int workunits) {
-        progress.progressDeterminate(workunits, 100);
+        progress.progressDeterminate(workunits, estimate);
     }
 
+    private long estimate;
 
     boolean started = false;
     
     protected void start(int workunits, long estimate) {
         progress.startDeterminate(name, workunits, estimate);
+        this.estimate = estimate;
         started = true;
     }
 
@@ -133,7 +136,7 @@ public abstract class NBTask<R,I> {
 
     protected void progress(String message, int workunit) {
         progress.setMessage(message);
-        progress.progressDeterminate(workunit, 100);
+        progress.progressDeterminate(workunit, estimate);
     }
 
     protected void progress(String message) {
@@ -141,7 +144,7 @@ public abstract class NBTask<R,I> {
     }
 
     protected void progress(int workunit) {
-        progress.progressDeterminate(workunit, 100);
+        progress.progressDeterminate(workunit, estimate);
     }
 
     public final boolean cancel() {

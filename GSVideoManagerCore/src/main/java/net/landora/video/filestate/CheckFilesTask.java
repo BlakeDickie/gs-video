@@ -60,7 +60,7 @@ public class CheckFilesTask extends NBTask<Object, Object> {
         
         Collection<CheckFileExtension> extensions = FileManager.getInstance().getCheckFileExtensions();
         
-        switchToDeterminate(filesToCheck.size());
+        switchToDeterminate(0, filesToCheck.size());
         for (int i = 0; i < filesToCheck.size(); i++) {
             File file = filesToCheck.get(i);
             progress(file.getName(), i);

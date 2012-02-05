@@ -7,6 +7,7 @@ package net.landora.video.tasks;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import net.landora.video.utils.UIUtils;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -140,7 +141,7 @@ public class TaskProgressImpl implements TaskProgress {
 
             public void run() {
                 setDeterminate(true);
-                setProgress((int)Math.round((double) current / (double) total));
+                setProgress((int)Math.round(100 * (double) current / (double) total));
             }
         };
         UIUtils.invokeInSwingThread(runnable);
@@ -152,7 +153,7 @@ public class TaskProgressImpl implements TaskProgress {
 
             public void run() {
                 setDeterminate(true);
-                setProgress((int)Math.round((double) current / (double) total));
+                setProgress((int)Math.round(100 * (double) current / (double) total));
             }
         };
         UIUtils.invokeInSwingThread(runnable);
