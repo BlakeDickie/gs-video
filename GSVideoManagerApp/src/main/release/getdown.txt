@@ -1,0 +1,9 @@
+appbase = http://landora.net/gsvideomanager/
+
+ui.name = GS Video Manager
+
+class = net.landora.gsvideomanagerapp.App
+
+allow_offline = true
+
+

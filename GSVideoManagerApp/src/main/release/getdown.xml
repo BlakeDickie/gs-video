@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="GSVideoManager-GetDown" default="makedigest" basedir=".">
+    <target name="makedigest">
+        
+        
+        <fileset dir="${getdown.web}" id="lib.files">
+            <include name="*.jar"/>
+        </fileset>
+        <pathconvert property="gotdown.code" refid="lib.files" pathsep="${line.separator}">
+            <mapper>
+                <chainedmapper>
+                    <flattenmapper/>
+                    <globmapper from="*" to="code = *"/>
+                </chainedmapper>
+            </mapper>
+        </pathconvert>
+        
+        
+        
+        <copy todir="${getdown.web}" file="getdown.txt" overwrite="true"/>
+        
+        <echo append="true" file="${getdown.web}/getdown.txt" message="${gotdown.code}" />
+        
+        <taskdef name="digest" classname="com.threerings.getdown.tools.DigesterTask"
+                 classpath="${basedir}/getdown-tools-1.2.jar"/>
+        <digest appdir="${getdown.web}"/>
+        
+        <mkdir dir="${getdown.stub}"/>
+        <copy todir="${getdown.stub}" file="getdown.txt" overwrite="true"/>
+        <copy todir="${getdown.stub}" file="getdown-client-1.2.jar" overwrite="true"/>
+    </target>
+    
+</project>
