@@ -7,6 +7,8 @@ package net.landora.video.tasks;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import net.landora.video.VideoManagerApp;
+import net.landora.video.utils.BusReciever;
 import net.landora.video.utils.Touple;
 import net.landora.video.utils.UIUtils;
 import org.slf4j.Logger;
@@ -56,6 +58,8 @@ public class PeriodicTaskManager {
                 }
             }
         });
+        
+        VideoManagerApp.getInstance().getEventBus().addHandlersWeak(this);
     }
     
     private List<TaskState> tasksState;
@@ -84,7 +88,8 @@ public class PeriodicTaskManager {
         }
     }
     
-    public void taskFinished(NBTask<?,?> task) {
+    @BusReciever
+    public void taskFinished(TaskCompletedEvent event) {
         synchronized(waitLock) {
             waitLock.notifyAll();
         }

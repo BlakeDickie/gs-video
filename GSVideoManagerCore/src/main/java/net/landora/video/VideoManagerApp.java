@@ -10,6 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import javax.swing.JFrame;
 import net.landora.video.addons.AddonManager;
 import net.landora.video.preferences.FileSyncProperties;
+import net.landora.video.utils.EventBus;
 import net.landora.video.utils.NamedThreadFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -51,6 +52,7 @@ public class VideoManagerApp extends Application {
     private boolean guiMode;
     private boolean daemonMode;
     private boolean systemTray;
+    private EventBus eventBus = new EventBus();
 
     public boolean isGuiMode() {
         return guiMode;
@@ -64,7 +66,9 @@ public class VideoManagerApp extends Application {
         return systemTray;
     }
 
-    
+    public EventBus getEventBus() {
+        return eventBus;
+    }
     
     @Override
     protected void startup() {

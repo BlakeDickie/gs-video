@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>GSVideoManager</artifactId>
+        <groupId>net.landora</groupId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+    <groupId>net.landora</groupId>
+    <artifactId>GSVMDatabaseScheme</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>GSVMDatabaseScheme</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-migration-plugin</groupId>
+                <artifactId>maven-migration-plugin</artifactId>
+                <version>1.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.1-901.jdbc4</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>apply-all-pending-migration</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>up</goal>
+                        </goals>
+                        <configuration>
+                            <repository>src/main/db_scheme</repository>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

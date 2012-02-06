@@ -10,11 +10,7 @@
  */
 package net.landora.animeinfo.notifications;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -22,8 +18,11 @@ import net.landora.animeinfo.data.AnimeDBA;
 import net.landora.animeinfo.data.AnimeEpisode;
 import net.landora.animeinfo.data.AnimeNotification;
 import net.landora.animeinfo.data.AnimeStub;
+import net.landora.video.VideoManagerApp;
+import net.landora.video.tasks.TaskCompletedEvent;
 import net.landora.video.ui.ContentPanel;
 import net.landora.video.ui.tree.LazyTreeLoadingManager;
+import net.landora.video.utils.BusReciever;
 import net.landora.video.utils.UIUtils;
 import org.apache.commons.collections.map.MultiValueMap;
 
@@ -39,6 +38,18 @@ public class NotificationViewer extends ContentPanel {
         
         setTitle("Anime Notifications");
         
+        reloadTree();
+        
+        VideoManagerApp.getInstance().getEventBus().addHandlersWeak(this);
+    }
+    
+    @BusReciever
+    public void taskCompleted(TaskCompletedEvent event) {
+        if (event.isTaskOf(NotificationsTask.class))
+            reloadTree();
+    }
+    
+    private void reloadTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
         
         notificationsNode = new DefaultMutableTreeNode("Notifications");

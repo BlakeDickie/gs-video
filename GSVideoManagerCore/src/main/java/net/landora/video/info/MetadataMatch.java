@@ -12,11 +12,21 @@ public class MetadataMatch {
     
     private MatchType type;
     private String metadataId;
+    private String uniqueVideoId;
     private MetadataProvider metadataProvider;
 
-    public MetadataMatch(MatchType type, String metadataId) {
+    public MetadataMatch(MatchType type, String metadataId, String uniqueVideoId) {
         this.type = type;
         this.metadataId = metadataId;
+        this.uniqueVideoId = uniqueVideoId;
+    }
+
+    public String getUniqueVideoId() {
+        return uniqueVideoId;
+    }
+
+    public void setUniqueVideoId(String uniqueVideoId) {
+        this.uniqueVideoId = uniqueVideoId;
     }
     
     

@@ -20,6 +20,7 @@ public interface VideoMetadata {
     public String getTypeDescription();
     public boolean isAnime();
     public String getNfoUrl();
+    public String getUniqueVideoId();
     
     public boolean isAdult();
 }

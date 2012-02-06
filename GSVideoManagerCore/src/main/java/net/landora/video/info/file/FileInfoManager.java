@@ -226,6 +226,7 @@ public class FileInfoManager {
                 info.setLastModified(Long.parseLong(reader.getAttributeValue(null, "lastmodified")));
                 info.setMetadataSource(reader.getAttributeValue(null, "metadatasource"));
                 info.setMetadataId(reader.getAttributeValue(null, "metadataid"));
+                info.setVideoId(reader.getAttributeValue(null, "videoid"));
 
                 files.put(filename, info);
                 
@@ -273,6 +274,8 @@ public class FileInfoManager {
                     writer.writeAttribute("metadatasource", info.getMetadataSource());
                 if (info.getMetadataId() != null)
                     writer.writeAttribute("metadataid", info.getMetadataId());
+                if (info.getVideoId() != null)
+                    writer.writeAttribute("videoid", info.getVideoId());
 
                 writer.writeEndElement();
                 writer.writeCharacters("\n");

@@ -132,6 +132,9 @@ public abstract class AnimeMetadata extends AbstractVideoMetadata {
     public String getNfoUrl() {
         return String.format("http://anidb.net/perl-bin/animedb.pl?show=anime&aid=%d", anime.getAnimeId());
     }
-    
+
+    public String getUniqueVideoId() {
+        return AnimeMetadataProvider.getUniqueVideoId(episode);
+    }
     
 }

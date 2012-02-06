@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import javax.swing.SwingUtilities;
+import net.landora.video.VideoManagerApp;
 import org.apache.commons.io.input.ProxyInputStream;
 import org.slf4j.LoggerFactory;
 
@@ -161,7 +162,9 @@ public abstract class NBTask<R,I> {
         finished();
         progress.finished();
         finished = true;
-        PeriodicTaskManager.getInstance().taskFinished(this);
+        
+        TaskCompletedEvent event = new TaskCompletedEvent(this);
+        VideoManagerApp.getInstance().getEventBus().fireEvent(event);
     }
 
     public boolean isFinished() {

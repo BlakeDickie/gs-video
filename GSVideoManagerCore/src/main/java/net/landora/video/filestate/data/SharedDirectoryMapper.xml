@@ -88,7 +88,8 @@
             ed2k,
             metadata_source,
             metadata_id,
-            last_modified
+            last_modified,
+            videoId
         ) Values (
             #{directory.directoryId,jdbcType=INTEGER},
             #{subPath,jdbcType=VARCHAR},
@@ -98,7 +99,8 @@
             #{e2dkHash,jdbcType=VARCHAR},
             #{metadataSource,jdbcType=VARCHAR},
             #{metadataId,jdbcType=VARCHAR},
-            #{lastModifiedDate,jdbcType=TIMESTAMP}
+            #{lastModifiedDate,jdbcType=TIMESTAMP},
+            #{videoId,jdbcType=VARCHAR}
         );
     </insert>
 
@@ -112,6 +114,7 @@
             ed2k = #{e2dkHash,jdbcType=VARCHAR},
             metadata_source = #{metadataSource,jdbcType=VARCHAR},
             metadata_id = #{metadataId,jdbcType=VARCHAR},
+            videoId = #{videoId,jdbcType=VARCHAR},
             last_modified = #{lastModifiedDate,jdbcType=TIMESTAMP}
         Where fileId = #{fileId}
     </update>
@@ -135,6 +138,7 @@
         SF.ed2k As FileRecord_ed2k,
         SF.metadata_source As FileRecord_metadata_source,
         SF.metadata_id As FileRecord_metadata_id,
+        SF.videoId As FileRecord_videoId,
         SF.last_modified As FileRecord_last_modified,
         SF.autoRename As FileRecord_autoRename,
         
@@ -151,6 +155,7 @@
         <result property="e2dkHash" column="FileRecord_ed2k"/>
         <result property="metadataSource" column="FileRecord_metadata_source"/>
         <result property="metadataId" column="FileRecord_metadata_id"/>
+        <result property="videoId" column="FileRecord_videoId"/>
         <result property="lastModifiedDate" column="FileRecord_last_modified" jdbcType="TIMESTAMP"/>
         <result property="rename" column="FileRecord_autoRename"/>
         

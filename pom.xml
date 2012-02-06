@@ -13,6 +13,8 @@
     <module>ED2KHasher</module>
     <module>AniDBModule</module>
     <module>XBMCSupport</module>
+    <module>GSVMDatabaseScheme</module>
+    <module>GSVideoManagerPackaging</module>
   </modules>
   
     <properties>

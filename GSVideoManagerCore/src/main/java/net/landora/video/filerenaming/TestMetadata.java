@@ -45,6 +45,10 @@ public abstract class TestMetadata extends AbstractVideoMetadata {
     public boolean isAdult() {
         return adult;
     }
+
+    public String getUniqueVideoId() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
     
     

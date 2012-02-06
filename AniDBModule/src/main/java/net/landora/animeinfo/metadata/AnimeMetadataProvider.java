@@ -42,6 +42,9 @@ public class AnimeMetadataProvider implements MetadataProvider {
         return 3;
     }
 
+    public static String getUniqueVideoId(AnimeEpisode episode) {
+        return "AID:" + episode.getEpisodeId();
+    }
 
     private List<MetadataMatch> episodeMatchresult(AnimeEpisode episode) {
         AnimeFile item = AnimeDBA.getGenericAnimeFile(episode);
@@ -51,7 +54,7 @@ public class AnimeMetadataProvider implements MetadataProvider {
         else
             metadataId = "FID:" + item.getFileId();
         
-        return Collections.singletonList(new MetadataMatch(MetadataMatch.MatchType.FilenameMatch, metadataId));
+        return Collections.singletonList(new MetadataMatch(MetadataMatch.MatchType.FilenameMatch, metadataId, getUniqueVideoId(episode)));
     }
 
     @Override
@@ -63,7 +66,8 @@ public class AnimeMetadataProvider implements MetadataProvider {
         if (!AnimeDBA.checkForCachedED2KFileFailure(info.getE2dkHash(), info.getFileSize())) {
             AnimeFile file = AnimeManager.getInstance().findFile(info.getE2dkHash(), info.getFileSize());
             if (file != null) {
-                return Collections.singletonList(new MetadataMatch(MetadataMatch.MatchType.HashMatch, "FID:" + file.getFileId()));
+                return Collections.singletonList(new MetadataMatch(MetadataMatch.MatchType.HashMatch, "FID:" + file.getFileId(),
+                        getUniqueVideoId(file.getEpisode())));
             }
         }
 

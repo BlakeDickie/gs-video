@@ -8,7 +8,6 @@ package net.landora.video.info;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 import net.landora.video.info.file.FileInfo;
@@ -80,12 +79,14 @@ public class MetadataProvidersManager {
             if (match.getType() == MetadataMatch.MatchType.HashMatch) {
                 info.setMetadataId(match.getMetadataId());
                 info.setMetadataSource(provider.getProviderId());
+                info.setVideoId(match.getUniqueVideoId());
                 return;
             }
         }
 
         info.setMetadataId(providerIdString);
         info.setMetadataSource(FAILURE_ID);
+        info.setVideoId(null);
     }
 
     public boolean checkForMetadataUpdate(FileInfo info) {
@@ -95,11 +96,15 @@ public class MetadataProvidersManager {
         } else if (info.getMetadataSource().equals(FAILURE_ID)) {
 //            if (!info.getMetadataId().equals(providerIdString))
                 redo = true;
+        } else if (info.getVideoId() == null) {
+            VideoMetadata md = getMetadata(info);
+            info.setVideoId(md.getUniqueVideoId());
         }
 
         if (redo) {
             info.setMetadataId(null);
             info.setMetadataSource(null);
+            info.setVideoId(null);
 
             checkForMetadata(info);
 

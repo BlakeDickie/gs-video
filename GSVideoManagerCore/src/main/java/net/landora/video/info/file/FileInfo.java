@@ -18,6 +18,7 @@ public class FileInfo implements Serializable {
     private String e2dkHash;
     private String metadataSource;
     private String metadataId;
+    private String videoId;
     private long lastModified;
 
     public FileInfo() {
@@ -32,6 +33,7 @@ public class FileInfo implements Serializable {
         info.metadataSource = metadataSource;
         info.metadataId = metadataId;
         info.lastModified = lastModified;
+        info.videoId = videoId;
         
         return info;
     }
@@ -82,6 +84,14 @@ public class FileInfo implements Serializable {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public String getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
     }
 
     @Override

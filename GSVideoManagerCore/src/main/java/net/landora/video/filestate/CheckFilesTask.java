@@ -86,6 +86,11 @@ public class CheckFilesTask extends NBTask<Object, Object> {
                 fileRecord.setMetadataSource(info.getMetadataSource());
                 fileRecord.setRename(subPath.getFirst().isRenameNewFiles());
                 fileRecord.setSubPath(subPath.getSecond());
+                fileRecord.setVideoId(info.getVideoId());
+                
+                SharedDirectoryDBA.saveFileRecord(fileRecord);
+            } else if (fileRecord.getVideoId() == null && info.getVideoId() != null) {
+                fileRecord.setVideoId(info.getVideoId());
                 
                 SharedDirectoryDBA.saveFileRecord(fileRecord);
             }
