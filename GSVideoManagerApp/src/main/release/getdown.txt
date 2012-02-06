@@ -1,9 +1,13 @@
-appbase = http://landora.net/gsvideomanager/
+appbase = http://landora.net/gsvideomanager/web/
 
-ui.name = GS Video Manager
+ui.name = GS Video Manager Launcher
+ui.background = background.png
+ui.progress = 5, 730, 540, 30
+ui.status = 55, 770, 490, 30
 
 class = net.landora.gsvideomanagerapp.App
 
 allow_offline = true
 
+resource = background.png
 

@@ -18,6 +18,7 @@
         
         
         <copy todir="${getdown.web}" file="getdown.txt" overwrite="true"/>
+        <copy todir="${getdown.web}" file="background.png" overwrite="true"/>
         
         <echo append="true" file="${getdown.web}/getdown.txt" message="${gotdown.code}" />
         
@@ -25,9 +26,17 @@
                  classpath="${basedir}/getdown-tools-1.2.jar"/>
         <digest appdir="${getdown.web}"/>
         
+        <exec executable="rsync">
+            <arg value="-auv" />
+            <arg value="--delete" />
+            <arg file="${getdown.web}/" />
+            <arg file="/media/quon/www/main/htdocs/gsvideomanager/" />
+        </exec>
+        
         <mkdir dir="${getdown.stub}"/>
-        <copy todir="${getdown.stub}" file="getdown.txt" overwrite="true"/>
-        <copy todir="${getdown.stub}" file="getdown-client-1.2.jar" overwrite="true"/>
+        <copy todir="${getdown.stub}" file="${getdown.web}/getdown.txt" overwrite="true"/>
+        <copy tofile="${getdown.stub}/getdown-client.jar" file="getdown-client-1.2.jar" overwrite="true"/>
+        <copy todir="${getdown.stub}" file="background.png" overwrite="true"/>
     </target>
     
 </project>
