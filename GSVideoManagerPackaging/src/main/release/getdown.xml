@@ -26,12 +26,6 @@
                  classpath="${basedir}/getdown-tools-1.2.jar"/>
         <digest appdir="${getdown.web}"/>
         
-        <exec executable="rsync">
-            <arg value="-auv" />
-            <arg value="--delete" />
-            <arg file="${getdown.web}/" />
-            <arg file="/media/quon/www/main/htdocs/gsvideomanager/" />
-        </exec>
         
         <mkdir dir="${getdown.stub}"/>
         <copy todir="${getdown.stub}" file="${getdown.web}/getdown.txt" overwrite="true"/>
