@@ -17,6 +17,7 @@ public interface Addon {
     public String getAddonName();
     public List<String> getRequiredAddons();
     
+    public void load();
     public void start();
     public void stop();
     public void ready();

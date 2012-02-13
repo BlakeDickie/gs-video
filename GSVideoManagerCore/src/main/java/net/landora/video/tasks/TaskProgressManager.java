@@ -42,7 +42,7 @@ public class TaskProgressManager {
     }
     
     public TaskProgress newTaskProgress() {
-        if (VideoManagerApp.getInstance().isGuiMode())
+        if (VideoManagerApp.getInstance().getProfile().isGUIEnabled())
             return new TaskProgressImpl();
         else
             return new NullTaskProgress();

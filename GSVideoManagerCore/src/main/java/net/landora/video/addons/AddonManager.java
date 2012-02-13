@@ -40,9 +40,10 @@ public class AddonManager {
     }
     
     private LinkedHashMap<Class<? extends Addon>, Addon> addons;
+    private boolean started;
     private ShutdownMonitor shutdownHook;
     
-    public void startAddons() {
+    public void loadAddons() {
         if (addons != null)
             throw new IllegalStateException("Addons already running.");
         
@@ -52,7 +53,7 @@ public class AddonManager {
         }
         
         for(Addon addon: addons.values())
-            addon.start();
+            addon.load();
         
         shutdownHook = new ShutdownMonitor();
         Runtime.getRuntime().addShutdownHook(shutdownHook);
@@ -61,6 +62,8 @@ public class AddonManager {
     private void stopAddons() {
         if (addons == null)
             throw new IllegalStateException("Addons not running.");
+        if (!started)
+            return;
         
         List<Addon> addonsReversed = new ArrayList<Addon>(addons.values());
         Collections.reverse(addonsReversed);
@@ -68,18 +71,28 @@ public class AddonManager {
         for(Addon addon: addonsReversed)
             addon.stop();
         
-        addons = null;
+        started = false;
     }
     
     public void readyAddons() {
-        if (addons == null)
+        if (addons == null || !started)
             throw new IllegalStateException("Addons not running.");
-        
-        
         
         for(Addon addon: addons.values())
             addon.ready();
         
+    }
+    
+    public void startAddons() {
+        if (addons == null)
+            throw new IllegalStateException("Addons not running.");
+        if (started)
+            throw new IllegalStateException("Addons already started.");
+        
+        for(Addon addon: addons.values())
+            addon.start();
+        
+        started = true;
     }
     
     

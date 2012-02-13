@@ -4,20 +4,19 @@
  */
 package net.landora.video;
 
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import javax.swing.JFrame;
 import net.landora.video.addons.AddonManager;
 import net.landora.video.preferences.FileSyncProperties;
+import net.landora.video.ui.ManagerProfile;
+import net.landora.video.profile.RunProfile;
 import net.landora.video.utils.EventBus;
 import net.landora.video.utils.NamedThreadFactory;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 import org.jdesktop.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +36,10 @@ public class VideoManagerApp extends Application {
         return getInstance(VideoManagerApp.class);
     }
 
+    public VideoManagerApp() {
+        profiles = new TreeMap<String, RunProfile>(String.CASE_INSENSITIVE_ORDER);
+    }
+    
     public synchronized FileSyncProperties getLocalProperties() {
         if (localProperties == null)
             localProperties = new FileSyncProperties("user.properties");
@@ -49,25 +52,25 @@ public class VideoManagerApp extends Application {
         return scheduledExecutor;
     }
     
-    private boolean guiMode;
-    private boolean daemonMode;
-    private boolean systemTray;
+    private Map<String,RunProfile> profiles;
+    
     private EventBus eventBus = new EventBus();
 
-    public boolean isGuiMode() {
-        return guiMode;
-    }
-
-    public boolean isDaemonMode() {
-        return daemonMode;
-    }
-
-    public boolean isSystemTray() {
-        return systemTray;
-    }
+    private RunProfile profile;
 
     public EventBus getEventBus() {
         return eventBus;
+    }
+
+    public RunProfile getProfile() {
+        return profile;
+    }
+    
+    public synchronized void addProfile(RunProfile profile) {
+        String name = profile.getProfileName();
+        if (profiles.containsKey(name))
+            throw new IllegalArgumentException("Profile with name already exists: " + name);
+        profiles.put(name, profile);
     }
     
     @Override
@@ -77,40 +80,59 @@ public class VideoManagerApp extends Application {
     
     @Override
     protected void initialize(String[] args) {
-        Options options = new Options();
-        options.addOption("h", "help", false, "Display this help message.");
-        options.addOption("d", "daemon", false, "Start in background daemon mode.");
-        options.addOption("t", "tray", false, "Show system tray icon when in daemon mode.");
-        CommandLineParser parser = new PosixParser();
+//        Options options = new Options();
+//        options.addOption("h", "help", false, "Display this help message.");
+//        options.addOption("d", "daemon", false, "Start in background daemon mode.");
+//        options.addOption("t", "tray", false, "Show system tray icon when in daemon mode.");
+//        CommandLineParser parser = new PosixParser();
+//        
+//        boolean showHelp = false;
+//        String message = null;
+//        
+//        try {
+//            CommandLine line = parser.parse(options, args);
+//            if (line.hasOption("h"))
+//                showHelp = true;
+//            
+//            daemonMode = line.hasOption("d");
+//            guiMode = !daemonMode;
+//            systemTray = line.hasOption("t");
+//            
+//        } catch (ParseException e) {
+//            message = e.getLocalizedMessage();
+//            showHelp = true;
+//        }
+//        
+//        if (showHelp) {
+//            HelpFormatter formatter = new HelpFormatter();
+//            PrintWriter writer = new PrintWriter(System.err);
+//            formatter.printHelp(writer, 60,  "gsvideomanager", message, options, 2, 3, null );
+//            writer.flush();
+//            
+//            guiMode = false;
+//            daemonMode = false;
+//            return;
+//        }
+        AddonManager.getInstance().loadAddons();
         
-        boolean showHelp = false;
-        String message = null;
-        
-        try {
-            CommandLine line = parser.parse(options, args);
-            if (line.hasOption("h"))
-                showHelp = true;
-            
-            daemonMode = line.hasOption("d");
-            guiMode = !daemonMode;
-            systemTray = line.hasOption("t");
-            
-        } catch (ParseException e) {
-            message = e.getLocalizedMessage();
-            showHelp = true;
+        String profileName;
+        List<String> argsList = new ArrayList<String>(Arrays.asList(args));
+        if (argsList.isEmpty()) {
+            profileName = ManagerProfile.PROFILE_NAME;
+        } else {
+            profileName = argsList.remove(0);
         }
         
-        if (showHelp) {
-            HelpFormatter formatter = new HelpFormatter();
-            PrintWriter writer = new PrintWriter(System.err);
-            formatter.printHelp(writer, 60,  "gsvideomanager", message, options, 2, 3, null );
-            writer.flush();
-            
-            guiMode = false;
-            daemonMode = false;
+        profile = profiles.get(profileName);
+        if (profile == null) {
+            log.error("No such profile: " + profileName);
             return;
         }
         
+        if (!profile.readCommandLine(argsList.toArray(new String[argsList.size()]))) {
+            profile = null;
+            return;
+        }
         
         AddonManager.getInstance().startAddons();
         
@@ -119,22 +141,17 @@ public class VideoManagerApp extends Application {
     @Override
     protected void ready() {
         
-        if (!guiMode && !daemonMode)
+        if (profile == null) {
+            System.exit(-1);
             return;
+        }
         
         AddonManager.getInstance().readyAddons();
-//        Server server = new Server(8080);
-//        Context root = new Context(server,"/",Context.SESSIONS);
-//        ServletHolder holder = new ServletHolder(HessianServlet.class);
-//        holder.setInitParameter("home-api", TestAPI.class.getName());
-//        holder.setInitParameter("home-class", TestImpl.class.getName());
-//        root.addServlet(holder, "/Hessian");
-//        try {
-//            server.start();
-//            
-//        } catch (Exception ex) {
-//            java.util.logging.Logger.getLogger(VideoManagerApp.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        
+        Integer returnCode = profile.runProfile();
+        
+        if (returnCode != null)
+            System.exit(returnCode);
     }
 
     

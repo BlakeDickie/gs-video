@@ -34,13 +34,6 @@ public final class UIAddon extends AbstractAddon {
     public UIAddon() {
         super(ID, "GUI", PreferencesAddon.ID);
         
-        if (VideoManagerApp.getInstance().isGuiMode()) {
-            frame = new ManagerFrame();
-            
-            addConfigurationPanel(DirectoriesConfigPanel.class);
-        }
-        
-        
     }
     
     public static UIAddon getInstance() {
@@ -50,7 +43,23 @@ public final class UIAddon extends AbstractAddon {
     private ManagerFrame frame;
 
     @Override
+    public void load() {
+        VideoManagerApp.getInstance().addProfile(new ManagerProfile());
+    }
+
+    
+    
+    @Override
     public void start() {
+        
+        if (VideoManagerApp.getInstance().getProfile().isManager()) {
+            frame = new ManagerFrame();
+        }
+        
+        if (VideoManagerApp.getInstance().getProfile().isGUIEnabled()) {
+            addConfigurationPanel(DirectoriesConfigPanel.class);
+        }
+        
         
     }
 
@@ -83,13 +92,13 @@ public final class UIAddon extends AbstractAddon {
     private List<Class<? extends ConfigurationPanel>> configPanels = new ArrayList<Class<? extends ConfigurationPanel>>();
     
     public void addConfigurationPanel(Class<? extends ConfigurationPanel> panelClass) {
-        if (VideoManagerApp.getInstance().isGuiMode()) {
+        if (VideoManagerApp.getInstance().getProfile().isGUIEnabled()) {
             configPanels.add(panelClass);
         }
     }
     
     public void showConfigurationDialog(Window parent) {
-        if (VideoManagerApp.getInstance().isGuiMode()) {
+        if (VideoManagerApp.getInstance().getProfile().isGUIEnabled()) {
             ConfigurationDialog dialog = new ConfigurationDialog(parent, configPanels);
             dialog.setVisible(true);
         }

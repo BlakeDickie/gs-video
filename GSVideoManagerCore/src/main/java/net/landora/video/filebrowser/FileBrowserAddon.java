@@ -21,8 +21,10 @@ public class FileBrowserAddon extends AbstractAddon {
 
     @Override
     public void start() {
-        if (VideoManagerApp.getInstance().isGuiMode())
+        if (VideoManagerApp.getInstance().getProfile().isManager()) {
             UIAddon.getInstance().addContentPanel(new FileBrowserPanel());
+            UIAddon.getInstance().addContentPanel(new DuplicateFilePanel());
+        }
     }
     
     

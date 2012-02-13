@@ -40,6 +40,12 @@ public abstract class AbstractAddon implements Addon {
         return name;
     }
 
+    @Override
+    public void load() {
+        
+    }
+    
+    @Override
     public void start() {
         
     }
