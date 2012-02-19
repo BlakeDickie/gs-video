@@ -5,7 +5,6 @@
 package net.landora.video.filerenaming;
 
 import net.landora.video.addons.AbstractAddon;
-import net.landora.video.filestate.CheckFilesPeriodicTask;
 import net.landora.video.preferences.PreferencesAddon;
 import net.landora.video.tasks.PeriodicTaskManager;
 import net.landora.video.ui.UIAddon;

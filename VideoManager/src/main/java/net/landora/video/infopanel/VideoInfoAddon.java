@@ -5,7 +5,7 @@
 package net.landora.video.infopanel;
 
 import net.landora.video.addons.AbstractAddon;
-import net.landora.video.ui.UIAddon;
+import net.landora.video.manager.ManagerAddon;
 
 /**
  *
@@ -15,12 +15,12 @@ public class VideoInfoAddon extends AbstractAddon {
     public static final String ID = "net.landora.video.infopanel.VideoInfoAddon";
     
     public VideoInfoAddon() {
-        super(ID, "Video Info", UIAddon.ID);
+        super(ID, "Video Info", ManagerAddon.ID);
     }
 
     @Override
     public void start() {
-        UIAddon.getInstance().addInfoPanel(new VideoInfoPanel());
+        ManagerAddon.getInstance().addInfoPanel(new VideoInfoPanel());
     }
     
     

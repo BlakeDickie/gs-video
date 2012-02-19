@@ -15,6 +15,7 @@ import net.landora.animeinfo.notifications.NotificationViewer;
 import net.landora.animeinfo.notifications.NotificationsPeriodic;
 import net.landora.video.addons.AbstractAddon;
 import net.landora.video.data.DataAddons;
+import net.landora.video.manager.ManagerAddon;
 import net.landora.video.preferences.PreferencesAddon;
 import net.landora.video.tasks.PeriodicTaskManager;
 import net.landora.video.ui.UIAddon;
@@ -27,7 +28,7 @@ public class AniDBAddon extends AbstractAddon {
     public static final String ID = "net.landora.animeinfo";
 
     public AniDBAddon() {
-        super(ID, "AniDB Information", PreferencesAddon.ID, DataAddons.ID, UIAddon.ID);
+        super(ID, "AniDB Information", PreferencesAddon.ID, DataAddons.ID, UIAddon.ID, ManagerAddon.ID);
     }
 
     @Override
@@ -36,7 +37,7 @@ public class AniDBAddon extends AbstractAddon {
         
         UIAddon.getInstance().addAction(new AcknowlegeNotification(), new ViewAnimeGroupPage(), new ViewAnimePage());
         notificationViewer = new NotificationViewer();
-        UIAddon.getInstance().addContentPanel(notificationViewer);
+        ManagerAddon.getInstance().addContentPanel(notificationViewer);
     }
     
     private NotificationViewer notificationViewer;

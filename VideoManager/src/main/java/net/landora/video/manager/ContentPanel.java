@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.landora.video.ui;
+package net.landora.video.manager;
 
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import net.landora.video.ui.UIAddon;
 
 /**
  *

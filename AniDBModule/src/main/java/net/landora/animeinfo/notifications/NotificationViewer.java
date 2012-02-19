@@ -20,7 +20,7 @@ import net.landora.animeinfo.data.AnimeNotification;
 import net.landora.animeinfo.data.AnimeStub;
 import net.landora.video.VideoManagerApp;
 import net.landora.video.tasks.TaskCompletedEvent;
-import net.landora.video.ui.ContentPanel;
+import net.landora.video.manager.ContentPanel;
 import net.landora.video.utils.BusReciever;
 import net.landora.video.utils.UIUtils;
 import org.apache.commons.collections.map.MultiValueMap;

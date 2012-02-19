@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.*;
 import net.landora.video.filestate.data.LocalPathManager;
 import net.landora.video.filestate.data.SharedDirectory;
-import net.landora.video.ui.ContentPanel;
+import net.landora.video.manager.ContentPanel;
 import net.landora.video.ui.tree.LazyTreeChildrenFactory;
 import net.landora.video.ui.tree.LazyTreeLoadingManager;
 import net.landora.video.ui.tree.LazyTreeNode;
@@ -91,7 +91,7 @@ public class FileBrowserPanel extends ContentPanel<VideoFile> {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblFiles = new javax.swing.JTable();
 
-        setPriority(net.landora.video.ui.ContentPanel.Priority.Main);
+        setPriority(net.landora.video.manager.ContentPanel.Priority.Main);
         setTitle("Files");
         setLayout(new java.awt.BorderLayout());
 

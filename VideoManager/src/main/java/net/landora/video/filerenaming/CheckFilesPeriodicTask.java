@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.landora.video.filestate;
+package net.landora.video.filerenaming;
 
 import net.landora.video.tasks.NBTask;
 import net.landora.video.tasks.PeriodicTask;

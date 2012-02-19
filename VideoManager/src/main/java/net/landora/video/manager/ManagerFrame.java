@@ -8,8 +8,9 @@
  *
  * Created on Dec 27, 2011, 6:33:32 PM
  */
-package net.landora.video.ui;
+package net.landora.video.manager;
 
+import net.landora.video.manager.ContentPanel;
 import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -18,6 +19,8 @@ import java.util.Collection;
 import java.util.List;
 import net.landora.video.tasks.TaskProgressImpl;
 import net.landora.video.tasks.TaskProgressManager;
+import net.landora.video.ui.InfoPanel;
+import net.landora.video.ui.UIAddon;
 import net.landora.video.utils.ComparisionUtils;
 import net.landora.video.utils.UIUtils;
 import org.apache.commons.collections.map.MultiValueMap;

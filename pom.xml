@@ -14,6 +14,7 @@
     <module>GSVideoDBScheme</module>
     <module>GSVideoPackaging</module>
     <module>VideoPlayer</module>
+    <module>VideoManager</module>
   </modules>
   
     <properties>

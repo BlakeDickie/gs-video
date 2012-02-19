@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import net.landora.video.VideoManagerApp;
@@ -40,21 +39,8 @@ public final class UIAddon extends AbstractAddon {
         return AddonManager.getInstance().getAddonInstance(UIAddon.class);
     }
     
-    private ManagerFrame frame;
-
-    @Override
-    public void load() {
-        VideoManagerApp.getInstance().addProfile(new ManagerProfile());
-    }
-
-    
-    
     @Override
     public void start() {
-        
-        if (VideoManagerApp.getInstance().getProfile().isManager()) {
-            frame = new ManagerFrame();
-        }
         
         if (VideoManagerApp.getInstance().getProfile().isGUIEnabled()) {
             addConfigurationPanel(DirectoriesConfigPanel.class);
@@ -62,33 +48,6 @@ public final class UIAddon extends AbstractAddon {
         
         
     }
-
-    @Override
-    public void ready() {
-        if (frame != null) {
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setVisible(true);
-        }
-    }
-
-    @Override
-    public void stop() {
-        if (frame != null)
-            frame.setVisible(false);
-    }
-    
-    public void addContentPanel(ContentPanel panel) {
-        if (frame != null)
-            frame.addContentPanel(panel);
-    }
-
-    public void addInfoPanel(InfoPanel panel) {
-        if (frame != null)
-            frame.addInfoPanel(panel);
-    }
-    
     private List<Class<? extends ConfigurationPanel>> configPanels = new ArrayList<Class<? extends ConfigurationPanel>>();
     
     public void addConfigurationPanel(Class<? extends ConfigurationPanel> panelClass) {

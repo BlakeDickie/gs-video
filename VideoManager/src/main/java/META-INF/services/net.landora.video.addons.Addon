@@ -1,0 +1,4 @@
+net.landora.video.manager.ManagerAddon
+net.landora.video.filebrowser.FileBrowserAddon
+net.landora.video.infopanel.VideoInfoAddon
+net.landora.video.filerenaming.RenamingAddon

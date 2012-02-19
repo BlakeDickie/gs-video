@@ -4,18 +4,12 @@
  */
 package net.landora.video;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import net.landora.video.addons.AddonManager;
 import net.landora.video.preferences.FileSyncProperties;
 import net.landora.video.profile.ProfileSorter;
-import net.landora.video.ui.ManagerProfile;
 import net.landora.video.profile.RunProfile;
 import net.landora.video.utils.EventBus;
 import net.landora.video.utils.NamedThreadFactory;
@@ -70,6 +64,8 @@ public class VideoManagerApp extends Application {
     
     public synchronized void addProfile(RunProfile profile) {
         String name = profile.getProfileName();
+        if (name.equalsIgnoreCase("help"))
+            throw new IllegalArgumentException("Reserved profile name: " + name);
         if (profiles.containsKey(name))
             throw new IllegalArgumentException("Profile with name already exists: " + name);
         profiles.put(name, profile);
@@ -85,10 +81,17 @@ public class VideoManagerApp extends Application {
         
         AddonManager.getInstance().loadAddons();
         
-        String profileName;
+        String profileName = null;
         List<String> argsList = new ArrayList<String>(Arrays.asList(args));
         if (argsList.isEmpty()) {
-            profileName = ManagerProfile.PROFILE_NAME;
+            for(RunProfile p: profiles.values())
+                if (p.isManager())
+                    profileName = p.getProfileName();
+            if (profileName == null) {
+                log.error("No manager profile found.");
+                System.exit(-1);
+            }
+            
         } else {
             profileName = argsList.remove(0);
         }
