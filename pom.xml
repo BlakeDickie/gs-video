@@ -15,6 +15,7 @@
     <module>XBMCSupport</module>
     <module>GSVideoDBScheme</module>
     <module>GSVideoPackaging</module>
+    <module>VideoPlayer</module>
   </modules>
   
     <properties>
