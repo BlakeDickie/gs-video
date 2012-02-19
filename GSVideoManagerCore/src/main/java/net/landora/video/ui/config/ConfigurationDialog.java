@@ -87,7 +87,7 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
         setHasChanges(true);
     }
     
-    
+    private javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ConfigurationDialog.class, this);
 
     
     /** This method is called from within the constructor to
@@ -116,8 +116,7 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ConfigurationDialog.class, this);
-        btnApply.setAction(actionMap.get("save")); // NOI18N
+        btnApply.setAction(actionMap.get("save"));
         btnApply.setName("btnApply"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${hasChanges}"), btnApply, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
@@ -125,7 +124,7 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
 
         jPanel1.add(btnApply);
 
-        btnOK.setAction(actionMap.get("saveAndClose")); // NOI18N
+        btnOK.setAction(actionMap.get("saveAndClose"));
         btnOK.setName("btnOK"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${hasChanges}"), btnOK, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
@@ -133,7 +132,7 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
 
         jPanel1.add(btnOK);
 
-        btnCancel.setAction(actionMap.get("cancel")); // NOI18N
+        btnCancel.setAction(actionMap.get("cancel"));
         btnCancel.setName("btnCancel"); // NOI18N
         jPanel1.add(btnCancel);
 
@@ -186,6 +185,25 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
         setHasChanges(false);
         
         return true;
+    }
+
+    private class SaveTask extends org.jdesktop.application.Task<Object, Void> {
+        SaveTask(org.jdesktop.application.Application app) {
+            // Runs on the EDT.  Copy GUI state that
+            // doInBackground() depends on from parameters
+            // to SaveTask fields, here.
+            super(app);
+        }
+        @Override protected Object doInBackground() {
+            // Your Task's code here.  This method runs
+            // on a background thread, so don't reference
+            // the Swing GUI from here.
+            return null;  // return your result
+        }
+        @Override protected void succeeded(Object result) {
+            // Runs on the EDT.  Update the GUI based on
+            // the result computed by doInBackground().
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

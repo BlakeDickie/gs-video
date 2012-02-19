@@ -13,7 +13,7 @@ import javax.swing.JPopupMenu;
  *
  * @author bdickie
  */
-public class ContentPanel<S> extends JPanel {
+public abstract class ContentPanel<S> extends JPanel {
 
     public ContentPanel() {
     }
@@ -57,7 +57,7 @@ public class ContentPanel<S> extends JPanel {
         firePropertyChange(PROP_PRIORITY, oldPriority, priority);
     }
 
-    
+    public abstract void loadView();
     
     protected boolean maybePopup(MouseEvent e) {
         if (!e.isPopupTrigger())

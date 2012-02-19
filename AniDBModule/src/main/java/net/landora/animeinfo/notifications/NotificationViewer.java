@@ -21,7 +21,6 @@ import net.landora.animeinfo.data.AnimeStub;
 import net.landora.video.VideoManagerApp;
 import net.landora.video.tasks.TaskCompletedEvent;
 import net.landora.video.ui.ContentPanel;
-import net.landora.video.ui.tree.LazyTreeLoadingManager;
 import net.landora.video.utils.BusReciever;
 import net.landora.video.utils.UIUtils;
 import org.apache.commons.collections.map.MultiValueMap;
@@ -38,18 +37,7 @@ public class NotificationViewer extends ContentPanel {
         
         setTitle("Anime Notifications");
         
-        reloadTree();
         
-        VideoManagerApp.getInstance().getEventBus().addHandlersWeak(this);
-    }
-    
-    @BusReciever
-    public void taskCompleted(TaskCompletedEvent event) {
-        if (event.isTaskOf(NotificationsTask.class))
-            reloadTree();
-    }
-    
-    private void reloadTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
         
         notificationsNode = new DefaultMutableTreeNode("Notifications");
@@ -58,8 +46,23 @@ public class NotificationViewer extends ContentPanel {
         treeModel = new DefaultTreeModel(root);
         
         treeItems.setModel(treeModel);
-        LazyTreeLoadingManager.getInstance().setup(treeItems);
+//        LazyTreeLoadingManager.getInstance().setup(treeItems);
+        
+        VideoManagerApp.getInstance().getEventBus().addHandlersWeak(this);
     }
+
+    @Override
+    public void loadView() {
+        loadNotifications();
+    }
+    
+    
+    @BusReciever
+    public void taskCompleted(TaskCompletedEvent event) {
+        if (event.isTaskOf(NotificationsTask.class))
+            loadNotifications();
+    }
+    
     
     private DefaultTreeModel treeModel;
     private DefaultMutableTreeNode notificationsNode;
@@ -167,8 +170,7 @@ public class NotificationViewer extends ContentPanel {
         pnlNoSelection.setName("pnlNoSelection"); // NOI18N
         pnlNoSelection.setLayout(new java.awt.GridBagLayout());
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(NotificationViewer.class);
-        lblNoSelection.setText(resourceMap.getString("lblNoSelection.text")); // NOI18N
+        lblNoSelection.setText("No Notification Selected"); // NOI18N
         lblNoSelection.setName("lblNoSelection"); // NOI18N
         pnlNoSelection.add(lblNoSelection, new java.awt.GridBagConstraints());
 

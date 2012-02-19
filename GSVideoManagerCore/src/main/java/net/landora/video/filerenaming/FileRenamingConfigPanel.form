@@ -43,7 +43,7 @@
                     <Font bold="true" component="jLabel1" property="font" relativeSize="true" size="0"/>
                   </FontInfo>
                 </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+                <Property name="text" type="java.lang.String" value="Folder Rename" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -88,7 +88,7 @@
                     <Font bold="true" component="jLabel2" property="font" relativeSize="true" size="0"/>
                   </FontInfo>
                 </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+                <Property name="text" type="java.lang.String" value="File Rename" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -177,7 +177,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
+            <Property name="text" type="java.lang.String" value="Test Profile" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="cboTestProfile">
@@ -187,12 +187,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel4.text"/>
+            <Property name="text" type="java.lang.String" value="Folder Test Result" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
+            <Property name="text" type="java.lang.String" value="File Test Result" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtFolderResult">

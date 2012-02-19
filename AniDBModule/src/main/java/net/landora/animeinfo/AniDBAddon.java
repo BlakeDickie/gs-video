@@ -49,7 +49,6 @@ public class AniDBAddon extends AbstractAddon {
         PeriodicTaskManager.getInstance().addPeriodicTask(new NotificationsPeriodic());
         PeriodicTaskManager.getInstance().addPeriodicTask(new MyListExportPeriodicTask());
         
-        notificationViewer.loadNotifications();
     }
 
     

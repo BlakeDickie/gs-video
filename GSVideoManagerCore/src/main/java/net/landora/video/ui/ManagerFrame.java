@@ -52,6 +52,8 @@ public class ManagerFrame extends javax.swing.JFrame {
         bindings.bind();
         
     }
+    
+    private javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ManagerFrame.class, this);
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -158,12 +160,11 @@ public class ManagerFrame extends javax.swing.JFrame {
         mnuFile.setText("File");
         mnuFile.setName("mnuFile"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ManagerFrame.class, this);
-        mnuConfig.setAction(actionMap.get("configure")); // NOI18N
+        mnuConfig.setAction(actionMap.get("configure"));
         mnuConfig.setName("mnuConfig"); // NOI18N
         mnuFile.add(mnuConfig);
 
-        mnuQuit.setAction(actionMap.get("quit")); // NOI18N
+        mnuQuit.setAction(actionMap.get("quit"));
         mnuQuit.setName("mnuQuit"); // NOI18N
         mnuFile.add(mnuQuit);
 
@@ -189,6 +190,9 @@ public class ManagerFrame extends javax.swing.JFrame {
 
     
     private void tabMainStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabMainStateChanged
+        ContentPanel panel = (ContentPanel)tabMain.getSelectedComponent();
+        if (panel != null)
+            panel.loadView();
         checkContext();
     }//GEN-LAST:event_tabMainStateChanged
 

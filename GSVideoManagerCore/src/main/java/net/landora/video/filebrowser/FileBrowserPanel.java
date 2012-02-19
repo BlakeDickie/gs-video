@@ -63,6 +63,17 @@ public class FileBrowserPanel extends ContentPanel<VideoFile> {
             }
         });
     }
+
+    @Override
+    public void loadView() {
+        reload();
+    }
+    
+    private void reload() {
+        
+    }
+    
+    
     
     /** This method is called from within the constructor to
      * initialize the form.

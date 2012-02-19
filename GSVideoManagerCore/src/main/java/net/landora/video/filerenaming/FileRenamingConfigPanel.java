@@ -98,12 +98,11 @@ public final class FileRenamingConfigPanel extends ConfigurationPanel {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getStyle() | java.awt.Font.BOLD));
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(FileRenamingConfigPanel.class);
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setText("Folder Rename"); // NOI18N
         jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         txtFolderScript.setColumns(80);
-        txtFolderScript.setFont(new java.awt.Font("Monospaced", 0, 10)); // NOI18N
+        txtFolderScript.setFont(new java.awt.Font("Monospaced", 0, 10));
         txtFolderScript.setRows(10);
         txtFolderScript.setTabSize(3);
         jScrollPane1.setViewportView(txtFolderScript);
@@ -115,11 +114,11 @@ public final class FileRenamingConfigPanel extends ConfigurationPanel {
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getStyle() | java.awt.Font.BOLD));
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setText("File Rename"); // NOI18N
         jPanel2.add(jLabel2, java.awt.BorderLayout.PAGE_START);
 
         txtFileScript.setColumns(80);
-        txtFileScript.setFont(new java.awt.Font("Monospaced", 0, 10)); // NOI18N
+        txtFileScript.setFont(new java.awt.Font("Monospaced", 0, 10));
         txtFileScript.setRows(10);
         txtFileScript.setTabSize(3);
         jScrollPane2.setViewportView(txtFileScript);
@@ -130,7 +129,7 @@ public final class FileRenamingConfigPanel extends ConfigurationPanel {
 
         add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setText("Test Profile"); // NOI18N
 
         cboTestProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,9 +137,9 @@ public final class FileRenamingConfigPanel extends ConfigurationPanel {
             }
         });
 
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setText("Folder Test Result"); // NOI18N
 
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setText("File Test Result"); // NOI18N
 
         txtFolderResult.setEditable(false);
 

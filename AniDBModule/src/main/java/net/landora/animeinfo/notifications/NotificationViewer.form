@@ -108,7 +108,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="lblNoSelection">
                   <Properties>
-                    <Property name="text" type="java.lang.String" resourceKey="lblNoSelection.text"/>
+                    <Property name="text" type="java.lang.String" value="No Notification Selected" noResource="true"/>
                     <Property name="name" type="java.lang.String" value="lblNoSelection" noResource="true"/>
                   </Properties>
                   <Constraints>

@@ -6,6 +6,7 @@ package net.landora.video;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,6 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import net.landora.video.addons.AddonManager;
 import net.landora.video.preferences.FileSyncProperties;
+import net.landora.video.profile.ProfileSorter;
 import net.landora.video.ui.ManagerProfile;
 import net.landora.video.profile.RunProfile;
 import net.landora.video.utils.EventBus;
@@ -80,39 +82,7 @@ public class VideoManagerApp extends Application {
     
     @Override
     protected void initialize(String[] args) {
-//        Options options = new Options();
-//        options.addOption("h", "help", false, "Display this help message.");
-//        options.addOption("d", "daemon", false, "Start in background daemon mode.");
-//        options.addOption("t", "tray", false, "Show system tray icon when in daemon mode.");
-//        CommandLineParser parser = new PosixParser();
-//        
-//        boolean showHelp = false;
-//        String message = null;
-//        
-//        try {
-//            CommandLine line = parser.parse(options, args);
-//            if (line.hasOption("h"))
-//                showHelp = true;
-//            
-//            daemonMode = line.hasOption("d");
-//            guiMode = !daemonMode;
-//            systemTray = line.hasOption("t");
-//            
-//        } catch (ParseException e) {
-//            message = e.getLocalizedMessage();
-//            showHelp = true;
-//        }
-//        
-//        if (showHelp) {
-//            HelpFormatter formatter = new HelpFormatter();
-//            PrintWriter writer = new PrintWriter(System.err);
-//            formatter.printHelp(writer, 60,  "gsvideomanager", message, options, 2, 3, null );
-//            writer.flush();
-//            
-//            guiMode = false;
-//            daemonMode = false;
-//            return;
-//        }
+        
         AddonManager.getInstance().loadAddons();
         
         String profileName;
@@ -121,6 +91,18 @@ public class VideoManagerApp extends Application {
             profileName = ManagerProfile.PROFILE_NAME;
         } else {
             profileName = argsList.remove(0);
+        }
+        
+        if (profileName.equalsIgnoreCase("help")) {
+            List<RunProfile> lists = new ArrayList<RunProfile>(profiles.values());
+            Collections.sort(lists, new ProfileSorter());
+            
+            System.out.println("Avaliable profiles:");
+            for(RunProfile p: lists)
+                System.out.println("  " + p.getProfileName() + ": " + p.getProfileDescription());
+            
+            System.exit(0);
+            return;
         }
         
         profile = profiles.get(profileName);
