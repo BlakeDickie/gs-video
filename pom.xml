@@ -12,7 +12,6 @@
     <module>GSVideoManagerAPI</module>
     <module>ED2KHasher</module>
     <module>AniDBModule</module>
-    <module>XBMCSupport</module>
     <module>GSVideoDBScheme</module>
     <module>GSVideoPackaging</module>
     <module>VideoPlayer</module>
