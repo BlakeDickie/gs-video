@@ -9,7 +9,6 @@
   <modules>
     <module>GSVideoApp</module>
     <module>GSVideoCore</module>
-    <module>GSVideoManagerAPI</module>
     <module>ED2KHasher</module>
     <module>AniDBModule</module>
     <module>GSVideoDBScheme</module>
