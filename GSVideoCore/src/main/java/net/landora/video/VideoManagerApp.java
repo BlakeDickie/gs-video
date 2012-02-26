@@ -15,6 +15,7 @@ import net.landora.video.profile.ProfileSorter;
 import net.landora.video.profile.RunProfile;
 import net.landora.video.utils.EventBus;
 import net.landora.video.utils.NamedThreadFactory;
+import net.landora.video.utils.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,10 @@ public final class VideoManagerApp {
     
     protected void initialize(String[] args) {
         try {
-            UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
+            if (OSUtils.isWindows() || OSUtils.isMac())
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            else
+                UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
         } catch (Exception ex) {
             log.error("Error setting look and feel.", ex);
         }
