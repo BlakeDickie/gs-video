@@ -240,6 +240,8 @@ public final class DirectoriesConfigPanel extends ConfigurationPanel {
         } else {
             localPath.put(currentDirectory, path);
             txtLocalPath.setText(path.getPath());
+            
+            changed();
         }
         
     }//GEN-LAST:event_btnFindPathActionPerformed
@@ -268,6 +270,8 @@ public final class DirectoriesConfigPanel extends ConfigurationPanel {
         model.addElement(directory);
         
         lstDirectories.setSelectedValue(directory, true);
+        
+        changed();
     }//GEN-LAST:event_btnAddDirectoryActionPerformed
 
     private void chkRenameNewFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRenameNewFilesActionPerformed

@@ -5,10 +5,9 @@
 package net.landora.video.filerenaming;
 
 import java.io.File;
-import net.landora.video.filerenaming.RenameScriptManager;
-import net.landora.video.filerenaming.RenamingScript;
 import net.landora.video.info.ExtensionUtils;
 import net.landora.video.info.VideoMetadata;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,22 +36,30 @@ public class RenamingManager {
     }
     
     public File getOutputFile(File file, VideoMetadata info) {
-        RenamingScript script = RenameScriptManager.getInstance().getRenamingScript();
-        
-        if (info == null)
-            return file;
-        
-        String outputFolder = script.findFolderName(info);
-        String outputFile = script.findFilename(info);
-        
-        File outputFolderFile = (outputFolder == null ? file.getParentFile() : new File(outputFolder));
-        if (outputFile == null) {
-            outputFile = file.getName();
-        } else {
-            String extension = ExtensionUtils.getExtension(file);
-            outputFile = outputFile + "." + extension;
+        try {
+            RenamingScript script = RenameScriptManager.getInstance().getRenamingScript();
+
+            if (info == null)
+                return file;
+
+            String outputFolder = script.findFolderName(info);
+            String outputFile = script.findFilename(info);
+            
+            if (outputFolder != null)
+                outputFolder = outputFolder.replace('/', File.separatorChar).replace('\\', File.separatorChar);
+
+            File outputFolderFile = (outputFolder == null ? file.getParentFile() : new File(outputFolder));
+            if (outputFile == null) {
+                outputFile = file.getName();
+            } else {
+                String extension = ExtensionUtils.getExtension(file);
+                outputFile = outputFile + "." + extension;
+            }
+
+            return new File(outputFolderFile, outputFile);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).warn("Error finding rename patterns.", e);
+            return null;
         }
-        
-        return new File(outputFolderFile, outputFile);
     }
 }

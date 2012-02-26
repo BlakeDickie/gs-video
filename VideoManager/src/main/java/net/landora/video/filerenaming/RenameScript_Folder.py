@@ -4,6 +4,6 @@ else:
 	coreName = metadata.getSeriesName()
 
 if metadata.isAdult():
-	return "/var/storage/blakes/Hentai/" + replaceIllegalCharacters(coreName)
+	return getSharedDirectoryPath("Quon Hentai") + replaceIllegalCharacters(coreName)
 else:
-	return "/var/storage/Videos/Anime/" + replaceIllegalCharacters(coreName)
+	return getSharedDirectoryPath("Quon Storage Videos") + "Anime/" + replaceIllegalCharacters(coreName)

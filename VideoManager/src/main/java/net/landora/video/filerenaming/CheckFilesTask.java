@@ -101,7 +101,7 @@ public class CheckFilesTask extends NBTask<Object, Object> {
                 if (fileRecord.isRename()) {
                     File outputFile = RenamingManager.getInstance().getOutputFile(file, md);
 
-                    if (!outputFile.equals(file)) {
+                    if (outputFile != null && !outputFile.equals(file)) {
                         if (outputFile.exists()) {
                             System.err.println("File already exists: " + outputFile);
                         } else {
@@ -121,7 +121,7 @@ public class CheckFilesTask extends NBTask<Object, Object> {
                     }
                 } else {
                     File outputFile = RenamingManager.getInstance().getOutputFile(file, md);
-                    if (outputFile.equals(file)) {
+                    if (outputFile != null && outputFile.equals(file)) {
                         fileRecord.setRename(true);
                         SharedDirectoryDBA.saveFileRecord(fileRecord);
                     }

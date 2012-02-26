@@ -1,4 +1,7 @@
-from net.landora.video.info import VideoInfoFileUtils
+from net.landora.video.filerenaming import RenameScriptFunctions
 
 def replaceIllegalCharacters(inputString):
-   return VideoInfoFileUtils.filterInvalidFilenameCharacters(inputString)
+   return RenameScriptFunctions.filterInvalidFilenameCharacters(inputString)
+
+def getSharedDirectoryPath(inputString):
+   return RenameScriptFunctions.getSharedDirectoryPath(inputString)

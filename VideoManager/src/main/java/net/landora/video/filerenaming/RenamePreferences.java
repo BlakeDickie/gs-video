@@ -13,26 +13,42 @@ import net.landora.video.preferences.PreferenceObject;
  * @author bdickie
  */
 public enum RenamePreferences {
-    AutomaticRenameFolders(new String[] { "/var/storage/Downloads"});
+    RenameScript_Folder(true, ""),
+    RenameScript_File(true, "");
     
-    private RenamePreferences(String defaultValue) {
-        pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
+    private RenamePreferences(boolean global, String defaultValue) {
+        if (global)
+            pref = new PreferenceObject(getClass(), name(), defaultValue);
+        else
+            pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
     }
     
-    private RenamePreferences(int defaultValue) {
-        pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
+    private RenamePreferences(boolean global, int defaultValue) {
+        if (global)
+            pref = new PreferenceObject(getClass(), name(), defaultValue);
+        else
+            pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
     }
     
-    private RenamePreferences(long defaultValue) {
-        pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
+    private RenamePreferences(boolean global, boolean defaultValue) {
+        if (global)
+            pref = new PreferenceObject(getClass(), name(), defaultValue);
+        else
+            pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
     }
     
-    private RenamePreferences(boolean defaultValue) {
-        pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
+    private RenamePreferences(boolean global, String[] defaultValue) {
+        if (global)
+            pref = new PreferenceObject(getClass(), name(), defaultValue);
+        else
+            pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
     }
     
-    private RenamePreferences(String[] defaultValue) {
-        pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
+    private RenamePreferences(boolean global, long defaultValue) {
+        if (global)
+            pref = new PreferenceObject(getClass(), name(), defaultValue);
+        else
+            pref = new LocalPreferenceObject(getClass(), name(), defaultValue);
     }
     
     private PreferenceObject pref;
@@ -80,5 +96,5 @@ public enum RenamePreferences {
     public long getLong() {
         return pref.getLong();
     }
-
+    
 }

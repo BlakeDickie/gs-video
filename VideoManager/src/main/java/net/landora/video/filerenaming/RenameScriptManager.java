@@ -4,11 +4,13 @@
  */
 package net.landora.video.filerenaming;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import net.landora.video.data.LocalStorage;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.LoggerFactory;
 
@@ -95,19 +97,19 @@ public class RenameScriptManager {
     }
 
     public String getFileRenameScript() {
-        return getRenameScript("RenameScript_File.py");
+        return getRenameScript("RenameScript_File.py", RenamePreferences.RenameScript_File);
     }
 
     public String getFolderRenameScript() {
-        return getRenameScript("RenameScript_Folder.py");
+        return getRenameScript("RenameScript_Folder.py", RenamePreferences.RenameScript_Folder);
     }
 
     public void setFileRenameScript(String script) {
-        setRenameScript("RenameScript_File.py", script);
+        setRenameScript("RenameScript_File.py", RenamePreferences.RenameScript_File, script);
     }
 
     public void setFolderRenameScript(String script) {
-        setRenameScript("RenameScript_Folder.py", script);
+        setRenameScript("RenameScript_Folder.py", RenamePreferences.RenameScript_Folder, script);
     }
     private static final String CHARSET = "UTF-8";
 
@@ -126,35 +128,17 @@ public class RenameScriptManager {
         }
     }
     
-    private String getRenameScript(String filename) {
-        if (!LocalStorage.getInstance().doesSettingFileExist(filename))
+    private String getRenameScript(String filename, RenamePreferences preference) {
+        String pref = preference.getString();
+        if (pref == null || pref.trim().isEmpty())
             return getClassScript(filename);
-        
-        InputStream is = null;
-        try {
-            is = LocalStorage.getInstance().openInputFile(filename);
-            return IOUtils.toString(is, CHARSET);
-        } catch (Exception e) {
-            LoggerFactory.getLogger(getClass()).error("Error getting rename script.", e);
-            return getClassScript(filename);
-        } finally {
-            if (is != null) {
-                IOUtils.closeQuietly(is);
-            }
-        }
+        return pref;
     }
 
-    private void setRenameScript(String filename, String script) {
-        OutputStream os = null;
-        try {
-            os = LocalStorage.getInstance().openOutputFile(filename);
-            IOUtils.write(script, os, CHARSET);
-        } catch (Exception e) {
-            LoggerFactory.getLogger(getClass()).error("Error saving rename script.", e);
-        } finally {
-            if (os != null) {
-                IOUtils.closeQuietly(os);
-            }
-        }
+    private void setRenameScript(String filename, RenamePreferences preference, String script) {
+        if (getClassScript(filename).equals(script))
+            preference.setString("");
+        else
+            preference.setString(script);
     }
 }
