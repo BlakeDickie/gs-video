@@ -4,16 +4,12 @@
  */
 package net.landora.video.filerenaming;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
+import java.io.*;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import net.landora.video.data.LocalStorage;
 import org.apache.commons.io.IOUtils;
-import org.jdesktop.application.Application;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -131,12 +127,15 @@ public class RenameScriptManager {
     }
     
     private String getRenameScript(String filename) {
+        if (!LocalStorage.getInstance().doesSettingFileExist(filename))
+            return getClassScript(filename);
+        
         InputStream is = null;
         try {
-            is = Application.getInstance().getContext().getLocalStorage().openInputFile(filename);
+            is = LocalStorage.getInstance().openInputFile(filename);
             return IOUtils.toString(is, CHARSET);
         } catch (Exception e) {
-//            LoggerFactory.getLogger(getClass()).error("Error getting rename script.", e);
+            LoggerFactory.getLogger(getClass()).error("Error getting rename script.", e);
             return getClassScript(filename);
         } finally {
             if (is != null) {
@@ -148,7 +147,7 @@ public class RenameScriptManager {
     private void setRenameScript(String filename, String script) {
         OutputStream os = null;
         try {
-            os = Application.getInstance().getContext().getLocalStorage().openOutputFile(filename);
+            os = LocalStorage.getInstance().openOutputFile(filename);
             IOUtils.write(script, os, CHARSET);
         } catch (Exception e) {
             LoggerFactory.getLogger(getClass()).error("Error saving rename script.", e);

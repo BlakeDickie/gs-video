@@ -15,6 +15,7 @@
     <module>GSVideoPackaging</module>
     <module>VideoPlayer</module>
     <module>VideoManager</module>
+    <module>FileInfo</module>
   </modules>
   
     <properties>

@@ -7,13 +7,14 @@ package net.landora.video;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import net.landora.video.addons.AddonManager;
 import net.landora.video.preferences.FileSyncProperties;
 import net.landora.video.profile.ProfileSorter;
 import net.landora.video.profile.RunProfile;
 import net.landora.video.utils.EventBus;
 import net.landora.video.utils.NamedThreadFactory;
-import org.jdesktop.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,18 +22,20 @@ import org.slf4j.LoggerFactory;
  *
  * @author bdickie
  */
-public class VideoManagerApp extends Application {
+public final class VideoManagerApp {
 
     private static final Logger log = LoggerFactory.getLogger(VideoManagerApp.class);
     
     private FileSyncProperties localProperties;
     private ScheduledExecutorService scheduledExecutor;
     
+    private static VideoManagerApp instance;
+    
     public static VideoManagerApp getInstance() {
-        return getInstance(VideoManagerApp.class);
+        return instance;
     }
 
-    public VideoManagerApp() {
+    private VideoManagerApp() {
         profiles = new TreeMap<String, RunProfile>(String.CASE_INSENSITIVE_ORDER);
     }
     
@@ -71,13 +74,12 @@ public class VideoManagerApp extends Application {
         profiles.put(name, profile);
     }
     
-    @Override
-    protected void startup() {
-        
-    }
-    
-    @Override
     protected void initialize(String[] args) {
+        try {
+            UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
+        } catch (Exception ex) {
+            log.error("Error setting look and feel.", ex);
+        }
         
         AddonManager.getInstance().loadAddons();
         
@@ -123,7 +125,6 @@ public class VideoManagerApp extends Application {
         
     }
 
-    @Override
     protected void ready() {
         
         if (profile == null) {
@@ -139,7 +140,27 @@ public class VideoManagerApp extends Application {
             System.exit(returnCode);
     }
 
-    
+    public static void main(final String[] args) {
+        instance = new VideoManagerApp();
+        
+        final Runnable readyRun = new Runnable() {
+
+            public void run() {
+                instance.ready();
+            }
+        };
+        
+        Runnable runnable = new Runnable() {
+
+            public void run() {
+                instance.initialize(args);
+                
+                SwingUtilities.invokeLater(readyRun);
+            }
+        };
+        
+        SwingUtilities.invokeLater(runnable);
+    }
     
     
 }

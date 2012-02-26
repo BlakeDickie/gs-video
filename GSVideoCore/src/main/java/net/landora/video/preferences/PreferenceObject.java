@@ -15,33 +15,33 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @author bdickie
  */
 public class PreferenceObject {
-    private Class<? extends Enum> context;
+    private Class<?> context;
     private String prefName;
     private String defaultValue;
 
-    public PreferenceObject(Class<? extends Enum> context, String prefName, String defaultValue) {
+    public PreferenceObject(Class<?> context, String prefName, String defaultValue) {
         this.context = context;
         this.prefName = prefName;
         this.defaultValue = defaultValue;
     }
     
-    public PreferenceObject(Class<? extends Enum> context, String prefName, int defaultValue) {
+    public PreferenceObject(Class<?> context, String prefName, int defaultValue) {
         this(context, prefName, String.valueOf(defaultValue));
     }
     
-    public PreferenceObject(Class<? extends Enum> context, String prefName, long defaultValue) {
+    public PreferenceObject(Class<?> context, String prefName, long defaultValue) {
         this(context, prefName, String.valueOf(defaultValue));
     }
     
-    public PreferenceObject(Class<? extends Enum> context, String prefName, boolean defaultValue) {
+    public PreferenceObject(Class<?> context, String prefName, boolean defaultValue) {
         this(context, prefName, String.valueOf(defaultValue));
     }
     
-    public PreferenceObject(Class<? extends Enum> context, String prefName, String[] defaultValue) {
+    public PreferenceObject(Class<?> context, String prefName, String[] defaultValue) {
         this(context, prefName, convertFromStringList(Arrays.asList(defaultValue)));
     }
 
-    public Class<? extends Enum> getContext() {
+    public Class<?> getContext() {
         return context;
     }
 
@@ -68,11 +68,11 @@ public class PreferenceObject {
         setString(String.valueOf(value));
     }
     
-    protected void setCurrentValue(Class<? extends Enum> context, String prefName, String value) {
+    protected void setCurrentValue(Class<?> context, String prefName, String value) {
         Preferences.getInstance().setValue(context.getName(), prefName, value);
     }
     
-    protected String getCurrentValue(Class<? extends Enum> context, String prefName) {
+    protected String getCurrentValue(Class<?> context, String prefName) {
         return Preferences.getInstance().getValue(context.getName(), prefName);
     }
     
@@ -116,7 +116,6 @@ public class PreferenceObject {
     }
     
     private static List<String> convertToStringList(String value) {
-        StringBuilder builder = new StringBuilder();
         if (value.equals(""))
             return Collections.EMPTY_LIST;
         

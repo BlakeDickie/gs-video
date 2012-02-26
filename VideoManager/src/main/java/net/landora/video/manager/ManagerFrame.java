@@ -10,13 +10,14 @@
  */
 package net.landora.video.manager;
 
-import net.landora.video.manager.ContentPanel;
 import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.swing.JOptionPane;
+import net.landora.video.VideoManagerApp;
 import net.landora.video.tasks.TaskProgressImpl;
 import net.landora.video.tasks.TaskProgressManager;
 import net.landora.video.ui.InfoPanel;
@@ -24,7 +25,6 @@ import net.landora.video.ui.UIAddon;
 import net.landora.video.utils.ComparisionUtils;
 import net.landora.video.utils.UIUtils;
 import org.apache.commons.collections.map.MultiValueMap;
-import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -55,8 +55,6 @@ public class ManagerFrame extends javax.swing.JFrame {
         bindings.bind();
         
     }
-    
-    private javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ManagerFrame.class, this);
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -86,8 +84,13 @@ public class ManagerFrame extends javax.swing.JFrame {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("GS Video Manager");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         splitMain.setResizeWeight(1.0);
         splitMain.setName("splitMain"); // NOI18N
@@ -163,12 +166,22 @@ public class ManagerFrame extends javax.swing.JFrame {
         mnuFile.setText("File");
         mnuFile.setName("mnuFile"); // NOI18N
 
-        mnuConfig.setAction(actionMap.get("configure"));
+        mnuConfig.setText("Configure");
         mnuConfig.setName("mnuConfig"); // NOI18N
+        mnuConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuConfigActionPerformed(evt);
+            }
+        });
         mnuFile.add(mnuConfig);
 
-        mnuQuit.setAction(actionMap.get("quit"));
+        mnuQuit.setText("Quit");
         mnuQuit.setName("mnuQuit"); // NOI18N
+        mnuQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuQuitActionPerformed(evt);
+            }
+        });
         mnuFile.add(mnuQuit);
 
         menuBar.add(mnuFile);
@@ -198,6 +211,18 @@ public class ManagerFrame extends javax.swing.JFrame {
             panel.loadView();
         checkContext();
     }//GEN-LAST:event_tabMainStateChanged
+
+    private void mnuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuQuitActionPerformed
+        exit();
+    }//GEN-LAST:event_mnuQuitActionPerformed
+
+    private void mnuConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuConfigActionPerformed
+        configure();
+    }//GEN-LAST:event_mnuConfigActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        exit();
+    }//GEN-LAST:event_formWindowClosing
 
     
     public void addContentPanel(ContentPanel panel) {
@@ -282,7 +307,6 @@ public class ManagerFrame extends javax.swing.JFrame {
         
     }
 
-    @Action
     public void configure() {
         UIAddon.getInstance().showConfigurationDialog(this);
     }
@@ -306,4 +330,11 @@ public class ManagerFrame extends javax.swing.JFrame {
         currentTaskProgress.setEnabled(currentMainTask != null);
     }
 
+    
+    public void exit() {
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you wish to quit?", "Exit", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION)
+            System.exit(0);
+    }
+    
 }

@@ -2,3 +2,5 @@ net.landora.video.preferences.PreferencesAddon
 net.landora.video.data.DataAddons
 net.landora.video.ui.UIAddon
 net.landora.video.actions.ActionsAddon
+net.landora.video.properties.PropertiesAddon
+net.landora.video.programs.ProgramsAddon

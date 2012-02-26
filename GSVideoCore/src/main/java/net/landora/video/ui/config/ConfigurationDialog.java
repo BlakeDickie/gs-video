@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import net.landora.video.ui.ConfigurationPanel;
-import org.jdesktop.application.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +70,7 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
     public boolean isHasChanges() {
         return hasChanges;
     }
-
+    
     /**
      * Set the value of hasChanges
      *
@@ -86,8 +85,6 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
     public void configurationPanelChanged(ConfigurationChangedEvent e) {
         setHasChanges(true);
     }
-    
-    private javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(ConfigurationDialog.class, this);
 
     
     /** This method is called from within the constructor to
@@ -116,24 +113,39 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        btnApply.setAction(actionMap.get("save"));
+        btnApply.setText("Apply");
         btnApply.setName("btnApply"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${hasChanges}"), btnApply, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
+        btnApply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApplyActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnApply);
 
-        btnOK.setAction(actionMap.get("saveAndClose"));
+        btnOK.setText("OK");
         btnOK.setName("btnOK"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${hasChanges}"), btnOK, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOKActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnOK);
 
-        btnCancel.setAction(actionMap.get("cancel"));
+        btnCancel.setText("Cancel");
         btnCancel.setName("btnCancel"); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnCancel);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
@@ -158,18 +170,27 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
         }
     }//GEN-LAST:event_formWindowClosing
 
-    @Action
+    private void btnApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApplyActionPerformed
+        save();
+    }//GEN-LAST:event_btnApplyActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        cancel();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+        saveAndClose();
+    }//GEN-LAST:event_btnOKActionPerformed
+    
     public void cancel() {
         setVisible(false);
     }
-
-    @Action
+    
     public void saveAndClose() {
         if (save())
             setVisible(false);
     }
 
-    @Action
     public boolean save() {
         for(ConfigurationPanel panel: panels) {
             if (!panel.valid()) {
@@ -187,24 +208,6 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
         return true;
     }
 
-    private class SaveTask extends org.jdesktop.application.Task<Object, Void> {
-        SaveTask(org.jdesktop.application.Application app) {
-            // Runs on the EDT.  Copy GUI state that
-            // doInBackground() depends on from parameters
-            // to SaveTask fields, here.
-            super(app);
-        }
-        @Override protected Object doInBackground() {
-            // Your Task's code here.  This method runs
-            // on a background thread, so don't reference
-            // the Swing GUI from here.
-            return null;  // return your result
-        }
-        @Override protected void succeeded(Object result) {
-            // Runs on the EDT.  Update the GUI based on
-            // the result computed by doInBackground().
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;

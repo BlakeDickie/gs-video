@@ -6,16 +6,12 @@ package net.landora.video.preferences;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import net.landora.video.VideoManagerApp;
 import net.landora.video.addons.AddonManager;
+import net.landora.video.data.LocalStorage;
 import net.landora.video.utils.ComparisionUtils;
-import org.jdesktop.application.Application;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -48,11 +44,13 @@ public class FileSyncProperties {
     public final synchronized void sync() {
         try {
             Properties props = new Properties();
-            try {
-                InputStream is = Application.getInstance().getContext().getLocalStorage().openInputFile(filename);
-                props.load(is);
-                is.close();
-            } catch (Exception ignore) { }
+            if (LocalStorage.getInstance().doesSettingFileExist(filename)) {
+                try {
+                    InputStream is = LocalStorage.getInstance().openInputFile(filename);
+                    props.load(is);
+                    is.close();
+                } catch (Exception ignore) { }
+            }
             
             for(String name: changedValues) {
                 String value = values.get(name);
@@ -62,7 +60,7 @@ public class FileSyncProperties {
                     props.setProperty(name, value);
             }
             
-            OutputStream os = Application.getInstance().getContext().getLocalStorage().openOutputFile(filename);
+            OutputStream os = LocalStorage.getInstance().openOutputFile(filename);
             props.store(os, "");
             os.close();
             
