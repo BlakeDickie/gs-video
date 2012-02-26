@@ -16,6 +16,7 @@
     <module>VideoPlayer</module>
     <module>VideoManager</module>
     <module>FileInfo</module>
+    <module>PlayerBackends</module>
   </modules>
   
     <properties>

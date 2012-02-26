@@ -8,12 +8,16 @@ package net.landora.video.module;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import net.landora.video.utils.MutableObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author bdickie
  */
 public abstract class AbstractModule implements ModuleInterface {
+    
+    protected Logger log = LoggerFactory.getLogger(getClass());
 
     public synchronized boolean isModuleUsable() {
         if (!cacheLoaded)
