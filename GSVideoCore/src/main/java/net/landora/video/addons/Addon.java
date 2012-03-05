@@ -5,7 +5,6 @@
 package net.landora.video.addons;
 
 import java.util.List;
-import org.mortbay.jetty.servlet.Context;
 
 /**
  *
@@ -21,5 +20,4 @@ public interface Addon {
     public void start();
     public void stop();
     public void ready();
-    public void addServlets(Context serverContext);
 }

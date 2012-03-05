@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -111,7 +111,7 @@ public class EventBus {
             try {
                 m.invoke(obj, event);
             } catch (Exception e) {
-                LogFactory.getLog(obj.getClass()).error("Error running EventBus handler.", e);
+                LoggerFactory.getLogger(obj.getClass()).error("Error running EventBus handler.", e);
             }
         }
         

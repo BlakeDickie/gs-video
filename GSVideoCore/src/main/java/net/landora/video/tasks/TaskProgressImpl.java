@@ -7,7 +7,6 @@ package net.landora.video.tasks;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import net.landora.video.utils.UIUtils;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *

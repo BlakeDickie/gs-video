@@ -7,7 +7,6 @@ package net.landora.video.addons;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.mortbay.jetty.servlet.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,14 +31,17 @@ public abstract class AbstractAddon implements Addon {
          shutdownCalls = new ArrayList<Runnable>();
     }
     
+    @Override
     public List<String> getRequiredAddons() {
         return requiredAddons;
     }
 
+    @Override
     public String getAddonId() {
         return id;
     }
 
+    @Override
     public String getAddonName() {
         return name;
     }
@@ -54,14 +56,12 @@ public abstract class AbstractAddon implements Addon {
         
     }
 
-    public void addServlets(Context serverContext) {
-        
-    }
-
+    @Override
     public void ready() {
         
     }
 
+    @Override
     public void stop() {
         for(Runnable runnable: shutdownCalls)
             runnable.run();
