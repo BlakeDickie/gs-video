@@ -7,6 +7,7 @@ package net.landora.video.playerbackends;
 import java.util.Collections;
 import net.landora.video.addons.AbstractAddon;
 import net.landora.video.addons.AddonManager;
+import net.landora.video.module.ModulesAddon;
 import net.landora.video.module.ModulesManager;
 import net.landora.video.player.VideoFilePlayer;
 import net.landora.video.player.VideoFilePlayerAddon;
@@ -21,7 +22,7 @@ public class PlayerBackendAddon extends AbstractAddon {
     public static final String ID = "net.landora.video.playerbackends.PlayerBackendAddon";
 
     public PlayerBackendAddon() {
-        super(ID, "Core Player Backends", VideoFilePlayerAddon.ID, ProgramsAddon.ID);
+        super(ID, "Core Player Backends", VideoFilePlayerAddon.ID, ProgramsAddon.ID, ModulesAddon.ID);
     }
 
     @Override

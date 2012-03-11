@@ -9,6 +9,7 @@ import net.landora.video.mediainfo.MediaInfoReader;
 import net.landora.video.mkv.MKVReader;
 import net.landora.video.mplayer.MPlayerVideoReader;
 import net.landora.video.addons.AbstractAddon;
+import net.landora.video.module.ModulesAddon;
 import net.landora.video.module.ModulesManager;
 import net.landora.video.programs.ProgramsAddon;
 import net.landora.video.properties.DVDReader;
@@ -23,7 +24,7 @@ public class FileInfoManager extends AbstractAddon {
     public static final String ID = "gsilva.file_info.FileInfoManager";
     
     public FileInfoManager() {
-        super(ID, "Core File Info Parsers", ProgramsAddon.ID, PropertiesAddon.ID);
+        super(ID, "Core File Info Parsers", ProgramsAddon.ID, PropertiesAddon.ID, ModulesAddon.ID);
     }
 
     @Override

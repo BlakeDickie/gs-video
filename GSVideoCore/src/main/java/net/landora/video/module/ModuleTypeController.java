@@ -21,6 +21,10 @@ final class ModuleTypeController<T extends ModuleInterface> {
         this.moduleType = moduleType;
         registeredModules = new ArrayList<T>();
     }
+
+    public ModuleType getModuleType() {
+        return moduleType;
+    }
     
     public synchronized void addModule(T module) {
         registeredModules.add(module);
@@ -43,10 +47,13 @@ final class ModuleTypeController<T extends ModuleInterface> {
     
     public List<T> getConfiguredModules() {
         List<T> modules = getUsableModules();
+        ModulesManager manager = ModulesManager.getInstance();
         ListIterator<T> i = modules.listIterator();
-        while(i.hasNext())
-            if (!i.next().isModuleConfigured())
+        while(i.hasNext()) {
+            T module = i.next();
+            if (!module.isModuleConfigured() || manager.isModuleDisabled(module))
                 i.remove();
+        }
         return modules;
     }
     

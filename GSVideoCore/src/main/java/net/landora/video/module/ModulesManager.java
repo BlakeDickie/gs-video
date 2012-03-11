@@ -4,9 +4,14 @@
  */
 package net.landora.video.module;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import net.landora.video.addons.AddonManager;
 
 /**
  *
@@ -25,6 +30,8 @@ public class ModulesManager {
     }
 
     public static ModulesManager getInstance() {
+        if (AddonManager.getInstance().getAddonInstance(ModulesAddon.class) == null)
+            throw new IllegalStateException("ModulesAddon not started.");
         return SingletonHolder.instance;
     }
     // </editor-fold>  
@@ -68,4 +75,26 @@ public class ModulesManager {
     }
 
 
+    List<ModuleType> getConfiguredTypes() {
+        List<ModuleType> result = new ArrayList<ModuleType>(controllerMap.size());
+        for(ModuleTypeController controller: controllerMap.values())
+            result.add(controller.getModuleType());
+        return result;
+    }
+    
+    private Set<String> disabledModules;
+    
+    synchronized boolean isModuleDisabled(ModuleInterface module) {
+        if (disabledModules == null)
+            disabledModules = new HashSet<String>(ModulesPreference.DisabledModules.getStringList());
+        return disabledModules.contains(module.getModuleName());
+    }
+    
+    synchronized void setDisabledMofules(Collection<ModuleInterface> modules) {
+        Set<String> ids = new HashSet<String>();
+        for(ModuleInterface module: modules)
+            ids.add(module.getModuleName());
+        disabledModules = ids;
+        ModulesPreference.DisabledModules.setStringList(new ArrayList<String>(ids));
+    }
 }
