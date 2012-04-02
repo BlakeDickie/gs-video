@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.landora</groupId>
-  <artifactId>GSVideo</artifactId>
-  <version>2.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>GSVideo</name>
-  <modules>
-    <module>GSVideoApp</module>
-    <module>GSVideoCore</module>
-    <module>ED2KHasher</module>
-    <module>AniDBModule</module>
-    <module>GSVideoDBScheme</module>
-    <module>GSVideoPackaging</module>
-    <module>VideoPlayer</module>
-    <module>VideoManager</module>
-    <module>FileInfo</module>
-    <module>PlayerBackends</module>
-  </modules>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.landora</groupId>
+    <artifactId>GSVideo</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>GSVideo</name>
+    <modules>
+        <module>GSVideoApp</module>
+        <module>GSVideoCore</module>
+        <module>ED2KHasher</module>
+        <module>AniDBModule</module>
+        <module>GSVideoDBScheme</module>
+        <module>GSVideoPackaging</module>
+        <module>VideoPlayer</module>
+        <module>VideoManager</module>
+        <module>FileInfo</module>
+        <module>PlayerBackends</module>
+    </modules>
   
     <properties>
         <slf4j.version>1.6.4</slf4j.version>
         <hibernate-core-version>3.6.8.Final</hibernate-core-version>
         <hibernate-validator-version>3.1.0.GA</hibernate-validator-version>
+        <netbeans.hint.license>gpl30</netbeans.hint.license> 
     </properties>
     
     
@@ -51,4 +52,46 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+    
+    <build>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>false</filtering>
+                <directory>${basedir}/src/main/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <inherited>false</inherited>
+                <groupId>com.google.code.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <header>${basedir}/src/license_header.txt</header>
+                    <failIfMissing>true</failIfMissing>
+                    <includes>
+                        <include>*/src/**</include>
+                    </includes>
+                    <excludes>
+                        <include>**/*.form</include>
+                        <include>**/META-INF/**</include>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-headers</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
