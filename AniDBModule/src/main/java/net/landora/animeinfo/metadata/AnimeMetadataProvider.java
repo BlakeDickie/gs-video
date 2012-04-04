@@ -71,12 +71,12 @@ public class AnimeMetadataProvider implements MetadataProvider {
     }
 
     @Override
-    public List<MetadataMatch> checkForMatch(FileInfo info) {
+    public List<MetadataMatch> checkForMatch(FileInfo info, boolean ignoreCache) {
         AnimeEpisode episode = AnimeDBA.findCachedED2K(info.getE2dkHash(), info.getFileSize());
         if (episode != null)
             return episodeMatchresult(episode);
 
-        if (!AnimeDBA.checkForCachedED2KFileFailure(info.getE2dkHash(), info.getFileSize())) {
+        if (ignoreCache || !AnimeDBA.checkForCachedED2KFileFailure(info.getE2dkHash(), info.getFileSize())) {
             AnimeFile file = AnimeManager.getInstance().findFile(info.getE2dkHash(), info.getFileSize());
             if (file != null) {
                 return Collections.singletonList(new MetadataMatch(MetadataMatch.MatchType.HashMatch, "FID:" + file.getFileId(),

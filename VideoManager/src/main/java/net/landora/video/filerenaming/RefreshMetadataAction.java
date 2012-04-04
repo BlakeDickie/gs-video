@@ -14,22 +14,31 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package net.landora.video.filerenaming;
 
-
-package net.landora.video.info;
-
+import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.List;
-import net.landora.video.info.file.FileInfo;
+import net.landora.video.ui.UIAction;
 
 /**
  *
  * @author bdickie
  */
-public interface MetadataProvider {
+public class RefreshMetadataAction extends UIAction<File> {
 
-    public int getProviderVersion();
-    public String getProviderId();
-    public List<MetadataMatch> checkForMatch(FileInfo info, boolean ignoreCache);
-    public VideoMetadata getMetadata(String metadataId);
-//    public List<?> searchMetadata(String searchTerm);
+    public RefreshMetadataAction() {
+        super(File.class, "Refresh Video Info", true);
+    }
+
+    
+    
+    @Override
+    public void actionPerformed(ActionEvent evt, List<File> objects) {
+        RenamingAddon renamingAddon = RenamingAddon.getInstance();
+        for(File file: objects) {
+            renamingAddon.checkFile(file, true);
+        }
+    }
+    
 }

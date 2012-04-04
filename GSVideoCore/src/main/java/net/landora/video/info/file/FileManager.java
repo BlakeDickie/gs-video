@@ -21,6 +21,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import net.landora.video.VideoManagerApp;
+import net.landora.video.utils.EventBus;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +95,8 @@ public class FileManager {
             if (empty)
                 srcDir.delete();
         }
+        
+        VideoManagerApp.getInstance().getEventBus().fireEvent(new FileMovedEvent(this, srcFile, destFile));
         
         return true;
     }

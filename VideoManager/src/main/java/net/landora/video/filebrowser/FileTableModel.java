@@ -167,6 +167,10 @@ public class FileTableModel extends AbstractTableModel {
             fireTableRowsUpdated(index, index);
     }
     
+    public void refresh() {
+        updateFolder();
+    }
+    
     
     private List<VideoFile> files;
     

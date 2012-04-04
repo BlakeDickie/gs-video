@@ -14,22 +14,34 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package net.landora.video.info.file;
 
-
-package net.landora.video.info;
-
-import java.util.List;
-import net.landora.video.info.file.FileInfo;
+import java.io.File;
+import java.util.EventObject;
 
 /**
  *
  * @author bdickie
  */
-public interface MetadataProvider {
+public class FileMovedEvent extends EventObject {
+    
+    private File fromFile;
+    private File toFile;
 
-    public int getProviderVersion();
-    public String getProviderId();
-    public List<MetadataMatch> checkForMatch(FileInfo info, boolean ignoreCache);
-    public VideoMetadata getMetadata(String metadataId);
-//    public List<?> searchMetadata(String searchTerm);
+    public FileMovedEvent(Object source, File fromFile, File toFile) {
+        super(source);
+        this.fromFile = fromFile;
+        this.toFile = toFile;
+    }
+
+    public File getFromFile() {
+        return fromFile;
+    }
+
+    public File getToFile() {
+        return toFile;
+    }
+    
+    
+    
 }

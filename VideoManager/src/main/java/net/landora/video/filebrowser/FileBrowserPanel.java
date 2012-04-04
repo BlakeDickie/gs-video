@@ -30,12 +30,15 @@ import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.*;
+import net.landora.video.VideoManagerApp;
 import net.landora.video.filestate.data.LocalPathManager;
 import net.landora.video.filestate.data.SharedDirectory;
+import net.landora.video.info.file.FileMovedEvent;
 import net.landora.video.manager.ContentPanel;
 import net.landora.video.ui.tree.LazyTreeChildrenFactory;
 import net.landora.video.ui.tree.LazyTreeLoadingManager;
 import net.landora.video.ui.tree.LazyTreeNode;
+import net.landora.video.utils.BusReciever;
 import net.landora.video.utils.Representation;
 import net.landora.video.utils.UIUtils;
 
@@ -75,6 +78,8 @@ public class FileBrowserPanel extends ContentPanel<VideoFile> {
                 tblFilesSelectionValueChanged(e);
             }
         });
+        
+        VideoManagerApp.getInstance().getEventBus().addHandlersWeak(this);
     }
 
     @Override
@@ -86,6 +91,17 @@ public class FileBrowserPanel extends ContentPanel<VideoFile> {
         
     }
     
+    @BusReciever
+    private void fileMoved(FileMovedEvent evt) {
+        File folder = tableModel.getFolder();
+        if (folder == null)
+            return;
+        
+        if (folder.equals(evt.getFromFile().getParentFile())
+                || folder.equals(evt.getToFile().getParentFile())) {
+            tableModel.refresh();
+        }
+    }
     
     
     /** This method is called from within the constructor to

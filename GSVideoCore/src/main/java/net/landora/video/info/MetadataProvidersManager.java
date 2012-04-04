@@ -83,8 +83,12 @@ public class MetadataProvidersManager {
     }
 
     public void checkForMetadata(FileInfo info) {
+        checkForMetadata(info, false);
+    }
+    
+    public void checkForMetadata(FileInfo info, boolean ignoreCache) {
         for(MetadataProvider provider: providers) {
-            List<MetadataMatch> matches = provider.checkForMatch(info);
+            List<MetadataMatch> matches = provider.checkForMatch(info, ignoreCache);
             if (matches == null || matches.isEmpty())
                 continue;
             
@@ -103,6 +107,10 @@ public class MetadataProvidersManager {
     }
 
     public boolean checkForMetadataUpdate(FileInfo info) {
+        return checkForMetadataUpdate(info, false);
+    }
+    
+    public boolean checkForMetadataUpdate(FileInfo info, boolean ignoreMetadataCache) {
         boolean redo = false;
         if (info.getMetadataSource() == null) {
             redo = true;
@@ -119,7 +127,7 @@ public class MetadataProvidersManager {
             info.setMetadataSource(null);
             info.setVideoId(null);
 
-            checkForMetadata(info);
+            checkForMetadata(info, ignoreMetadataCache);
 
             return true;
         } else

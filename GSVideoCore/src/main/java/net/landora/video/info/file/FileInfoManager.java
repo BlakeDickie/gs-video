@@ -79,10 +79,14 @@ public class FileInfoManager {
 
 
     public FileInfo getFileInfo(File file) {
-        return getFileInfo(file, false);
+        return getFileInfo(file, false, false);
     }
     
     public FileInfo getFileInfo(File file, boolean cachedOnly) {
+        return getFileInfo(file, cachedOnly, false);
+    }
+    
+    public FileInfo getFileInfo(File file, boolean cachedOnly, boolean ignoreMetadataCache) {
         if (!file.exists())
             throw new IllegalArgumentException("Unable to find file.");
 
@@ -96,7 +100,7 @@ public class FileInfoManager {
             return info;
         
         if (info != null && info.getLastModified() == file.lastModified() && info.getFileSize() == file.length()) {
-            if (MetadataProvidersManager.getInstance().checkForMetadataUpdate(info)) {
+            if (MetadataProvidersManager.getInstance().checkForMetadataUpdate(info, ignoreMetadataCache)) {
                 cache.setFileInfo(file.getName(), info);
                 fireFileChanged(file, info);
             }
