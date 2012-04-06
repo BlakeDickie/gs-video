@@ -61,7 +61,7 @@ public abstract class AnimeMetadata extends AbstractVideoMetadata {
         return anime.getType();
     }
     @Override
-    protected void addExtraInformationImpl(Map<String, String> addTo) {
+    protected void addExtraInformationImpl(Map<String, String> addTo, boolean detailed) {
         
         
         if (anime.getRatingPermanent() != null)
@@ -74,8 +74,11 @@ public abstract class AnimeMetadata extends AbstractVideoMetadata {
             if (group != null)
                 addTo.put("Group", group.getLostName());
         
-            if (file.getVersion() != null && file.getVersion().intValue() > 1)
+            if (detailed && file.getVersion() != null && file.getVersion().intValue() > 1)
                 addTo.put("Version", String.valueOf(file.getVersion()));
+            
+            if (detailed && file.getSource() != null)
+                addTo.put("Source", file.getSource());
             
         }
         

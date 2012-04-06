@@ -528,6 +528,23 @@ public class AniDB {
         }
     }
     
+    public static boolean deleteListItem(AnimeListItem item) {
+        AniDBCommand command = new AniDBCommand("MYLISTDEL");
+        command.addArgument("fid", item.getFile().getFileId());
+        
+        AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
+        switch(reply.getReturnCode()) {
+            case 211:
+                // Item edited
+                return true;
+            case 411:
+                // No such item.
+                return false;
+            default:
+                throw new AniDBConnectionError(reply);
+        }
+    }
+    
     
     public static boolean hasNotifications() {
 

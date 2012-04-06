@@ -17,6 +17,7 @@
 
 package net.landora.video.utils;
 
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.FocusManager;
 import javax.swing.SwingUtilities;
 import net.landora.video.ui.ContextProducer;
 import org.apache.commons.collections.map.MultiValueMap;
@@ -186,5 +188,9 @@ public class UIUtils {
         } catch (IOException ex) {
             LoggerFactory.getLogger(UIUtils.class).error("Error opening browsner: " + url, ex);
         }
+    }
+    
+    public static Component getActiveWindow() {
+        return FocusManager.getCurrentManager().getActiveWindow();
     }
 }

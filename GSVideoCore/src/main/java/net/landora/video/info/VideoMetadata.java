@@ -29,8 +29,8 @@ public interface VideoMetadata {
     public boolean isMovie();
     public Type getType();
     public byte[] getPosterImage();
-    public void addExtraInformation(Map<String,String> addTo);
-    public Map<String,String> getAllInformation();
+    public void addExtraInformation(Map<String,String> addTo, boolean detailed);
+    public Map<String,String> getAllInformation(boolean detailed);
     public ViewListManager getListManager();
     public String getTypeDescription();
     public boolean isAnime();

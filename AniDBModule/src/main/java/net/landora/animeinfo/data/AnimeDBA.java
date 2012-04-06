@@ -559,6 +559,28 @@ public class AnimeDBA {
         }
     }
     
+    
+    public static void deleteListItem(AnimeListItem list) {
+        SqlSession session = null;
+
+        try {
+            session = AnimeDataManager.getInstance().openSession();
+            AnimeMapper mapper = session.getMapper(AnimeMapper.class);
+
+            mapper.deleteListItem(list);
+
+            session.commit();
+            
+            myListCache.put(list.getFile().getFileId(), null);
+        } catch (Exception e) {
+            session.rollback();
+            log.error("Error saving list item.", e);
+        } finally {
+            if (session != null)
+                session.close();
+        }
+    }
+    
     public static AnimeListItem getAnimeListByFileId(int fileId) {
         AnimeListItem result = myListCache.get(fileId);
         if (result != null)

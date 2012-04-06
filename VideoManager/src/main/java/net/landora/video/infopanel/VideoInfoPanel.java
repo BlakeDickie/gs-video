@@ -81,7 +81,7 @@ public class VideoInfoPanel extends InfoPanel {
             }
         }
         
-        Map<String,String> values = md.getAllInformation();
+        Map<String,String> values = md.getAllInformation(false);
         
         StringBuilder buffer = new StringBuilder();
         buffer.append("<html>");

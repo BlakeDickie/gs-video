@@ -654,6 +654,11 @@
         Where file_id = #{file.fileId,jdbcType=INTEGER}
     </update>
 
+    <delete id="deleteListItem" parameterType="AnimeListItem">
+        Delete From AnimeMyList
+        Where file_id = #{file.fileId,jdbcType=INTEGER}
+    </delete>
+
     <sql id="myListColumns">
         AL.state As AnimeMyList_stateId,
         AL.file_state As AnimeMyList_fileStateId,

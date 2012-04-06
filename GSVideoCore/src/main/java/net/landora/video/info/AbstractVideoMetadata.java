@@ -85,7 +85,7 @@ public abstract class AbstractVideoMetadata implements VideoMetadata, ContextPro
     }
     
     @Override
-    public final void addExtraInformation(Map<String, String> addTo) {
+    public final void addExtraInformation(Map<String, String> addTo, boolean detailed) {
         addTo.put("Type", getTypeDescription());
         
         ViewListState state = getViewListState();
@@ -94,10 +94,10 @@ public abstract class AbstractVideoMetadata implements VideoMetadata, ContextPro
             addTo.put("Watched", (viewDate == null ? "Not Watched" : viewDate.getTime().toString()));
 
         }
-        addExtraInformationImpl(addTo);
+        addExtraInformationImpl(addTo, detailed);
     }
     
-    protected abstract void addExtraInformationImpl(Map<String, String> addTo);
+    protected abstract void addExtraInformationImpl(Map<String, String> addTo, boolean detailed);
     
     
     
@@ -129,7 +129,7 @@ public abstract class AbstractVideoMetadata implements VideoMetadata, ContextPro
     }
 
     @Override
-    public Map<String, String> getAllInformation() {
+    public Map<String, String> getAllInformation(boolean detailed) {
         
         Map<String,String> values = new LinkedHashMap<String, String>();
         if (isMovie()) {
@@ -148,7 +148,7 @@ public abstract class AbstractVideoMetadata implements VideoMetadata, ContextPro
             }
         }
         
-        addExtraInformation(values);
+        addExtraInformation(values, detailed);
         
         if (isAdult()) {
             values.put("Adult Content", "Yes");

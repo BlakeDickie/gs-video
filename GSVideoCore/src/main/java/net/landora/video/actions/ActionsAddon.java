@@ -34,7 +34,9 @@ public class ActionsAddon extends AbstractAddon {
     @Override
     public void start() {
         UIAddon.getInstance().addAction(
-                new MarkWatchedAction()
+                new MarkWatchedAction(),
+                new DeleteFile(),
+                new DeleteAndRemoveListFile()
                 );
     }
     

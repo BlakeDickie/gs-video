@@ -74,4 +74,8 @@ public class AnimeViewListState implements ViewListState, ContextProducer {
         addTo.add(this);
         UIUtils.addContentObject(item, addTo);
     }
+
+    public void remove() {
+        AnimeManager.getInstance().deleteListItem(item);
+    }
 }

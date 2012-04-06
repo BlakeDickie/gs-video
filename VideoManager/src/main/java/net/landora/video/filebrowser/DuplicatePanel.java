@@ -193,13 +193,13 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
         for (Touple<FileRecord, VideoMetadata> touple : records) {
             LinkedHashMap<String,String> v = new LinkedHashMap<String, String>();
             
-            v.putAll(touple.getSecond().getAllInformation());
+            v.putAll(touple.getSecond().getAllInformation(true));
             
             v.put("ED2K", touple.getFirst().getE2dkHash());
             
             File path = localPathManager.getLocalPath(touple.getFirst());
             if (path != null)
-                v.put("Path", path.getParent());
+                v.put("Path", path.getPath());
             
             values.add(v);
         }

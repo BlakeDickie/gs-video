@@ -68,6 +68,7 @@ public interface AnimeMapper {
     public void insertListItem(AnimeListItem listItem);
     public int updateListItem(AnimeListItem listItem);
     public AnimeListItem selectListByFileId(int fileId);
+    public int deleteListItem(AnimeListItem listItem);
     
     
     public void insertAnimeNotification(AnimeNotification listItem);

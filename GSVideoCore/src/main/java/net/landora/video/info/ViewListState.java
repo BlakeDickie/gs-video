@@ -28,6 +28,7 @@ public interface ViewListState {
     public void setLastViewed(Calendar lastViewed);
     public DiskState getDiskState();
     public void setDiskState(DiskState state);
+    public void remove();
     
     
     public static enum DiskState {

@@ -46,7 +46,7 @@ public abstract class TestMetadata extends AbstractVideoMetadata {
     }
 
     @Override
-    protected void addExtraInformationImpl(Map<String, String> addTo) {
+    protected void addExtraInformationImpl(Map<String, String> addTo, boolean detailed) {
     }
 
     @Override

@@ -184,6 +184,12 @@ public class AnimeManager {
         AniDB.updateListItem(item);
         AnimeDBA.saveListItem(item);
     }
+
+    
+    public void deleteListItem(AnimeListItem item) {
+        AniDB.deleteListItem(item);
+        AnimeDBA.deleteListItem(item);
+    }
     
     public void ensureGroupIsFullyLoaded(AnimeGroup group) {
         if (group == null || group.isFullyLoaded())
