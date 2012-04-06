@@ -37,4 +37,5 @@ public interface SharedDirectoryMapper {
     public FileRecord selectFileRecordByPath(int directoryId, String subPath);
     public List<FileRecord> selectFileRecordsInDirectory(int directoryId);
     public List<FileRecord> selectFileRecordsByProviders(String metadataProvider);
+    public List<FileRecord> selectDuplicateFileRecords();
 }

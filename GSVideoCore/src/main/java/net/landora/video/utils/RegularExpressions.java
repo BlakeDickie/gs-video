@@ -14,34 +14,20 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package net.landora.video.utils;
 
-package net.landora.video.info;
-
-import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author bdickie
  */
-public interface VideoMetadata {
-    public boolean isSeries();
-    public boolean isMultiSeasonSeries();
-    public boolean isMovie();
-    public Type getType();
-    public byte[] getPosterImage();
-    public void addExtraInformation(Map<String,String> addTo);
-    public Map<String,String> getAllInformation();
-    public ViewListManager getListManager();
-    public String getTypeDescription();
-    public boolean isAnime();
-    public String getNfoUrl();
-    public String getUniqueVideoId();
+public class RegularExpressions {
+    public static final String WHOLE_NUMBER = "(\\+|-)?\\d+";
     
-    public boolean isAdult();
+    public static final Pattern WHOLE_NUMBER_PATTERN = Pattern.compile(WHOLE_NUMBER);
     
-    public static enum Type {
-        Movie,
-        SingleSeasonSeries,
-        MultiSeasonSeries;
+    public static boolean isWholeNumber(String str) {
+        return WHOLE_NUMBER_PATTERN.matcher(str).matches();
     }
 }

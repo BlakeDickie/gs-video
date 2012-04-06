@@ -81,28 +81,7 @@ public class VideoInfoPanel extends InfoPanel {
             }
         }
         
-        Map<String,String> values = new LinkedHashMap<String, String>();
-        if (md.isMovie()) {
-            MovieMetadata movie = (MovieMetadata)md;
-            values.put("Movie Name", movie.getMovieName());
-        } else if (md.isSeries()) {
-            SeriesMetadata series = (SeriesMetadata)md;
-            values.put("Series name", series.getSeriesName());
-            if (md.isMultiSeasonSeries()) {
-                MultiSeasonSeriesMetadata multiSeason = (MultiSeasonSeriesMetadata)md;
-                values.put("Season", String.valueOf(multiSeason.getSeasonNumber()));
-            }
-            values.put("Episode Number", series.getEpisodeNumber());
-            if (series.getEpisodeName() != null) {
-                values.put("Episode Name", series.getEpisodeName());
-            }
-        }
-        
-        md.addExtraInformation(values);
-        
-        if (md.isAdult()) {
-            values.put("Adult Content", "Yes");
-        }
+        Map<String,String> values = md.getAllInformation();
         
         StringBuilder buffer = new StringBuilder();
         buffer.append("<html>");

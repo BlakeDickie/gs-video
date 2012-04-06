@@ -60,7 +60,7 @@ public class RenamingAddon extends AbstractAddon {
 
     @Override
     public void ready() {
-        PeriodicTaskManager.getInstance().addPeriodicTask(new CheckFilesPeriodicTask());
+//        PeriodicTaskManager.getInstance().addPeriodicTask(new CheckFilesPeriodicTask());
     }
     
     

@@ -58,10 +58,10 @@ public class AniDBAddon extends AbstractAddon {
     @Override
     public void ready() {
         
-        PeriodicTaskManager.getInstance().addPeriodicTask(new NameReloadPeriodicTask());
-        PeriodicTaskManager.getInstance().addPeriodicTask(new CategoryReloadPeriodicTask());
-        PeriodicTaskManager.getInstance().addPeriodicTask(new NotificationsPeriodic());
-        PeriodicTaskManager.getInstance().addPeriodicTask(new MyListExportPeriodicTask());
+//        PeriodicTaskManager.getInstance().addPeriodicTask(new NameReloadPeriodicTask());
+//        PeriodicTaskManager.getInstance().addPeriodicTask(new CategoryReloadPeriodicTask());
+//        PeriodicTaskManager.getInstance().addPeriodicTask(new NotificationsPeriodic());
+//        PeriodicTaskManager.getInstance().addPeriodicTask(new MyListExportPeriodicTask());
         
     }
 

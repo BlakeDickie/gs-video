@@ -19,7 +19,7 @@ package net.landora.video.manager;
 
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import net.landora.video.ui.UIAddon;
 
@@ -27,7 +27,7 @@ import net.landora.video.ui.UIAddon;
  *
  * @author bdickie
  */
-public abstract class ContentPanel<S> extends JPanel {
+public class ContentPanel<S> extends JComponent {
 
     public ContentPanel() {
     }
@@ -71,7 +71,9 @@ public abstract class ContentPanel<S> extends JPanel {
         firePropertyChange(PROP_PRIORITY, oldPriority, priority);
     }
 
-    public abstract void loadView();
+    public void loadView() {
+        throw new IllegalStateException("Implementations of ContentPanel must implement loadView()");
+    }
     
     protected boolean maybePopup(MouseEvent e) {
         if (!e.isPopupTrigger())

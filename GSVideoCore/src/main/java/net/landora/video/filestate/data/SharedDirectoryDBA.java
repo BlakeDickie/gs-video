@@ -177,4 +177,23 @@ public class SharedDirectoryDBA {
         }
         
     }
+    
+    public static Collection<FileRecord> getDuplicateFileRecords() {
+        SqlSession session = null;
+
+        try {
+            session = FileStateDataManager.getInstance().openSession();
+            SharedDirectoryMapper mapper = session.getMapper(SharedDirectoryMapper.class);
+
+            return mapper.selectDuplicateFileRecords();
+        } catch (Exception e) {
+            log.error("Error getting FileRecords.", e);
+            
+            return null;
+        } finally {
+            if (session != null)
+                session.close();
+        }
+        
+    }
 }

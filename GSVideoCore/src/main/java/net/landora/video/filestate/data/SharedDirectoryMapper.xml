@@ -212,4 +212,18 @@
     </select>
     
     
+    
+    <select id="selectDuplicateFileRecords" resultMap="FileRecordResult">
+        Select
+        <include refid="FileRecordColumns"/>
+        From 
+        <include refid="FileRecordTables"/>
+        Where SF.videoid IN (Select videoid 
+        From sharedfile
+        Where videoid Is Not Null
+        Group By videoid
+        Having Count(*) > 1)
+    </select>
+    
+    
 </mapper>

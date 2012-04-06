@@ -36,6 +36,7 @@ public class FileBrowserAddon extends AbstractAddon {
     public void start() {
         if (VideoManagerApp.getInstance().getProfile().isManager()) {
             ManagerAddon.getInstance().addContentPanel(new FileBrowserPanel());
+            ManagerAddon.getInstance().addContentPanel(new DuplicatePanel());
         }
     }
     

@@ -85,6 +85,15 @@ public class LocalPathManager {
         return path;
     }
     
+    public File getLocalPath(FileRecord record) {
+        File parent = getLocalPath(record.getDirectory());
+        if (parent == null)
+            return null;
+        
+        File temp = new File(parent, record.getSubPath().replace('/', File.separatorChar));
+        return temp;
+    }
+    
     public void setLocalPath(SharedDirectory directory, File path) {
         if (path == null)
             paths.remove(directory.getUuid());

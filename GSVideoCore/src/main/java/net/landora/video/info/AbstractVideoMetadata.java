@@ -19,6 +19,7 @@ package net.landora.video.info;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import net.landora.video.ui.ContextProducer;
 import net.landora.video.utils.UIUtils;
@@ -42,6 +43,19 @@ public abstract class AbstractVideoMetadata implements VideoMetadata, ContextPro
     @Override
     public boolean isSeries() {
         return this instanceof SeriesMetadata;
+    }
+
+    @Override
+    public Type getType() {
+        if (isMovie())
+            return Type.Movie;
+        else if (isSeries()) {
+            if (isMultiSeasonSeries())
+                return Type.MultiSeasonSeries;
+            else
+                return Type.SingleSeasonSeries;
+        } else
+            throw new IllegalStateException("Unknown metadata type: " + getClass());
     }
 
     @Override
@@ -113,5 +127,35 @@ public abstract class AbstractVideoMetadata implements VideoMetadata, ContextPro
     public boolean isAnime() {
         return false;
     }
+
+    @Override
+    public Map<String, String> getAllInformation() {
+        
+        Map<String,String> values = new LinkedHashMap<String, String>();
+        if (isMovie()) {
+            MovieMetadata movie = (MovieMetadata)this;
+            values.put("Movie Name", movie.getMovieName());
+        } else if (isSeries()) {
+            SeriesMetadata series = (SeriesMetadata)this;
+            values.put("Series name", series.getSeriesName());
+            if (isMultiSeasonSeries()) {
+                MultiSeasonSeriesMetadata multiSeason = (MultiSeasonSeriesMetadata)this;
+                values.put("Season", String.valueOf(multiSeason.getSeasonNumber()));
+            }
+            values.put("Episode Number", series.getEpisodeNumber());
+            if (series.getEpisodeName() != null) {
+                values.put("Episode Name", series.getEpisodeName());
+            }
+        }
+        
+        addExtraInformation(values);
+        
+        if (isAdult()) {
+            values.put("Adult Content", "Yes");
+        }
+        
+        return values;
+    }
+    
     
 }

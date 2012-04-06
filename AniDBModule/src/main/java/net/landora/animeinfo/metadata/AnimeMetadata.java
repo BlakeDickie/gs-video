@@ -73,6 +73,9 @@ public abstract class AnimeMetadata extends AbstractVideoMetadata {
             AnimeGroup group = file.getGroup();
             if (group != null)
                 addTo.put("Group", group.getLostName());
+        
+            if (file.getVersion() != null && file.getVersion().intValue() > 1)
+                addTo.put("Version", String.valueOf(file.getVersion()));
             
         }
         

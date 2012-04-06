@@ -15,12 +15,6 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-/*
- * FileBrowserPanel.java
- *
- * Created on Dec 27, 2011, 7:26:43 PM
- */
 package net.landora.video.filebrowser;
 
 import java.io.File;
@@ -92,7 +86,7 @@ public class FileBrowserPanel extends ContentPanel<VideoFile> {
     }
     
     @BusReciever
-    private void fileMoved(FileMovedEvent evt) {
+    public void fileMoved(FileMovedEvent evt) {
         File folder = tableModel.getFolder();
         if (folder == null)
             return;
