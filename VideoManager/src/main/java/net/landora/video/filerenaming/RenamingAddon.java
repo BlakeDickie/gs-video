@@ -74,6 +74,15 @@ public class RenamingAddon extends AbstractAddon {
         if (subPath == null)
             return ;
         FileRecord fileRecord = SharedDirectoryDBA.getFileRecord(subPath.getFirst(), subPath.getSecond());
+        
+        if (fileRecord != null && !(
+                info.getE2dkHash().equals(fileRecord.getE2dkHash())
+                && info.getFileSize() == fileRecord.getFileSize() ) ) {
+            // File content has changed, remove existing FileRecord.
+            SharedDirectoryDBA.deleteFileRecord(fileRecord);
+            fileRecord = null;
+        }
+        
         if (fileRecord == null) {
             fileRecord = new FileRecord();
             fileRecord.setDirectory(subPath.getFirst());
