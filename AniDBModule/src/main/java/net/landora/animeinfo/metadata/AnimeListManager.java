@@ -52,14 +52,18 @@ public class AnimeListManager implements ViewListManager<AnimeMetadata,AnimeView
     public AnimeViewListState getViewListState(AnimeMetadata videoMetadata) {
         AnimeFile file = videoMetadata.getFile();
         if (file == null) {
-            return null;
-        } else {
+            AnimeEpisode episode = videoMetadata.getEpisode();
+            file = AnimeDBA.getGenericAnimeFile(episode);
+        }
+        
+        if (file != null) {
             AnimeListItem item = AnimeManager.getInstance().findListItemByFileId(file.getFileId(), true);
             if (item == null)
                 return null;
             else
                 return new AnimeViewListState(item);
-        }
+        } else
+            return null;
     }
 
     @Override
