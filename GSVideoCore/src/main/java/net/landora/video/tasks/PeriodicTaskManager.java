@@ -83,6 +83,9 @@ public class PeriodicTaskManager {
     private List<Touple<TaskState,NBTask<?,?>>> runningTasks = new ArrayList<Touple<TaskState, NBTask<?, ?>>>();
     
     public synchronized void addPeriodicTask(PeriodicTask task) {
+        if (System.getProperty("no.tasks", "false").equalsIgnoreCase("true"))
+            return;
+        
         TaskState state = new TaskState(task);
         Long lastRun = task.getRunPeriodPreferenceValue();
         state.lastRun = (lastRun == null ? 0 : lastRun);
