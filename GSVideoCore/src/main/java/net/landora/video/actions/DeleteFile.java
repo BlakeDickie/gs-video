@@ -20,8 +20,13 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 import javax.swing.JOptionPane;
+import net.landora.video.filestate.data.FileRecord;
+import net.landora.video.filestate.data.LocalPathManager;
+import net.landora.video.filestate.data.SharedDirectory;
+import net.landora.video.filestate.data.SharedDirectoryDBA;
 import net.landora.video.info.file.FileManager;
 import net.landora.video.ui.UIAction;
+import net.landora.video.utils.Touple;
 import net.landora.video.utils.UIUtils;
 
 /**
@@ -44,8 +49,16 @@ public class DeleteFile extends UIAction<File> {
         if (reply != JOptionPane.YES_OPTION)
             return;
         
-        for(File file: objects)
+        LocalPathManager pathMgr = LocalPathManager.getInstance();
+        for(File file: objects) {
             FileManager.getInstance().deleteFile(file);
+            Touple<SharedDirectory, String> subPath = pathMgr.findSubPath(file);
+            if (subPath != null) {
+                FileRecord fileRecord = SharedDirectoryDBA.getFileRecord(subPath.getFirst(), subPath.getSecond());
+                if (fileRecord != null)
+                    SharedDirectoryDBA.deleteFileRecord(fileRecord);
+            }
+        }
     }
     
 }
