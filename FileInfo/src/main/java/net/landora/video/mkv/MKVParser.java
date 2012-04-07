@@ -17,15 +17,14 @@
 
 package net.landora.video.mkv;
 
-import net.landora.video.file_info.FileInfoPreferences;
-import net.landora.video.properties.NamedChapter;
-import net.landora.video.properties.Video;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.landora.video.programs.CommonPrograms;
 import net.landora.video.programs.ProgramsAddon;
+import net.landora.video.properties.NamedChapter;
+import net.landora.video.properties.Video;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -123,7 +122,6 @@ public class MKVParser {
             }
             return file;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -318,6 +316,5 @@ public class MKVParser {
     }
 
     public static void main(String[] args) {
-        System.out.println(parseFile(new File("/var/storage/Videos/Anime/Shana/Shana - 11 - Yuji, Shana, and Kisses.mkv")));
     }
 }

@@ -75,7 +75,7 @@ public class AnimeEpisode implements java.io.Serializable, ContextProducer {
         Matcher m = EPNAME_PATTERN.matcher(episodeNumber);
         if (m.matches()) {
             Integer numEps = null;
-            if (m.group(1).equals("")) {
+            if (m.group(1).length() == 0) {
                 numEps = anime.getEpisodeCount();
             }
             

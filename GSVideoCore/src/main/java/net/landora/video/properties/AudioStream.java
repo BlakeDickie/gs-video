@@ -75,9 +75,9 @@ public class AudioStream {
     
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         String lang = getLanguageDescription();
-        if (!lang.equals("")) {
+        if (!lang.isEmpty()) {
             result.append(lang);
             result.append(" ");
         }

@@ -233,10 +233,6 @@ public class AniDBUDPManager {
         command.addArgument("id", "1814551");
 //        
         String reply = AniDBUDPManager.getInstance().sendData(command.getResult());
-        System.out.println(reply);
-        
-//        AniDBReply reply = new AniDBReply(testCase);
-//        System.out.println(reply);
 
     }
 

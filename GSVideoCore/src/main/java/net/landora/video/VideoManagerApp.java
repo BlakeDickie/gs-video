@@ -162,6 +162,7 @@ public final class VideoManagerApp {
         
         final Runnable readyRun = new Runnable() {
 
+            @Override
             public void run() {
                 instance.ready();
             }
@@ -169,6 +170,7 @@ public final class VideoManagerApp {
         
         Runnable runnable = new Runnable() {
 
+            @Override
             public void run() {
                 instance.initialize(args);
                 

@@ -23,7 +23,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import net.landora.animeinfo.data.AnimeDBA;
 import net.landora.animeinfo.data.AnimeEpisode;
-import net.landora.animeinfo.data.AnimeFile;
 import net.landora.animeinfo.data.AnimeNotification;
 import net.landora.animeinfo.data.AnimeStub;
 import net.landora.video.ui.tree.LazyTreeChildrenFactory;

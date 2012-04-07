@@ -129,7 +129,7 @@ public class PreferenceObject {
     }
     
     private static List<String> convertToStringList(String value) {
-        if (value.equals(""))
+        if (value.isEmpty())
             return Collections.EMPTY_LIST;
         
         List<String> result = new ArrayList<String>();

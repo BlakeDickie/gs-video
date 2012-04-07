@@ -18,15 +18,15 @@
 
 package net.landora.animeinfo.anidb;
 
-import net.landora.animeinfo.data.AnimeNameLookup;
-import net.landora.animeinfo.data.AnimeNameLookupMapper;
-import net.landora.animeinfo.data.AnimeDataManager;
-import net.landora.animeinfo.data.AnimeNameLookupSummary;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
+import net.landora.animeinfo.data.AnimeDataManager;
+import net.landora.animeinfo.data.AnimeNameLookup;
+import net.landora.animeinfo.data.AnimeNameLookupMapper;
+import net.landora.animeinfo.data.AnimeNameLookupSummary;
 import net.landora.video.utils.XMLUtilities;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;

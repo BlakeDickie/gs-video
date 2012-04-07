@@ -17,32 +17,16 @@
 
 package net.landora.animeinfo.mylistreader;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
-import net.landora.animeinfo.data.Anime;
-import net.landora.animeinfo.data.AnimeCategoryWeight;
-import net.landora.animeinfo.data.AnimeDBA;
-import net.landora.animeinfo.data.AnimeEpisode;
-import net.landora.animeinfo.data.AnimeFile;
-import net.landora.animeinfo.data.AnimeGroup;
-import net.landora.animeinfo.data.AnimeListItem;
-import net.landora.animeinfo.data.AnimeName;
-import net.landora.animeinfo.data.AnimeRelation;
+import net.landora.animeinfo.data.*;
 import org.apache.commons.io.IOUtils;
 import org.xeustechnologies.jtar.TarEntry;
 import org.xeustechnologies.jtar.TarInputStream;
@@ -153,28 +137,28 @@ public class ListReader {
     
     private Integer getInt(String name) {
         String value = getString(name);
-        if (value == null || value.equals("") || value.equals("-"))
+        if (value == null || value.length() == 0 || value.equals("-"))
             return null;
         return Integer.parseInt(value);
     }
     
     private Long getLong(String name) {
         String value = getString(name);
-        if (value == null || value.equals("") || value.equals("-"))
+        if (value == null || value.length() == 0 || value.equals("-"))
             return null;
         return Long.parseLong(value);
     }
     
     private Float getFloat(String name) {
         String value = getString(name);
-        if (value == null || value.equals("") || value.equals("-"))
+        if (value == null || value.length() == 0 || value.equals("-"))
             return null;
         return Float.parseFloat(value);
     }
     
     private Boolean getBoolean(String name) {
         String value = getString(name);
-        if (value == null || value.equals("") || value.equals("-"))
+        if (value == null || value.length() == 0 || value.equals("-"))
             return null;
         return getString(name).equals("1");
     }
@@ -192,7 +176,7 @@ public class ListReader {
     
     public Calendar getDateTime(String name) throws ParseException {
         String value = getString(name);
-        if (value == null || value.equals("0") || value.equals("") || value.equals("-")  || value.equals("?"))
+        if (value == null || value.equals("0") || value.length() == 0 || value.equals("-")  || value.equals("?"))
             return null;
         
         Date date;
@@ -231,7 +215,7 @@ public class ListReader {
         anime.setLastLoaded(exportDate);
         
         anime.setNameEnglish(getString("NameEnglish"));
-        if (anime.getNameEnglish().equals(""))
+        if (anime.getNameEnglish().length() == 0)
             anime.setNameEnglish(null);
         anime.setNameMain(getString("Name"));
         anime.setDescription(getString("AnimeDescription"));

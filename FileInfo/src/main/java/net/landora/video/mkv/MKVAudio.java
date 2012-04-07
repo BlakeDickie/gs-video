@@ -78,7 +78,7 @@ public class MKVAudio extends AudioStream implements MKVStream {
     
     @Override
     public String toString() {
-        if (name != null && !name.equals("")) {
+        if (name != null && !name.isEmpty()) {
             return name + " (" + super.toString() + ")";
         } else
             return super.toString();

@@ -18,7 +18,8 @@
 
 package net.landora.video.properties.dvd;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

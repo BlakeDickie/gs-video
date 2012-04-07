@@ -102,9 +102,7 @@ public class RenamingAddon extends AbstractAddon {
 
                 if (outputFile != null && !outputFile.equals(file)) {
                     if (outputFile.exists()) {
-                        System.err.println("File already exists: " + outputFile);
                     } else {
-                        System.err.println("Move File: " + file + "   to   " + outputFile);
                         if (FileManager.getInstance().moveFile(file, outputFile))
                             currentFileLocation = outputFile;
                     }

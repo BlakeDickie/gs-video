@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.List;
 import net.landora.animeinfo.data.AnimeDBA;
 import net.landora.animeinfo.data.AnimeNotification;
-
 import net.landora.video.ui.UIAction;
 
 //@Messages("CTL_AcknowlegeNotification=Acknowlege Notification")

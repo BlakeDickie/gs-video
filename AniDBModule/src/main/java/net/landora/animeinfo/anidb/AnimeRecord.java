@@ -17,10 +17,10 @@
 
 package net.landora.animeinfo.anidb;
 
-import net.landora.animeinfo.data.RelationType;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import net.landora.animeinfo.data.RelationType;
 
 /**
  *

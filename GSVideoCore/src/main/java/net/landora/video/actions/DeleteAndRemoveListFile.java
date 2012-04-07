@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 import javax.swing.JOptionPane;
-import net.landora.video.filestate.data.LocalPathManager;
 import net.landora.video.info.MetadataProvidersManager;
 import net.landora.video.info.VideoMetadata;
 import net.landora.video.info.file.FileInfo;

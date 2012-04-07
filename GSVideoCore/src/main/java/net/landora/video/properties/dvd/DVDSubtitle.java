@@ -43,7 +43,7 @@ public class DVDSubtitle extends SubtitleStream {
     
     @Override
     public String toString() {
-        if (content != null && !content.equals("")  && !content.equalsIgnoreCase("Undefined")) {
+        if (content != null && !content.isEmpty()  && !content.equalsIgnoreCase("Undefined")) {
             return content + " (" + super.toString() + ")";
         } else
             return super.toString();

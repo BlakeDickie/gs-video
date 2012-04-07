@@ -18,8 +18,6 @@
 
 package net.landora.video.properties;
 
-import net.landora.video.properties.Chapter;
-
 /**
  *
  * @author bdickie
@@ -37,7 +35,7 @@ public class NamedChapter extends Chapter {
     
     @Override
     public String toString() {
-        if (title != null && !title.equals("")) {
+        if (title != null && !title.isEmpty()) {
             return super.toString() + " (" + title + ")";
         } else
             return super.toString();

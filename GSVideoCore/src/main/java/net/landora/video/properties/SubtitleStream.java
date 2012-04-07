@@ -18,8 +18,6 @@
 
 package net.landora.video.properties;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 /**
  *
  * @author bdickie
@@ -71,9 +69,9 @@ public class SubtitleStream {
     
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         String lang = getLanguageDescription();
-        if (!lang.equals("")) {
+        if (!lang.isEmpty()) {
             result.append(lang);
             result.append(" ");
         }        

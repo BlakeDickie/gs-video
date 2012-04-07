@@ -38,7 +38,7 @@ public final class ViewAnimeGroupPage extends UIAction<AnimeGroup> {
         
         try {
             AnimeManager.getInstance().ensureGroupIsFullyLoaded(context);
-            if (context.getUrl() == null || context.getUrl().equals(""))
+            if (context.getUrl() == null || context.getUrl().length() == 0)
                 UIUtils.openBrowser("http://anidb.net/perl-bin/animedb.pl?show=group&gid=" + context.getGroupId());
             else
                 UIUtils.openBrowser(context.getUrl());

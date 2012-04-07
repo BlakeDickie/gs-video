@@ -64,7 +64,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             return parseXML(new InputSource(new StringReader(xml)), validating);
             
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -80,7 +79,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             return parseXML(new InputSource(new FileInputStream(xml)), validating);
             
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -96,7 +94,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             return parseXML(new InputSource(xml), validating);
             
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -123,7 +120,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
                 return null;
             return doc;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -142,7 +138,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             t.transform(src, result);
             return writer.toString();
         } catch (TransformerException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -163,7 +158,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             writer.close();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -188,7 +182,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
         try {
             return saxParse(new InputSource(new FileInputStream(xml)), handler, validating);
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -213,7 +206,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             parser.parse(xml, handler);
             return !handler.isError();
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -245,7 +237,7 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
                 
                 
                 rootNode.setAttributeNS(xmlnsURI, "xmlns:xsi", schemaInstanceNS);
-                if (namespacePrefix == null || namespacePrefix.equals(""))
+                if (namespacePrefix == null || namespacePrefix.isEmpty())
                     rootNode.setAttributeNS(xmlnsURI, "xmlns", namespaceURI);
                 else
                     rootNode.setAttributeNS(xmlnsURI, "xmlns:" + namespacePrefix, namespaceURI);
@@ -257,7 +249,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             doc.appendChild(rootNode);
             return doc;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -331,7 +322,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             
             return out.toString();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -356,7 +346,6 @@ private static final Logger log = LoggerFactory.getLogger(XMLUtilities.class);
             
             return out.toString();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

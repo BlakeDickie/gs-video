@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JOptionPane;
-import net.landora.video.VideoManagerApp;
 import net.landora.video.tasks.TaskProgressImpl;
 import net.landora.video.tasks.TaskProgressManager;
 import net.landora.video.ui.InfoPanel;

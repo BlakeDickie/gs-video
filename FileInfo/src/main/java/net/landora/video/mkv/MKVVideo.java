@@ -17,9 +17,9 @@
 
 package net.landora.video.mkv;
 
+import java.text.NumberFormat;
 import net.landora.video.properties.VideoFormat;
 import net.landora.video.properties.VideoStream;
-import java.text.NumberFormat;
 
 /**
  *
@@ -117,7 +117,7 @@ public class MKVVideo extends VideoStream implements MKVStream {
     
     @Override
     public String toString() {
-        if (name != null && !name.equals("")) {
+        if (name != null && !name.isEmpty()) {
             return name + " (" + super.toString() + ")";
         } else
             return super.toString();

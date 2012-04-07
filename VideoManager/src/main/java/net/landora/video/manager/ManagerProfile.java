@@ -60,7 +60,6 @@ public class ManagerProfile implements RunProfile {
     @Override
     public boolean readCommandLine(String[] args) {
         if (args.length != 0) {
-            System.err.println("The manager profile does not support any command line arguments.");
             return false;
         }
         return true;

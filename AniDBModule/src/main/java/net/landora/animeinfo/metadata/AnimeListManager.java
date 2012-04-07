@@ -18,11 +18,7 @@
 package net.landora.animeinfo.metadata;
 
 import java.util.Calendar;
-import net.landora.animeinfo.data.AnimeEpisode;
-import net.landora.animeinfo.data.AnimeFile;
-import net.landora.animeinfo.data.AnimeListItem;
-import net.landora.animeinfo.data.AnimeListState;
-import net.landora.animeinfo.data.AnimeManager;
+import net.landora.animeinfo.data.*;
 import net.landora.video.info.ViewListManager;
 import net.landora.video.info.ViewListState.DiskState;
 

@@ -18,26 +18,11 @@
 
 package net.landora.animeinfo.anidb;
 
-import net.landora.animeinfo.data.RelationType;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import net.landora.animeinfo.data.Anime;
-import net.landora.animeinfo.data.AnimeCategory;
-import net.landora.animeinfo.data.AnimeCategoryWeight;
-import net.landora.animeinfo.data.AnimeDBA;
-import net.landora.animeinfo.data.AnimeEpisode;
-import net.landora.animeinfo.data.AnimeFile;
-import net.landora.animeinfo.data.AnimeGroup;
-import net.landora.animeinfo.data.AnimeListItem;
-import net.landora.animeinfo.data.AnimeListState;
-import net.landora.animeinfo.data.AnimeManager;
-import net.landora.animeinfo.data.AnimeMessage;
-import net.landora.animeinfo.data.AnimeName;
-import net.landora.animeinfo.data.AnimeNameLookup;
-import net.landora.animeinfo.data.AnimeNotification;
-import net.landora.animeinfo.data.AnimeRelation;
+import net.landora.animeinfo.data.*;
 import net.landora.video.utils.Touple;
 
 
@@ -149,7 +134,7 @@ public class AniDB {
         String relationIds = line.getValue(col++);
         String relationTypes = line.getValue(col++);
 
-        if (!relationIds.equals("")) {
+        if (relationIds.length() != 0) {
             String[] ids = relationIds.split("'");
             String[] types = relationTypes.split("'");
             for(int i = 0; i < Math.min(ids.length, types.length); i++) {
@@ -170,7 +155,7 @@ public class AniDB {
         record.setPicName(line.getValue(col++));
 
         String categoryIds = line.getValue(col++);
-        if (!categoryIds.equals("")) {
+        if (categoryIds.length() != 0) {
             String[] ids = categoryIds.split(",");
             String[] weights = categoryWeights.split(",");
             for(int i = 0; i < Math.min(ids.length, weights.length); i++) {

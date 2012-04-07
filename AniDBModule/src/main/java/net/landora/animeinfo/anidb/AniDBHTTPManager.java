@@ -18,25 +18,25 @@
 
 package net.landora.animeinfo.anidb;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import net.landora.animeinfo.data.AnimeCategory;
-import java.util.Calendar;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import net.landora.animeinfo.data.AnimeName;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import net.landora.animeinfo.data.Anime;
+import net.landora.animeinfo.data.AnimeCategory;
 import net.landora.animeinfo.data.AnimeDBA;
+import net.landora.animeinfo.data.AnimeName;
+import static net.landora.video.utils.XMLUtilities.ignoreTag;
+import static net.landora.video.utils.XMLUtilities.nextString;
 import org.apache.commons.io.IOUtils;
-
-import static net.landora.video.utils.XMLUtilities.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *

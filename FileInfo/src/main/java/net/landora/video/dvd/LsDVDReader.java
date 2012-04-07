@@ -17,12 +17,12 @@
 
 package net.landora.video.dvd;
 
-import net.landora.video.file_info.FileInfoPreferences;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import net.landora.video.file_info.FileInfoPreferences;
 import net.landora.video.module.AbstractModule;
 import net.landora.video.programs.CommonPrograms;
 import net.landora.video.programs.ProgramsAddon;
@@ -74,7 +74,6 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
             disk.setDvdDevice(dvdPath);
             return disk;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -86,19 +85,6 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
         boolean prolog = true;
         String line;
         while((line = reader.readLine()) != null) {
-            if (line.startsWith("libdvdread: "))
-                System.err.println(line);
-            else if (line.equals("Couldn't read enough bytes for title."))
-                continue;
-            else if (prolog &&
-                    ( line.trim().equals("") ||
-                    line.startsWith("***") ))
-                continue;
-            else {
-                prolog = true;
-                output.append(line);
-                output.append('\n');
-            }
         }
         p.waitFor();
         

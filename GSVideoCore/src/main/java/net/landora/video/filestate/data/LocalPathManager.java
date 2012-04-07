@@ -17,12 +17,12 @@
 
 package net.landora.video.filestate.data;
 
-import net.landora.video.filestate.DirectoryUUIDChecker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.landora.video.filestate.DirectoryUUIDChecker;
 import net.landora.video.filestate.FileStatePreference;
 import net.landora.video.utils.Touple;
 

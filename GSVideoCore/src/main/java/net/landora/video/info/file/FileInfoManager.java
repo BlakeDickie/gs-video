@@ -18,13 +18,7 @@
 
 package net.landora.video.info.file;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.CheckedOutputStream;
@@ -36,8 +30,8 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import jonelo.jacksum.algorithm.Edonkey;
-import net.landora.video.utils.XMLUtilities;
 import net.landora.video.info.MetadataProvidersManager;
+import net.landora.video.utils.XMLUtilities;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.slf4j.Logger;

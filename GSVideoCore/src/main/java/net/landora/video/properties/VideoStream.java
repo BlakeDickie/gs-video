@@ -98,7 +98,7 @@ public class VideoStream {
     
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 //        String lang = getLanguageDescription();
 //        if (!lang.equals("")) {
 //            result.append(lang);

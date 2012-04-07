@@ -19,9 +19,9 @@
 package net.landora.video.data.handlers;
 
 import java.sql.CallableStatement;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 import java.util.Calendar;
 
 /**

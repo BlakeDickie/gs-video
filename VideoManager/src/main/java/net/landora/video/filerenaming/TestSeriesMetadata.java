@@ -18,8 +18,6 @@
 package net.landora.video.filerenaming;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import net.landora.video.info.SeriesMetadata;
 
 /**

@@ -40,7 +40,7 @@ public class Languages {
             while (m.find()) {
                 for (int i = 1; i <= 3; i++) {
                     String code = m.group(i).trim();
-                    if (code != null && !code.equals("")) {
+                    if (code != null && !code.isEmpty()) {
                         langMap.put(code, m.group(4));
                     }
                 }

@@ -18,19 +18,10 @@
 
 package net.landora.video.info.file;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.zip.CheckedOutputStream;
 import jonelo.jacksum.algorithm.Edonkey;
-import net.landora.video.info.ExtensionUtils;
-import net.landora.video.info.MetadataProvidersManager;
-import net.landora.video.info.MovieMetadata;
-import net.landora.video.info.SeriesMetadata;
-import net.landora.video.info.VideoInfoFileUtils;
-import net.landora.video.info.VideoMetadata;
+import net.landora.video.info.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -73,9 +64,6 @@ public class FileHasher {
                 if (!ExtensionUtils.isVideoExtension(extension))
                     continue;
                 
-                
-                System.err.println(file);
-                
                 FileInfo info = FileInfoManager.getInstance().getFileInfo(file);
                 VideoMetadata md = MetadataProvidersManager.getInstance().getMetadata(info);
                 
@@ -94,9 +82,7 @@ public class FileHasher {
                 
                 if (!outputFile.equals(file)) {
                     if (outputFile.exists()) {
-                        System.err.println("File already exists: " + outputFile);
                     } else {
-                        System.err.println("Move File: " + file + "   to   " + outputFile);
                         FileUtils.moveFile(file, outputFile);
                     }
                     

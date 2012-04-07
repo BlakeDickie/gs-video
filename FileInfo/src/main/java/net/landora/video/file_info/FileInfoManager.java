@@ -17,13 +17,13 @@
 
 package net.landora.video.file_info;
 
+import net.landora.video.addons.AbstractAddon;
 import net.landora.video.dvd.LsDVDReader;
 import net.landora.video.mediainfo.MediaInfoReader;
 import net.landora.video.mkv.MKVReader;
-import net.landora.video.mplayer.MPlayerVideoReader;
-import net.landora.video.addons.AbstractAddon;
 import net.landora.video.module.ModulesAddon;
 import net.landora.video.module.ModulesManager;
+import net.landora.video.mplayer.MPlayerVideoReader;
 import net.landora.video.programs.ProgramsAddon;
 import net.landora.video.properties.DVDReader;
 import net.landora.video.properties.PropertiesAddon;

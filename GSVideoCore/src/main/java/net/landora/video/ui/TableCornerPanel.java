@@ -16,8 +16,6 @@
  */
 package net.landora.video.ui;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JTable;

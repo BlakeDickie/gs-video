@@ -17,14 +17,6 @@
 
 package net.landora.video.mplayer;
 
-import net.landora.video.file_info.FileInfoPreferences;
-import net.landora.video.properties.SubtitleStream;
-import net.landora.video.properties.AudioFormat;
-import net.landora.video.properties.Video;
-import net.landora.video.properties.VideoStream;
-import net.landora.video.properties.SubtitleFormat;
-import net.landora.video.properties.VideoFormat;
-import net.landora.video.properties.AudioStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -33,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.landora.video.programs.CommonPrograms;
 import net.landora.video.programs.ProgramsAddon;
+import net.landora.video.properties.*;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -74,7 +67,6 @@ public class MPlayerParser {
             
             return file;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -223,7 +215,5 @@ public class MPlayerParser {
 
     public static void main(String[] args) {
 //        System.out.println(parseFile(new File("/media/quon/storage/blakes/Hentai/Princess 69/Princess 69 Lesson 1.ogm")));
-        System.out.println(parseFile(new File("/media/quon/storage/Videos/Anime/Madlax/mk2/Madlax20.mkv")));
-        
     }
 }

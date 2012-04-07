@@ -263,7 +263,6 @@ public final class FileRenamingConfigPanel extends ConfigurationPanel {
                 failed = false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         if (failed) {
             txtFolderResult.setText("*** Test Failed ***");
@@ -278,7 +277,6 @@ public final class FileRenamingConfigPanel extends ConfigurationPanel {
                 failed = false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         if (failed) {
             txtFileResult.setText("*** Test Failed ***");

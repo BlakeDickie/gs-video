@@ -19,7 +19,6 @@ package net.landora.video.info.file;
 
 import java.io.File;
 import net.landora.video.info.VideoMetadata;
-import net.landora.video.info.file.FileInfo;
 
 /**
  *

@@ -18,16 +18,6 @@
 package net.landora.video.mediainfo;
 
 
-import net.landora.video.file_info.FileInfoPreferences;
-import net.landora.video.properties.SubtitleStream;
-import net.landora.video.properties.AudioFormat;
-import net.landora.video.properties.Video;
-import net.landora.video.properties.VideoStream;
-import net.landora.video.properties.Chapter;
-import net.landora.video.properties.SubtitleFormat;
-import net.landora.video.properties.NamedChapter;
-import net.landora.video.properties.AudioStream;
-import net.landora.video.properties.VideoFormat;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
@@ -36,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.landora.video.programs.CommonPrograms;
 import net.landora.video.programs.ProgramsAddon;
+import net.landora.video.properties.*;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -113,7 +104,7 @@ public class MediaInfoParser {
                             break;
                     }
 
-                } else if (line.trim().equals("")) {
+                } else if (line.trim().isEmpty()) {
                     state = State.EmptyLine;
                 } else {
                     line = line.trim();
@@ -144,7 +135,6 @@ public class MediaInfoParser {
 
             return file;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -229,7 +219,6 @@ public class MediaInfoParser {
 
     public static void main(String[] args) {
         Video v = parseFile(new File("/var/storage/Videos/Anime/To Aru Kagaku no Railgun/To Aru Kagaku no Railgun - 02 - For Working Under the Blazing Sun, Proper Hydration is Required.mkv"));
-        System.out.println(v);
     }
 
     private static enum State {
