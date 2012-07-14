@@ -46,23 +46,27 @@ public class MetadataProvidersManager {
 
     public static final String FAILURE_ID = "NOMATCH";
 
-    private final String providerIdString;
-    private final List<MetadataProvider> providers;
+    private String providerIdString;
+    private List<MetadataProvider> providers;
 
     private MetadataProvidersManager() {
-        ServiceLoader<MetadataProvider> loader = ServiceLoader.load(MetadataProvider.class);
+        providers = new ArrayList<MetadataProvider>();
+    }
+    
+    public synchronized void registerProvider(MetadataProvider provider) {
+        providers.add(provider);
+        providerIdString = null;
+    }
+    
+    private synchronized void ensureProviderLoaded() {
+        if (providerIdString != null)
+            return;
         
-        List<MetadataProvider> allProviders = new ArrayList<MetadataProvider>();
-        for(MetadataProvider provider: loader)
-            allProviders.add(provider);
-
-        Collections.sort(allProviders, new ProviderNameSorter());
-
-        providers = Collections.unmodifiableList(allProviders);
+        Collections.sort(providers, new ProviderNameSorter());
 
         StringBuilder providerIdBuilder = new StringBuilder();
-        for (int i = 0; i < allProviders.size(); i++) {
-            MetadataProvider metadataProvider = allProviders.get(i);
+        for (int i = 0; i < providers.size(); i++) {
+            MetadataProvider metadataProvider = providers.get(i);
             if (i > 0)
                 providerIdBuilder.append(",");
             providerIdBuilder.append(metadataProvider.getProviderId());
@@ -83,6 +87,8 @@ public class MetadataProvidersManager {
     }
     
     public void checkForMetadata(FileInfo info, boolean ignoreCache) {
+        ensureProviderLoaded();
+        
         for(MetadataProvider provider: providers) {
             List<MetadataMatch> matches = provider.checkForMatch(info, ignoreCache);
             if (matches == null || matches.isEmpty())
@@ -131,6 +137,8 @@ public class MetadataProvidersManager {
     }
 
     public String getProviderIdString() {
+        ensureProviderLoaded();
+        
         return providerIdString;
     }
 
@@ -148,6 +156,8 @@ public class MetadataProvidersManager {
     public VideoMetadata getMetadata(FileInfo info) {
         if (info == null)// || (info.getMetadataSource().equalsIgnoreCase(FAILURE_ID) && info.getMetadataId().equals(providerIdString)))
             return null;
+        
+        ensureProviderLoaded();
         
         for(MetadataProvider provider: providers)
             if (provider.getProviderId().equalsIgnoreCase(info.getMetadataSource()))

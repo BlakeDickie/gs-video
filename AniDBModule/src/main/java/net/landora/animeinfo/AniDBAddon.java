@@ -23,11 +23,13 @@ import net.landora.animeinfo.actions.ViewAnimePage;
 import net.landora.animeinfo.anidb.AniDBUDPManager;
 import net.landora.animeinfo.listrefresher.CategoryReloadPeriodicTask;
 import net.landora.animeinfo.listrefresher.NameReloadPeriodicTask;
+import net.landora.animeinfo.metadata.AnimeMetadataProvider;
 import net.landora.animeinfo.mylistreader.MyListExportPeriodicTask;
 import net.landora.animeinfo.notifications.NotificationViewer;
 import net.landora.animeinfo.notifications.NotificationsPeriodic;
 import net.landora.video.addons.AbstractAddon;
 import net.landora.video.data.DataAddons;
+import net.landora.video.info.MetadataProvidersManager;
 import net.landora.video.manager.ManagerAddon;
 import net.landora.video.preferences.PreferencesAddon;
 import net.landora.video.tasks.PeriodicTaskManager;
@@ -42,6 +44,11 @@ public class AniDBAddon extends AbstractAddon {
 
     public AniDBAddon() {
         super(ID, "AniDB Information", PreferencesAddon.ID, DataAddons.ID, UIAddon.ID, ManagerAddon.ID);
+    }
+
+    @Override
+    public void load() {
+        MetadataProvidersManager.getInstance().registerProvider(new AnimeMetadataProvider());
     }
 
     @Override
