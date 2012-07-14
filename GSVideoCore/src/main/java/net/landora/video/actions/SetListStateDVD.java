@@ -14,33 +14,30 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.actions;
 
-import net.landora.video.addons.AbstractAddon;
-import net.landora.video.ui.UIAddon;
+import java.awt.event.ActionEvent;
+import java.util.List;
+import net.landora.video.info.ViewListState;
+import net.landora.video.ui.UIAction;
 
 /**
  *
  * @author bdickie
  */
-public class ActionsAddon extends AbstractAddon {
-    public static final String ID = "net.landora.video.actions.ActionsAddon";
+public class SetListStateDVD extends UIAction<ViewListState> {
 
-    public ActionsAddon() {
-        super(ID, "General Actions", UIAddon.ID);
+    public SetListStateDVD() {
+        super(ViewListState.class, "Mark on DVD", true);
     }
 
+    
+    
     @Override
-    public void start() {
-        UIAddon.getInstance().addAction(
-                new MarkWatchedAction(),
-                new DeleteFile(),
-                new DeleteAndRemoveListFile(),
-                new SetListStateDVD()
-                );
+    public void actionPerformed(ActionEvent evt, List<ViewListState> objects) {
+        for(ViewListState state: objects) {
+            state.setDiskState(ViewListState.DiskState.DVD);
+        }
     }
-    
-    
     
 }
