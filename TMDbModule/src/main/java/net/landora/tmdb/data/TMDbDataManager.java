@@ -19,6 +19,7 @@ package net.landora.tmdb.data;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
+import net.landora.tmdb.data.entity.TMDbGenre;
 import net.landora.tmdb.data.entity.TMDbMovie;
 import net.landora.video.data.AbstractJPAManager;
 
@@ -45,26 +46,51 @@ public class TMDbDataManager extends AbstractJPAManager {
     // </editor-fold>
 
     
+    private EntityManager manager;
+    
     private TMDbDataManager() {
+        manager = getEntityManagerFactory().createEntityManager();
     }
 
     @Override
     protected boolean createScheme() {
-        return true;
+        return false;
     }
     
-    public void save(TMDbMovie movie) {
-        EntityManager manager = getEntityManagerFactory().createEntityManager();
+    public synchronized void save(TMDbMovie movie) {
         manager.getTransaction().begin();
         manager.persist(movie);
         manager.getTransaction().commit();
         manager.close();
     }
     
+    public synchronized void save(TMDbGenre genre) {
+        manager.getTransaction().begin();
+        manager.persist(genre);
+        manager.getTransaction().commit();
+        manager.close();
+    }
+    
+    public synchronized void saveGenres(List<TMDbGenre> genres) {
+        if (genres.isEmpty())
+            return;
+        
+        manager.getTransaction().begin();
+        for(TMDbGenre genre: genres)
+            manager.persist(genre);
+        manager.getTransaction().commit();
+        manager.close();
+    }
+    
+    public synchronized TMDbGenre getGenre(int genreId) {
+        return manager.find(TMDbGenre.class, genreId);
+    }
+    
     @Override
     protected List<? extends Class> getEntityClasses() {
         return Arrays.asList(
-                TMDbMovie.class
+                TMDbMovie.class,
+                TMDbGenre.class
                 );
     }
     

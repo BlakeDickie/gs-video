@@ -16,9 +16,15 @@
  */
 package net.landora.tmdb;
 
+import com.moviejukebox.themoviedb.MovieDbException;
+import com.moviejukebox.themoviedb.TheMovieDb;
+import com.moviejukebox.themoviedb.model.Genre;
+import java.util.ArrayList;
+import java.util.List;
 import net.landora.tmdb.data.TMDbDataManager;
-import net.landora.tmdb.data.entity.TMDbMovie;
+import net.landora.tmdb.data.entity.TMDbGenre;
 import net.landora.video.addons.AbstractAddon;
+import net.landora.video.addons.AddonManager;
 import net.landora.video.data.DataAddons;
 import net.landora.video.info.MetadataProvidersManager;
 import net.landora.video.manager.ManagerAddon;
@@ -31,23 +37,62 @@ import net.landora.video.ui.UIAddon;
  */
 public class TMDbAddon extends AbstractAddon {
     public static final String ID = "net.landora.tmdb.TMDbAddon";
+    
+    public static final String API_KEY = "84a76d3264028068970506ba25375a9e";
+    
+    private TheMovieDb api;
 
     public TMDbAddon() {
         super(ID, "The Movie DB", PreferencesAddon.ID, DataAddons.ID, UIAddon.ID, ManagerAddon.ID);
     }
+    
+    public static TMDbAddon getIntance() {
+        return AddonManager.getInstance().getAddonInstance(TMDbAddon.class);
+    }
 
+    public TheMovieDb getApi() {
+        return api;
+    }
+    
     @Override
     public void load() {
+        
+        try {
+            api = new TheMovieDb(API_KEY);
+        } catch (Exception ex) {
+            log.error("Error loading TMDb API.", ex);
+            return;
+        }
+        
         MetadataProvidersManager.getInstance().registerProvider(new TMDbMetadataProvider());
     }
 
     @Override
     public void ready() {
-        TMDbMovie movie = new TMDbMovie();
-        movie.setName("Testing");
-        TMDbDataManager.getInstance().save(movie);
+        if (api == null)
+            return;
+        
+//        loadGenres();
+        
     }
     
     
-    
+    private void loadGenres() {
+        try {
+            List<Genre> genres = api.getGenreList("eng");
+            TMDbDataManager data = TMDbDataManager.getInstance();
+            List<TMDbGenre> toSave = new ArrayList<TMDbGenre>(genres.size());
+            for(Genre g: genres) {
+                TMDbGenre genre = data.getGenre(g.getId());
+                if (genre == null) {
+                    genre = new TMDbGenre(g.getId(), g.getName());
+                } else
+                    genre.setName(g.getName());
+                toSave.add(genre);
+            }
+            data.saveGenres(toSave);
+        } catch (MovieDbException e) {
+            log.error("Error loading TMDb Genres.", e);
+        }
+    }
 }
