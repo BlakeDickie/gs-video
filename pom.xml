@@ -18,10 +18,15 @@
         <module>FileInfo</module>
         <module>PlayerBackends</module>
     <module>TMDbModule</module>
+    <module>VideoPlayerBasicSkin</module>
+    <module>LIRCVideoInput</module>
   </modules>
   
     <properties>
         <slf4j.version>1.6.4</slf4j.version>
+        <swingx.version>1.6.4</swingx.version>
+        <insubstantial.version>7.1</insubstantial.version>
+        
         <hibernate-core-version>3.6.8.Final</hibernate-core-version>
         <hibernate-validator-version>3.1.0.GA</hibernate-validator-version>
         <netbeans.hint.license>gpl30</netbeans.hint.license> 

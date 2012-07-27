@@ -89,14 +89,6 @@ public final class VideoManagerApp {
     }
     
     protected void initialize(String[] args) {
-        try {
-            if (OSUtils.isWindows() || OSUtils.isMac())
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            else
-                UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
-        } catch (Exception ex) {
-            log.error("Error setting look and feel.", ex);
-        }
         
         AddonManager.getInstance().loadAddons();
         
@@ -137,6 +129,17 @@ public final class VideoManagerApp {
             profile = null;
             return;
         }
+        
+        
+        try {
+            if (OSUtils.isWindows() || OSUtils.isMac())
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            else
+                UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
+        } catch (Exception ex) {
+            log.error("Error setting look and feel.", ex);
+        }
+        
         
         AddonManager.getInstance().startAddons();
         

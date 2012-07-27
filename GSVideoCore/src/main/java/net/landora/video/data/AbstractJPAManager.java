@@ -58,7 +58,7 @@ public abstract class AbstractJPAManager {
             props.put("openjpa.MetaDataFactory", types.toString());
             props.put("openjpa.ConnectionFactory", DatabaseConnectionManager.getInstance().getDataSource());
             props.put("openjpa.RuntimeUnenhancedClasses", "unsupported");
-            props.put("openjpa.Log", "commons");
+            props.put("openjpa.Log", "slf4j");
             props.put("openjpa.Id", getClass().getName());
             
             if (createScheme()) {

@@ -20,6 +20,7 @@ package net.landora.video.utils;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -184,5 +185,20 @@ public class UIUtils {
     
     public static Component getActiveWindow() {
         return FocusManager.getCurrentManager().getActiveWindow();
+    }
+    
+    public static String getFirstAvaliableFamily(String...fontFamilies) {
+        Map<String,String> families = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+        for(String family: GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) {
+            families.put(family, family);
+        }
+        
+        for(String family: fontFamilies) {
+            String result = families.get(family);
+            if (result != null)
+                return result;
+        }
+        
+        return null;
     }
 }
