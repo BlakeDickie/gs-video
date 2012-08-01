@@ -165,6 +165,12 @@ public class VideoPlayerAddon extends AbstractAddon {
         }
         
     }
+
+    public PlayerFrame getFrame() {
+        return frame;
+    }
+    
+    
     
     private class MenuLinkComparator implements Comparator<MenuLink> {
 

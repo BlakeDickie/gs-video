@@ -16,6 +16,12 @@
  */
 package net.landora.videoplayer.menu;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.landora.videoplayer.BackgroundTask;
+
 /**
  *
  * @author bdickie
@@ -24,11 +30,24 @@ public abstract class BackgroundRefreshMenu extends Menu {
 
     @Override
     public final void refresh() {
-        // TODO: Add background support :(
-        refreshImpl();
+        BackgroundTask task = new BackgroundTask(Executors.callable(new RefreshRunnable()), getRefreshDescription());
+        try {
+            task.runTask();
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(BackgroundRefreshMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     protected abstract void refreshImpl();
     protected abstract String getRefreshDescription();
+    
+    private class RefreshRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            refreshImpl();
+        }
+        
+    }
     
 }
