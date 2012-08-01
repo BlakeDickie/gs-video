@@ -42,5 +42,28 @@ public class BasicMenu extends Menu {
     public List<? extends MenuItem> getMenuItems() {
         return menuItems;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + (this.menuItems != null ? this.menuItems.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BasicMenu other = (BasicMenu) obj;
+        if (this.menuItems != other.menuItems && (this.menuItems == null || !this.menuItems.equals(other.menuItems))) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }

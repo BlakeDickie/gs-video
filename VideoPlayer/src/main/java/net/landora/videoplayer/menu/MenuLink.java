@@ -18,6 +18,7 @@ package net.landora.videoplayer.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 /**
  *
@@ -92,5 +93,37 @@ public class MenuLink extends MenuItem {
             l.actionPerformed(evt);
         }
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 13 * hash + (this.name != null ? this.name.hashCode() : 0);
+        
+        ActionListener[] l = listeners.getListeners(ActionListener.class);
+        hash = 13 * hash + (l != null ? Arrays.hashCode(l) : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MenuLink other = (MenuLink) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        ActionListener[] l1 = listeners.getListeners(ActionListener.class);
+        ActionListener[] l2 = listeners.getListeners(ActionListener.class);
+        if ((l1 == null) ? (l2 != null) : !Arrays.equals(l1, l2)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }

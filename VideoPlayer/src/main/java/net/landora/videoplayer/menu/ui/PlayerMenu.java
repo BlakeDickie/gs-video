@@ -28,6 +28,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
+import net.landora.video.utils.ComparisionUtils;
 import net.landora.videoplayer.menu.Menu;
 import net.landora.videoplayer.menu.MenuItem;
 import net.landora.videoplayer.menu.MenuLink;
@@ -156,7 +157,7 @@ public class PlayerMenu extends JComponent implements Scrollable, UIEventHandler
             add(comp);
             components.add(comp);
             
-            if (item == selectedMenuItem)
+            if (ComparisionUtils.equals(item, selectedMenuItem))
                 compToSelect = comp;
         }
         

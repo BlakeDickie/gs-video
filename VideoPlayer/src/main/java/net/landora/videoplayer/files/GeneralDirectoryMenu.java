@@ -77,5 +77,28 @@ public class GeneralDirectoryMenu extends BackgroundRefreshMenu {
     public List<? extends MenuItem> getMenuItems() {
         return links;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + (this.dir != null ? this.dir.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GeneralDirectoryMenu other = (GeneralDirectoryMenu) obj;
+        if (this.dir != other.dir && (this.dir == null || !this.dir.equals(other.dir))) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }

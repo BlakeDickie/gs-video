@@ -35,5 +35,28 @@ public class OpenMenuAction implements ActionListener {
         MenuItem item = (MenuItem)e.getSource();
         item.getMenuComponent().openMenu(menu);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + (this.menu != null ? this.menu.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OpenMenuAction other = (OpenMenuAction) obj;
+        if (this.menu != other.menu && (this.menu == null || !this.menu.equals(other.menu))) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }

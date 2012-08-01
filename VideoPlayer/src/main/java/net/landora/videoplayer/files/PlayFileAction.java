@@ -44,6 +44,14 @@ public class PlayFileAction implements ActionListener {
             }
         }
     }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
     
     
     
