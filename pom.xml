@@ -23,7 +23,7 @@
   </modules>
   
     <properties>
-        <slf4j.version>1.6.4</slf4j.version>
+        <slf4j.version>1.6.6</slf4j.version>
         <swingx.version>1.6.4</swingx.version>
         <insubstantial.version>7.1</insubstantial.version>
         
