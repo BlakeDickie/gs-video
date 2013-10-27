@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.sql.DataSource;
+import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.PersistenceProviderImpl;
 
 
@@ -39,6 +41,10 @@ public abstract class AbstractJPAManager {
     
     private EntityManagerFactory factory;
     
+    protected DataSource getDataSource() {
+        return DatabaseConnectionManager.getInstance().getDataSource();
+    }
+    
     protected synchronized EntityManagerFactory getEntityManagerFactory() {
         if (factory == null) {
             
@@ -56,7 +62,7 @@ public abstract class AbstractJPAManager {
             types.append(")");
             
             props.put("openjpa.MetaDataFactory", types.toString());
-            props.put("openjpa.ConnectionFactory", DatabaseConnectionManager.getInstance().getDataSource());
+            props.put("openjpa.ConnectionFactory", getDataSource());
             props.put("openjpa.RuntimeUnenhancedClasses", "unsupported");
             props.put("openjpa.Log", "slf4j");
             props.put("openjpa.Id", getClass().getName());
@@ -65,7 +71,7 @@ public abstract class AbstractJPAManager {
                 props.put("openjpa.jdbc.SynchronizeMappings", "buildSchema(ForeignKeys=true)");
             }
             
-            factory = Persistence.createEntityManagerFactory("openjpa", props);
+            factory = OpenJPAPersistence.getEntityManagerFactory(props);
             
             
         }

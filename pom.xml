@@ -20,6 +20,9 @@
     <module>TMDbModule</module>
     <module>VideoPlayerBasicSkin</module>
     <module>LIRCVideoInput</module>
+        <module>XBMCSupport</module>
+    <module>XBMCDatabase</module>
+    <module>XBMCWebService</module>
   </modules>
   
     <properties>
@@ -29,6 +32,7 @@
         
         <hibernate-core-version>3.6.8.Final</hibernate-core-version>
         <hibernate-validator-version>3.1.0.GA</hibernate-validator-version>
+        <org.springframework.version>3.2.0.RELEASE</org.springframework.version>
         <netbeans.hint.license>gpl30</netbeans.hint.license> 
     </properties>
     

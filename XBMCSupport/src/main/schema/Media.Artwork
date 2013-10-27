@@ -1,0 +1,26 @@
+{
+  "additionalProperties": {
+    "$ref": "Global.String.NotEmpty", 
+    "default": ""
+  }, 
+  "id": "Media.Artwork", 
+  "properties": {
+    "banner": {
+      "$ref": "Global.String.NotEmpty", 
+      "default": ""
+    }, 
+    "poster": {
+      "$ref": "Global.String.NotEmpty", 
+      "default": ""
+    }, 
+    "fanart": {
+      "$ref": "Global.String.NotEmpty", 
+      "default": ""
+    }, 
+    "thumb": {
+      "$ref": "Global.String.NotEmpty", 
+      "default": ""
+    }
+  }, 
+  "type": "object"
+}

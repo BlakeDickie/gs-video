@@ -1,0 +1,10 @@
+{
+  "id": "Item.Details.Base", 
+  "properties": {
+    "label": {
+      "required": true, 
+      "type": "string"
+    }
+  }, 
+  "type": "object"
+}
