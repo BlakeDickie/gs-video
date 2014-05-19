@@ -1,21 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.anidb;
 
 import java.io.BufferedInputStream;
@@ -54,8 +52,9 @@ public class AniDBHTTPManager {
 
     // <editor-fold defaultstate="collapsed" desc="Singleton">
     /**
-     * SingletonHolder is loaded on the first execution of Singleton.getInstance()
-     * or the first access to SingletonHolder.instance , not before.
+     * SingletonHolder is loaded on the first execution of
+     * Singleton.getInstance() or the first access to SingletonHolder.instance ,
+     * not before.
      */
     private static class SingletonHolder {
 
@@ -67,7 +66,6 @@ public class AniDBHTTPManager {
     }
     // </editor-fold>
 
-
     private AniDBHTTPManager() {
     }
 
@@ -77,9 +75,7 @@ public class AniDBHTTPManager {
 
 //            URL url = new URL(String.format("%s&request=anime&aid=%d", HTTP_URL, aid));
 //            is = new GZIPInputStream(url.openStream());
-
             is = new BufferedInputStream(new FileInputStream("/home/bdickie/anidb/http_test.xml"));
-
 
             XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(is);
 
@@ -92,7 +88,7 @@ public class AniDBHTTPManager {
             anime.setHentai(Boolean.parseBoolean(reader.getAttributeValue(null, "restricted")));
             anime.setLastLoaded(Calendar.getInstance());
 
-            while(reader.nextTag() != XMLStreamReader.END_ELEMENT) {
+            while (reader.nextTag() != XMLStreamReader.END_ELEMENT) {
                 String tagName = reader.getLocalName();
                 if (tagName.equals("type")) {
                     anime.setType(nextString(reader));
@@ -108,16 +104,17 @@ public class AniDBHTTPManager {
                     anime.setPictureFileName(nextString(reader));
                 } else if (tagName.equals("titles")) {
                     List<AnimeName> names = new ArrayList<AnimeName>();
-                    while(reader.nextTag() != XMLStreamReader.END_ELEMENT) {
+                    while (reader.nextTag() != XMLStreamReader.END_ELEMENT) {
                         reader.require(XMLStreamReader.START_ELEMENT, null, "title");
 
                         AnimeName name = new AnimeName();
-                        for(int i = 0; i < reader.getAttributeCount(); i++) {
+                        for (int i = 0; i < reader.getAttributeCount(); i++) {
                             String aname = reader.getAttributeLocalName(i);
-                            if (aname.equals("type"))
+                            if (aname.equals("type")) {
                                 name.setType(reader.getAttributeValue(i));
-                            else if (aname.equals("lang"))
+                            } else if (aname.equals("lang")) {
                                 name.setLanguage(reader.getAttributeValue(i));
+                            }
 
                         }
 
@@ -126,7 +123,7 @@ public class AniDBHTTPManager {
                         names.add(name);
                     }
 
-                    for(AnimeName name: names) {
+                    for (AnimeName name : names) {
                         if (name.getType().equalsIgnoreCase("main")) {
                             anime.setNameMain(name.getName());
                         } else if (name.getType().equalsIgnoreCase("official") && name.getLanguage().equalsIgnoreCase("en")) {
@@ -135,8 +132,8 @@ public class AniDBHTTPManager {
                     }
                     anime.setNames(names);
                 } else if (tagName.equals("ratings")) {
-                    
-                    while(reader.nextTag() != XMLStreamReader.END_ELEMENT) {
+
+                    while (reader.nextTag() != XMLStreamReader.END_ELEMENT) {
                         String tagName2 = reader.getLocalName();
                         int count = Integer.parseInt(reader.getAttributeValue(null, "count"));
                         float value = Float.parseFloat(nextString(reader));
@@ -151,34 +148,34 @@ public class AniDBHTTPManager {
 
                 } else if (tagName.equals("categories")) {
 
-                    while(reader.nextTag() != XMLStreamReader.END_ELEMENT) {
+                    while (reader.nextTag() != XMLStreamReader.END_ELEMENT) {
                         reader.require(XMLStreamReader.START_ELEMENT, null, "category");
 
                         int categoryid = Integer.parseInt(reader.getAttributeValue(null, "id"));
                         int weight = Integer.parseInt(reader.getAttributeValue(null, "weight"));
 
                         AnimeCategory category = AnimeDBA.getAnimeCategory(categoryid);
-                        if (category == null)
+                        if (category == null) {
                             return null;
+                        }
 
                         ignoreTag(reader);
                     }
                 } else {
                     ignoreTag(reader);
                 }
-                
 
             }
             reader.close();
-
 
             return anime;
         } catch (Exception e) {
             log.error("Error downloading anime: " + aid, e);
             return null;
         } finally {
-            if (is != null)
+            if (is != null) {
                 IOUtils.closeQuietly(is);
+            }
         }
     }
 

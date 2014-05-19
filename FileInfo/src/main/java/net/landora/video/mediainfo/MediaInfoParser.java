@@ -1,22 +1,20 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.mediainfo;
-
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +24,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.landora.video.programs.CommonPrograms;
 import net.landora.video.programs.ProgramsAddon;
-import net.landora.video.properties.*;
+import net.landora.video.properties.AudioFormat;
+import net.landora.video.properties.AudioStream;
+import net.landora.video.properties.Chapter;
+import net.landora.video.properties.NamedChapter;
+import net.landora.video.properties.SubtitleFormat;
+import net.landora.video.properties.SubtitleStream;
+import net.landora.video.properties.Video;
+import net.landora.video.properties.VideoFormat;
+import net.landora.video.properties.VideoStream;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -42,7 +48,7 @@ public class MediaInfoParser {
     public static Video parseFile(File f) {
         return new MediaInfoParser().handleFile(f);
     }
-    
+
     private State state;
     private Video file;
     private VideoStream curVideo;
@@ -50,7 +56,6 @@ public class MediaInfoParser {
     private SubtitleStream curSubtitle;
     private int audioCount;
     private int subtitleCount;
-    
 
     public Video handleFile(File f) {
 
@@ -60,11 +65,10 @@ public class MediaInfoParser {
             process.redirectErrorStream(true);
             Process p = process.start();
 
-
             StringWriter buffer = new StringWriter();
             IOUtils.copy(p.getInputStream(), buffer);
             p.waitFor();
-            
+
             String reply = buffer.toString();
             buffer = null;
 
@@ -75,14 +79,14 @@ public class MediaInfoParser {
 
             BufferedReader reader = new BufferedReader(new StringReader(reply));
             String line;
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
 
                 Matcher m = dataPattern.matcher(line);
                 if (m.matches()) {
                     String field = m.group(1);
                     String value = m.group(2);
 
-                    switch(state) {
+                    switch (state) {
                         case General:
                             handleGeneral(field, value);
                             break;
@@ -128,7 +132,7 @@ public class MediaInfoParser {
                         state = State.Chapters;
                     }
                 }
-                
+
             }
 
             cleanupChapters();
@@ -181,14 +185,16 @@ public class MediaInfoParser {
     }
 
     private void handleChapter(String field, String value) {
-        if (!numberPattern.matcher(field).matches())
+        if (!numberPattern.matcher(field).matches()) {
             return;
+        }
 
         int chapterNumber = Integer.parseInt(field);
 
         Matcher m = chapterStartPattern.matcher(value);
-        if (!m.matches())
+        if (!m.matches()) {
             return;
+        }
 
         NamedChapter chapter = new NamedChapter();
         chapter.setTitle(m.group(4));
@@ -200,7 +206,7 @@ public class MediaInfoParser {
         chapter.setStartTime(seconds + 60 * (mins + 60 * hours));
 
         file.getChapters().add(chapter);
-        
+
     }
 
     private void cleanupChapters() {
@@ -210,18 +216,19 @@ public class MediaInfoParser {
             float nextChap;
             if (i == num - 1) {
                 nextChap = file.getLength();
-            } else
+            } else {
                 nextChap = file.getChapters().get(i + 1).getStartTime();
+            }
             chapter.setLength(nextChap - chapter.getStartTime());
         }
     }
-    
 
     public static void main(String[] args) {
         Video v = parseFile(new File("/var/storage/Videos/Anime/To Aru Kagaku no Railgun/To Aru Kagaku no Railgun - 02 - For Working Under the Blazing Sun, Proper Hydration is Required.mkv"));
     }
 
     private static enum State {
+
         General,
         Video,
         Audio,

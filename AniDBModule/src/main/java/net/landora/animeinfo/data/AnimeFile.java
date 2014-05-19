@@ -1,32 +1,31 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.data;
 
 import java.util.Collection;
 import net.landora.video.ui.ContextProducer;
 import net.landora.video.utils.UIUtils;
+
 /**
  *
  * @author bdickie
  */
 public class AnimeFile implements java.io.Serializable, ContextProducer {
-    
+
     public static final int SAVE_REVISION = 2;
 
     private int fileId;
@@ -39,7 +38,7 @@ public class AnimeFile implements java.io.Serializable, ContextProducer {
 
     private Long size;
     private String ed2k;
-    
+
     private String source;
     private String videoCodec;
     private String videoResolution;
@@ -123,31 +122,32 @@ public class AnimeFile implements java.io.Serializable, ContextProducer {
         this.generic = generic;
     }
 
-    
-
     public void setState(int state) {
         crcValid = null;
         version = null;
         censored = null;
 
-        if ((state & FILE_CRCOK) != 0)
+        if ((state & FILE_CRCOK) != 0) {
             crcValid = true;
-        else if ((state & FILE_CRCERR) != 0)
+        } else if ((state & FILE_CRCERR) != 0) {
             crcValid = false;
+        }
 
-        if ((state & FILE_ISV2) != 0)
+        if ((state & FILE_ISV2) != 0) {
             version = 2;
-        else if ((state & FILE_ISV3) != 0)
+        } else if ((state & FILE_ISV3) != 0) {
             version = 3;
-        else if ((state & FILE_ISV4) != 0)
+        } else if ((state & FILE_ISV4) != 0) {
             version = 4;
-        else if ((state & FILE_ISV5) != 0)
+        } else if ((state & FILE_ISV5) != 0) {
             version = 5;
+        }
 
-        if ((state & FILE_CEN) != 0)
+        if ((state & FILE_CEN) != 0) {
             censored = true;
-        else if ((state & FILE_UNC) != 0)
+        } else if ((state & FILE_UNC) != 0) {
             censored = false;
+        }
     }
 
     private static final int FILE_CRCOK = 1;
@@ -183,12 +183,13 @@ public class AnimeFile implements java.io.Serializable, ContextProducer {
 
     @Override
     public String toString() {
-        if (isGeneric())
+        if (isGeneric()) {
             return String.format("Generic: %s", episode.toString());
-        else if (group == null)
+        } else if (group == null) {
             return String.format("No Group: %s", episode.toString());
-        else
+        } else {
             return String.format("%s: %s", group.getShortName(), episode.toString());
+        }
     }
 
     @Override
@@ -238,5 +239,4 @@ public class AnimeFile implements java.io.Serializable, ContextProducer {
         this.currentSaveRevision = currentSaveRevision;
     }
 
-    
 }

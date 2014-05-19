@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-        Copyright (C) 2012 Blake Dickie
+        Copyright (C) 2012-2014 Blake Dickie
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 
     <insert id="insertAnime" parameterType="AnimeNameLookupSummary">
         Insert Into AnimeNameLookupSummary (
-            anime_id,
-            name_main,
-            name_english
+        anime_id,
+        name_main,
+        name_english
         ) Values (
-            #{animeId},
-            #{nameMain,jdbcType=VARCHAR},
-            #{nameEnglish,jdbcType=VARCHAR}
+        #{animeId},
+        #{nameMain,jdbcType=VARCHAR},
+        #{nameEnglish,jdbcType=VARCHAR}
         );
     </insert>
 
@@ -60,17 +60,17 @@
     
     <insert id="insertAnimeName" parameterType="AnimeNameLookup">
         Insert Into AnimeNameLookup (
-            anime_id,
-            anime_name,
-            name_type,
-            name_lang,
-            anime_name_escaped
+        anime_id,
+        anime_name,
+        name_type,
+        name_lang,
+        anime_name_escaped
         ) Values (
-            #{anime.animeId,jdbcType=INTEGER},
-            #{name,jdbcType=VARCHAR},
-            #{type,jdbcType=VARCHAR},
-            #{language,jdbcType=VARCHAR},
-            #{nameEscaped,jdbcType=VARCHAR}
+        #{anime.animeId,jdbcType=INTEGER},
+        #{name,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{language,jdbcType=VARCHAR},
+        #{nameEscaped,jdbcType=VARCHAR}
         );
     </insert>
     
@@ -104,9 +104,9 @@
         <include refid="animeNameColumns"/>
         From AnimeNameLookup As AN
         Where 
-            ( AN.anime_name = #{name}
-            OR AN.anime_name_escaped = #{name} )
-            AND AN.name_lang in ('en', 'ja', 'x-jat')
+        ( AN.anime_name = #{name}
+        OR AN.anime_name_escaped = #{name} )
+        AND AN.name_lang in ('en', 'ja', 'x-jat')
     </select>
 
 

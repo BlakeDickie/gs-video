@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.filebrowser;
 
 import java.beans.PropertyChangeListener;
@@ -31,26 +30,24 @@ import net.landora.video.utils.UIUtils;
  * @author bdickie
  */
 public class VideoFile implements ContextProducer {
-    
+
     private File file;
     private long length;
 
     public VideoFile(File file) {
         this.file = file;
-        
+
         length = file.length();
-        
+
         status = Status.Waiting;
     }
-    
+
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);
     }
 
-    
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
@@ -64,18 +61,11 @@ public class VideoFile implements ContextProducer {
         };
         UIUtils.invokeLaterInSwingThread(runnable);
     }
-    
-    
-    
 
     public long getLength() {
         return length;
     }
-    
-    
-    
-    
-    
+
     protected Status status;
     public static final String PROP_STATUS = "status";
 
@@ -115,8 +105,7 @@ public class VideoFile implements ContextProducer {
     public File getFile() {
         return file;
     }
-    
-    
+
     protected FileInfo info;
     public static final String PROP_INFO = "info";
 
@@ -148,11 +137,12 @@ public class VideoFile implements ContextProducer {
     @Override
     public void addContentObjects(Collection<Object> addTo) {
         addTo.add(this);
-        
+
         UIUtils.addContentObject(getFile(), addTo);
-                
-        if (getInfo() != null)
+
+        if (getInfo() != null) {
             UIUtils.addContentObject(getInfo(), addTo);
+        }
 
         if (getVideo() != null) {
             UIUtils.addContentObject(getVideo(), addTo);
@@ -160,9 +150,8 @@ public class VideoFile implements ContextProducer {
         }
     }
 
-    
-    
     public static enum Status {
+
         Waiting,
         Identifying,
         Unknown,

@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.mkv;
 
 import java.io.File;
@@ -56,7 +55,7 @@ public class MKVParser {
     private int chapterCount;
     private int audioCount;
     private int subtitleCount;
-    
+
     private boolean vfwVideo;
 
     public Video handleFile(File f) {
@@ -66,16 +65,16 @@ public class MKVParser {
             process.redirectErrorStream(true);
             Process p = process.start();
 
-
             StringWriter buffer = new StringWriter();
             IOUtils.copy(p.getInputStream(), buffer);
             p.waitFor();
-            
+
             String reply = buffer.toString();
             buffer = null;
-            
-            if (reply.contains("No segment/level 0 element found."))
+
+            if (reply.contains("No segment/level 0 element found.")) {
                 return null;
+            }
 
             Matcher mkvInfoMatcher = dataPattern.matcher(reply);
 
@@ -110,11 +109,11 @@ public class MKVParser {
                     case Attachment:
                         handleAttachment();
                         break;
-                        
+
                     case Chapter:
                         handleChapter();
                         break;
-                        
+
                     case Other:
                     default:
                         handleStateless();
@@ -125,10 +124,10 @@ public class MKVParser {
             return null;
         }
     }
-    
+
     private static Pattern FOURCC_PATTERN = Pattern.compile("FourCC\\s+([^, ]+)", Pattern.CASE_INSENSITIVE);
     private static Pattern FPS_PATTERN = Pattern.compile("(\\d+\\.\\d+)\\s*fps", Pattern.CASE_INSENSITIVE);
-    
+
     private void handleVideo() {
         if (field.equalsIgnoreCase("Pixel width")) {
             curVideo.setPixelWidth(Integer.parseInt(value));
@@ -142,21 +141,25 @@ public class MKVParser {
             curVideo.setInterlaced(value.equals("1"));
         } else if (field.equalsIgnoreCase("Default duration")) {
             Matcher m = FPS_PATTERN.matcher(value);
-            if (m.find())
+            if (m.find()) {
                 curVideo.setFps(m.group(1));
+            }
         } else if (vfwVideo && field.startsWith("CodecPrivate")) {
-            Matcher m = FOURCC_PATTERN.matcher(field +" " + value);
-            if (m.find())
+            Matcher m = FOURCC_PATTERN.matcher(field + " " + value);
+            if (m.find()) {
                 curVideo.setFormat(m.group(1));
-        } else
+            }
+        } else {
             handleGeneralStreamFields();
+        }
     }
-    
+
     private void handleAudo() {
         if (field.equalsIgnoreCase("Channels")) {
             curAudio.setChannels(Integer.parseInt(value));
-        } else
+        } else {
             handleGeneralStreamFields();
+        }
     }
 
     private void handleGeneralStreamFields() {
@@ -172,8 +175,8 @@ public class MKVParser {
             curSubtitle = null;
             curAudio = null;
             state = MKVParserState.UnknownTrack;
-        } else if (field.equalsIgnoreCase("Attachments") ||
-                field.equalsIgnoreCase("Chapters")) {
+        } else if (field.equalsIgnoreCase("Attachments")
+                || field.equalsIgnoreCase("Chapters")) {
             curStream = null;
             curVideo = null;
             curSubtitle = null;
@@ -187,17 +190,19 @@ public class MKVParser {
             if (curStream instanceof MKVVideo && value.equalsIgnoreCase("V_MS/VFW/FOURCC")) {
                 // Special handling for when the format is specified with FOURCC.
                 vfwVideo = true;
-            } else
+            } else {
                 curStream.setFormat(value);
+            }
         } else if (field.equalsIgnoreCase("Language")) {
             curStream.setLanguage(value);
         } else if (field.equalsIgnoreCase("Name")) {
             curStream.setName(value);
-        } else
+        } else {
             handleStateless();
+        }
 
     }
-    
+
     private void handleAttachment() {
         if (field.equalsIgnoreCase("File name")) {
             curAttachment.setFilename(value);
@@ -209,10 +214,11 @@ public class MKVParser {
             curAttachment.setUid(Long.parseLong(value));
         } else if (field.equalsIgnoreCase("File description")) {
             curAttachment.setDescription(value);
-        } else
+        } else {
             handleStateless();
+        }
     }
-    
+
     private void handleChapter() {
         if (field.equalsIgnoreCase("ChapterString")) {
             curChapter.setTitle(value);
@@ -221,8 +227,9 @@ public class MKVParser {
         } else if (field.equalsIgnoreCase("ChapterTimeEnd")) {
             float endTime = parseChapterTime(value);
             curChapter.setLength(endTime - curChapter.getStartTime());
-        } else
+        } else {
             handleStateless();
+        }
     }
 
     private void handleStateless() {
@@ -241,9 +248,9 @@ public class MKVParser {
             file.getChapters().add(curChapter);
         }
     }
-    
+
     private static Pattern timePattern = Pattern.compile("(\\d+):(\\d+):(\\d+)\\.(\\d+)");
-    
+
     private static float parseChapterTime(String time) {
         Matcher m = timePattern.matcher(time);
         if (m.matches()) {
@@ -251,9 +258,9 @@ public class MKVParser {
             int min = Integer.parseInt(m.group(2));
             int sec = Integer.parseInt(m.group(3));
             float msec = Float.parseFloat("0." + m.group(4));
-            
+
             return ((hour * 60f) + min) * 60f + sec + msec;
-            
+
         } else {
             throw new IllegalArgumentException("Invalid time: " + time);
         }
@@ -279,8 +286,9 @@ public class MKVParser {
                 }
                 file.setUid(data);
             }
-        } else
+        } else {
             handleStateless();
+        }
     }
 
     private void handleUnknownTrack() {
@@ -311,8 +319,9 @@ public class MKVParser {
 
             curStream.setUid(trackUID);
             curStream.setTrackId(trackNum);
-        } else
+        } else {
             handleStateless();
+        }
     }
 
     public static void main(String[] args) {

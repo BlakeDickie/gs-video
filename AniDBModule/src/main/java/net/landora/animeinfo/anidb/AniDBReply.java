@@ -1,21 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.anidb;
 
 import java.io.BufferedReader;
@@ -33,13 +31,13 @@ import java.util.regex.Pattern;
  * @author bdickie
  */
 public class AniDBReply {
+
     private static final Pattern STATUS_LINE_PATTERN = Pattern.compile("(\\d{3}) (.*)");
     private static final Pattern DATA_LINE_PATTERN = Pattern.compile("<br />|`|\\|", Pattern.CASE_INSENSITIVE);
 
     private int returnCode;
     private String returnMessage;
     private List<ReplyLine> lines;
-    
 
     public AniDBReply(String message) {
         try {
@@ -59,7 +57,7 @@ public class AniDBReply {
             lines = new ArrayList<ReplyLine>();
 
             String line;
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 lines.add(new ReplyLine(line));
             }
         } catch (IOException e) {
@@ -82,23 +80,24 @@ public class AniDBReply {
     }
 
     public ReplyLine getFirstLine() {
-        if (lines.isEmpty())
+        if (lines.isEmpty()) {
             return null;
-        else
+        } else {
             return lines.get(0);
+        }
     }
 
     public List<ReplyLine> getLines() {
         return lines;
     }
 
-
     public String getFirstValue(int index) {
         ReplyLine first = getFirstLine();
-        if (first == null)
+        if (first == null) {
             return "";
-        else
+        } else {
             return first.getValue(index);
+        }
     }
 
     public int getFirstValueAsInt(int index) {
@@ -116,9 +115,8 @@ public class AniDBReply {
 
     public static class ReplyLine {
 
-
         private String line;
-        
+
         private List<String> data;
 
         public ReplyLine(String line) {
@@ -126,13 +124,13 @@ public class AniDBReply {
             data = new ArrayList<String>();
             StringBuffer buffer = new StringBuffer();
             Matcher m = DATA_LINE_PATTERN.matcher(line);
-            while(m.find()) {
+            while (m.find()) {
                 String match = m.group();
-                if (match.equalsIgnoreCase("<br />"))
+                if (match.equalsIgnoreCase("<br />")) {
                     m.appendReplacement(buffer, "\n");
-                else if (match.equals("`"))
+                } else if (match.equals("`")) {
                     m.appendReplacement(buffer, "'");
-                else if (match.equals("|")) {
+                } else if (match.equals("|")) {
                     m.appendReplacement(buffer, "");
                     data.add(buffer.toString());
                     buffer.setLength(0);
@@ -143,10 +141,11 @@ public class AniDBReply {
         }
 
         public String getValue(int index) {
-            if (data.size() <= index)
+            if (data.size() <= index) {
                 return "";
-            else
+            } else {
                 return data.get(index);
+            }
         }
 
         public int getValueAsInt(int index) {
@@ -164,8 +163,9 @@ public class AniDBReply {
 
         public Calendar getValueAsDateTime(int index) {
             int value = getValueAsInt(index);
-            if (value == 0)
+            if (value == 0) {
                 return null;
+            }
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(value * 1000l);
             return cal;
@@ -173,8 +173,9 @@ public class AniDBReply {
 
         public Calendar getValueAsDate(int index) {
             int value = getValueAsInt(index);
-            if (value == 0)
+            if (value == 0) {
                 return null;
+            }
             Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             cal.setTimeInMillis(value * 1000l);
             Calendar result = Calendar.getInstance();

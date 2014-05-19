@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.filestate.data;
 
 /**
@@ -22,6 +21,7 @@ package net.landora.video.filestate.data;
  * @author bdickie
  */
 public class SharedDirectory implements java.io.Serializable {
+
     private int directoryId;
     private String uuid;
     private String name;
@@ -35,7 +35,7 @@ public class SharedDirectory implements java.io.Serializable {
         return directoryId;
     }
 
-    public void setDirectoryId(int directoryId) {
+    public void setDirectoryId( int directoryId ) {
         this.directoryId = directoryId;
     }
 
@@ -43,7 +43,7 @@ public class SharedDirectory implements java.io.Serializable {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid( String uuid ) {
         this.uuid = uuid;
     }
 
@@ -51,7 +51,7 @@ public class SharedDirectory implements java.io.Serializable {
         return defaultPath;
     }
 
-    public void setDefaultPath(String defaultPath) {
+    public void setDefaultPath( String defaultPath ) {
         this.defaultPath = defaultPath;
     }
 
@@ -59,7 +59,7 @@ public class SharedDirectory implements java.io.Serializable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName( String name ) {
         this.name = name;
     }
 
@@ -67,29 +67,25 @@ public class SharedDirectory implements java.io.Serializable {
         return renameNewFiles;
     }
 
-    public void setRenameNewFiles(boolean renameNewFiles) {
+    public void setRenameNewFiles( boolean renameNewFiles ) {
         this.renameNewFiles = renameNewFiles;
     }
 
-    
-
-    
-    
     @Override
     public String toString() {
-        return (getName() == null || getName().trim().isEmpty() ? "--Unnamed--" : getName());
+        return ( getName() == null || getName().trim().isEmpty() ? "--Unnamed--" : getName() );
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals( Object obj ) {
+        if ( obj == null ) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if ( getClass() != obj.getClass() ) {
             return false;
         }
         final SharedDirectory other = (SharedDirectory) obj;
-        if ((this.uuid == null) ? (other.uuid != null) : !this.uuid.equals(other.uuid)) {
+        if ( ( this.uuid == null ) ? ( other.uuid != null ) : !this.uuid.equals( other.uuid ) ) {
             return false;
         }
         return true;
@@ -98,11 +94,8 @@ public class SharedDirectory implements java.io.Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + (this.uuid != null ? this.uuid.hashCode() : 0);
+        hash = 67 * hash + ( this.uuid != null ? this.uuid.hashCode() : 0 );
         return hash;
     }
-    
-    
-    
-    
+
 }

@@ -1,18 +1,18 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package gnu.crypto.hash;
 
@@ -58,164 +58,181 @@ package gnu.crypto.hash;
 // library, but you are not obligated to do so.  If you do not wish to
 // do so, delete this exception statement from your version.
 // ----------------------------------------------------------------------------
-
 /**
- * <p>A base abstract class to facilitate hash implementations.</p>
+ * <p>
+ * A base abstract class to facilitate hash implementations.</p>
  *
  * @version $Revision: 1.8 $
  */
 public abstract class BaseHash implements IMessageDigest {
 
-   // Constants and variables
-   // -------------------------------------------------------------------------
+    // Constants and variables
+    // -------------------------------------------------------------------------
+    /**
+     * The canonical name prefix of the hash.
+     */
+    protected String name;
 
-   /** The canonical name prefix of the hash. */
-   protected String name;
+    /**
+     * The hash (output) size in bytes.
+     */
+    protected int hashSize;
 
-   /** The hash (output) size in bytes. */
-   protected int hashSize;
+    /**
+     * The hash (inner) block size in bytes.
+     */
+    protected int blockSize;
 
-   /** The hash (inner) block size in bytes. */
-   protected int blockSize;
+    /**
+     * Number of bytes processed so far.
+     */
+    protected long count;
 
-   /** Number of bytes processed so far. */
-   protected long count;
+    /**
+     * Temporary input buffer.
+     */
+    protected byte[] buffer;
 
-   /** Temporary input buffer. */
-   protected byte[] buffer;
+    // Constructor(s)
+    // -------------------------------------------------------------------------
+    /**
+     * <p>
+     * Trivial constructor for use by concrete subclasses.</p>
+     *
+     * @param name the canonical name prefix of this instance.
+     * @param hashSize the block size of the output in bytes.
+     * @param blockSize the block size of the internal transform.
+     */
+    protected BaseHash(String name, int hashSize, int blockSize) {
+        super();
 
-   // Constructor(s)
-   // -------------------------------------------------------------------------
+        this.name = name;
+        this.hashSize = hashSize;
+        this.blockSize = blockSize;
+        this.buffer = new byte[blockSize];
 
-   /**
-    * <p>Trivial constructor for use by concrete subclasses.</p>
-    *
-    * @param name the canonical name prefix of this instance.
-    * @param hashSize the block size of the output in bytes.
-    * @param blockSize the block size of the internal transform.
-    */
-   protected BaseHash(String name, int hashSize, int blockSize) {
-      super();
-
-      this.name = name;
-      this.hashSize = hashSize;
-      this.blockSize = blockSize;
-      this.buffer = new byte[blockSize];
-
-      resetContext();
-   }
+        resetContext();
+    }
 
    // Class methods
-   // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Instance methods
+    // -------------------------------------------------------------------------
+    // IMessageDigest interface implementation ---------------------------------
+    public String name() {
+        return name;
+    }
 
-   // Instance methods
-   // -------------------------------------------------------------------------
+    public int hashSize() {
+        return hashSize;
+    }
 
-   // IMessageDigest interface implementation ---------------------------------
+    public int blockSize() {
+        return blockSize;
+    }
 
-   public String name() {
-      return name;
-   }
+    public void update(byte b) {
+        // compute number of bytes still unhashed; ie. present in buffer
+        int i = (int) (count % blockSize);
+        count++;
+        buffer[i] = b;
+        if (i == (blockSize - 1)) {
+            transform(buffer, 0);
+        }
+    }
 
-   public int hashSize() {
-      return hashSize;
-   }
+    public void update(byte[] b, int offset, int len) {
+        int n = (int) (count % blockSize);
+        count += len;
+        int partLen = blockSize - n;
+        int i = 0;
 
-   public int blockSize() {
-      return blockSize;
-   }
+        if (len >= partLen) {
+            System.arraycopy(b, offset, buffer, n, partLen);
+            transform(buffer, 0);
+            for (i = partLen; i + blockSize - 1 < len; i += blockSize) {
+                transform(b, offset + i);
+            }
+            n = 0;
+        }
 
-   public void update(byte b) {
-      // compute number of bytes still unhashed; ie. present in buffer
-      int i = (int)(count % blockSize);
-      count++;
-      buffer[i] = b;
-      if (i == (blockSize - 1))
-		transform(buffer, 0);
-   }
+        if (i < len) {
+            System.arraycopy(b, offset + i, buffer, n, len - i);
+        }
+    }
 
-   public void update(byte[] b, int offset, int len) {
-      int n = (int)(count % blockSize);
-      count += len;
-      int partLen = blockSize - n;
-      int i = 0;
+    public byte[] digest() {
+        byte[] tail = padBuffer(); // pad remaining bytes in buffer
+        update(tail, 0, tail.length); // last transform of a message
+        byte[] result = getResult(); // make a result out of context
 
-      if (len >= partLen) {
-         System.arraycopy(b, offset, buffer, n, partLen);
-         transform(buffer, 0);
-         for (i = partLen; i + blockSize - 1 < len; i+= blockSize)
-			transform(b, offset + i);
-         n = 0;
-      }
+        reset(); // reset this instance for future re-use
 
-      if (i < len)
-		System.arraycopy(b, offset + i, buffer, n, len - i);
-   }
+        return result;
+    }
 
-   public byte[] digest() {
-      byte[] tail = padBuffer(); // pad remaining bytes in buffer
-      update(tail, 0, tail.length); // last transform of a message
-      byte[] result = getResult(); // make a result out of context
+    public void reset() { // reset this instance for future re-use
+        count = 0L;
+        for (int i = 0; i < blockSize;) {
+            buffer[i++] = 0;
+        }
 
-      reset(); // reset this instance for future re-use
+        resetContext();
+    }
 
-      return result;
-   }
+    // methods to be implemented by concrete subclasses ------------------------
+    public abstract Object clone();
 
-   public void reset() { // reset this instance for future re-use
-      count = 0L;
-      for (int i = 0; i < blockSize; )
-		buffer[i++] = 0;
+    public abstract boolean selfTest();
 
-      resetContext();
-   }
+    /**
+     * <p>
+     * Returns the byte array to use as padding before completing a hash
+     * operation.</p>
+     *
+     * @return the bytes to pad the remaining bytes in the buffer before
+     * completing a hash operation.
+     */
+    protected abstract byte[] padBuffer();
 
-   // methods to be implemented by concrete subclasses ------------------------
+    /**
+     * <p>
+     * Constructs the result from the contents of the current context.</p>
+     *
+     * @return the output of the completed hash operation.
+     */
+    protected abstract byte[] getResult();
 
-   public abstract Object clone();
+    /**
+     * Resets the instance for future re-use.
+     */
+    protected abstract void resetContext();
 
-   public abstract boolean selfTest();
+    /**
+     * <p>
+     * The block digest transformation per se.</p>
+     *
+     * @param in the <i>blockSize</i> long block, as an array of bytes to
+     * digest.
+     * @param offset the index where the data to digest is located within the
+     * input buffer.
+     */
+    protected abstract void transform(byte[] in, int offset);
 
-   /**
-    * <p>Returns the byte array to use as padding before completing a hash
-    * operation.</p>
-    *
-    * @return the bytes to pad the remaining bytes in the buffer before
-    * completing a hash operation.
-    */
-   protected abstract byte[] padBuffer();
+    //public abstract void dumpVar();
+    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
-   /**
-    * <p>Constructs the result from the contents of the current context.</p>
-    *
-    * @return the output of the completed hash operation.
-    */
-   protected abstract byte[] getResult();
+    public static String toString(byte[] ba) {
+        return toString(ba, 0, ba.length);
+    }
 
-   /** Resets the instance for future re-use. */
-   protected abstract void resetContext();
-
-   /**
-    * <p>The block digest transformation per se.</p>
-    *
-    * @param in the <i>blockSize</i> long block, as an array of bytes to digest.
-    * @param offset the index where the data to digest is located within the
-    * input buffer.
-    */
-   protected abstract void transform(byte[] in, int offset);
-
-   //public abstract void dumpVar();
-   private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
-   public static String toString(byte[] ba) {
-      return toString(ba, 0, ba.length);
-   }
-   public static final String toString(byte[] ba, int offset, int length) {
-      char[] buf = new char[length * 2];
-      for (int i = 0, j = 0, k; i < length; ) {
-         k = ba[offset + i++];
-         buf[j++] = HEX_DIGITS[(k >>> 4) & 0x0F];
-         buf[j++] = HEX_DIGITS[ k        & 0x0F];
-      }
-      return new String(buf);
-   }
+    public static final String toString(byte[] ba, int offset, int length) {
+        char[] buf = new char[length * 2];
+        for (int i = 0, j = 0, k; i < length;) {
+            k = ba[offset + i++];
+            buf[j++] = HEX_DIGITS[(k >>> 4) & 0x0F];
+            buf[j++] = HEX_DIGITS[ k & 0x0F];
+        }
+        return new String(buf);
+    }
 }

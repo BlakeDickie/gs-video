@@ -1,32 +1,37 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.module;
 
-import java.util.*;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import net.landora.video.ui.BooleanCellEditor;
 import net.landora.video.ui.BooleanCellRenderer;
 import net.landora.video.ui.ConfigurationPanel;
 import net.landora.video.utils.UIUtils;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -35,17 +40,16 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 public class ModuleConfigPanel extends ConfigurationPanel {
 
     private ModulesModel model;
-    
+
     /**
      * Creates new form ModuleConfigPanel
      */
     public ModuleConfigPanel() {
         initComponents();
-        
-        
+
     }
-    
-    private Map<ModuleType,List<ModuleInterface>> modulesMap;
+
+    private Map<ModuleType, List<ModuleInterface>> modulesMap;
     private List<ModuleType> modulesList;
     private Set<ModuleInterface> disabledModules;
 
@@ -54,36 +58,37 @@ public class ModuleConfigPanel extends ConfigurationPanel {
         modulesMap = new HashMap<ModuleType, List<ModuleInterface>>();
         modulesList = new ArrayList<ModuleType>();
         disabledModules = new HashSet<ModuleInterface>();
-        for(ModuleType type: ModulesManager.getInstance().getConfiguredTypes()) {
-            modulesList.add(type);
-            
+        for ( ModuleType type : ModulesManager.getInstance().getConfiguredTypes() ) {
+            modulesList.add( type );
+
             List<ModuleInterface> modules = new ArrayList<ModuleInterface>();
-            for(ModuleInterface module: ModulesManager.getInstance().getModules(type.getServiceClass())) {
-                modules.add(module);
+            for ( ModuleInterface module : ModulesManager.getInstance().getModules( type.getServiceClass() ) ) {
+                modules.add( module );
                 // To ensure the values are pre-cached.
                 module.isModuleConfigured();
-                if (ModulesManager.getInstance().isModuleDisabled(module))
-                    disabledModules.add(module);
+                if ( ModulesManager.getInstance().isModuleDisabled( module ) ) {
+                    disabledModules.add( module );
+                }
             }
-            modulesMap.put(type, modules);
-            
+            modulesMap.put( type, modules );
+
         }
-        
-        Collections.sort(modulesList, UIUtils.LEXICAL_SORTER);
-        
+
+        Collections.sort( modulesList, UIUtils.LEXICAL_SORTER );
+
         model = new ModulesModel();
-        treeModules.setTreeTableModel(model);
-        
-        TableColumn column = treeModules.getColumn(COL_ENABLED);
+        treeModules.setTreeTableModel( model );
+
+        TableColumn column = treeModules.getColumn( COL_ENABLED );
         int width = booleanCellRenderer.getPreferredSize().width;
-        column.setPreferredWidth(width);
-        column.setMinWidth(width);
-        column.setMaxWidth(width);
+        column.setPreferredWidth( width );
+        column.setMinWidth( width );
+        column.setMaxWidth( width );
     }
 
     @Override
     public void store() {
-        ModulesManager.getInstance().setDisabledMofules(disabledModules);
+        ModulesManager.getInstance().setDisabledMofules( disabledModules );
     }
 
     @Override
@@ -91,14 +96,12 @@ public class ModuleConfigPanel extends ConfigurationPanel {
         return true;
     }
 
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -117,21 +120,18 @@ public class ModuleConfigPanel extends ConfigurationPanel {
     private org.jdesktop.swingx.JXTreeTable treeModules;
     // End of variables declaration//GEN-END:variables
 
-
     private static final int COL_ENABLED = 0;
     private static final int COL_NAME = COL_ENABLED + 1;
     private static final int COL_STATUS = COL_NAME + 1;
 
     private static final int NUM_COLS = COL_STATUS + 1;
-    
-    
+
     private class ModulesModel extends AbstractTreeTableModel {
 
-        
         private Object rootObject;
 
         public ModulesModel() {
-            super(new Object());
+            super( new Object() );
             rootObject = getRoot();
         }
 
@@ -139,17 +139,15 @@ public class ModuleConfigPanel extends ConfigurationPanel {
         public int getHierarchicalColumn() {
             return COL_NAME;
         }
-        
-        
-        
+
         @Override
         public int getColumnCount() {
             return NUM_COLS;
         }
 
         @Override
-        public String getColumnName(int column) {
-            switch(column) {
+        public String getColumnName( int column ) {
+            switch ( column ) {
                 case COL_NAME:
                     return "Module";
                 case COL_ENABLED:
@@ -157,16 +155,14 @@ public class ModuleConfigPanel extends ConfigurationPanel {
                 case COL_STATUS:
                     return "State";
                 default:
-                    return super.getColumnName(column);
+                    return super.getColumnName( column );
             }
         }
-        
-        
 
         @Override
-        public Object getValueAt(Object node, int column) {
-            if (!(node instanceof ModuleInterface)) {
-                switch(column) {
+        public Object getValueAt( Object node, int column ) {
+            if ( !( node instanceof ModuleInterface ) ) {
+                switch ( column ) {
                     case COL_NAME:
                         return node;
                     case COL_ENABLED:
@@ -177,119 +173,128 @@ public class ModuleConfigPanel extends ConfigurationPanel {
                         return null;
                 }
             }
-            
-            ModuleInterface module = (ModuleInterface)node;
-            switch(column) {
+
+            ModuleInterface module = (ModuleInterface) node;
+            switch ( column ) {
                 case COL_NAME:
                     return module.getModuleName();
                 case COL_ENABLED:
-                    return !disabledModules.contains(module);
+                    return !disabledModules.contains( module );
                 case COL_STATUS:
-                    if (!module.isModuleUsable())
+                    if ( !module.isModuleUsable() ) {
                         return "Not Usable";
-                    else if (!module.isModuleConfigured())
+                    } else if ( !module.isModuleConfigured() ) {
                         return "Not Configured";
-                    else
+                    } else {
                         return "Ready";
+                    }
                 default:
                     return null;
             }
         }
 
         @Override
-        public Object getChild(Object parent, int index) {
-            if (parent == rootObject) {
-                return modulesList.get(index);
-            } else if (parent instanceof ModuleType) {
-                return modulesMap.get((ModuleType)parent).get(index);
-            } else
-                throw new IllegalStateException("getChild called on leaf.");
+        public Object getChild( Object parent, int index ) {
+            if ( parent == rootObject ) {
+                return modulesList.get( index );
+            } else if ( parent instanceof ModuleType ) {
+                return modulesMap.get( (ModuleType) parent ).get( index );
+            } else {
+                throw new IllegalStateException( "getChild called on leaf." );
+            }
         }
 
         @Override
-        public boolean isLeaf(Object node) {
-            if (node == rootObject) {
+        public boolean isLeaf( Object node ) {
+            if ( node == rootObject ) {
                 return false;
-            } else if (node instanceof ModuleType) {
+            } else if ( node instanceof ModuleType ) {
                 return false;
-            } else
+            } else {
                 return true;
+            }
         }
-        
-        
 
         @Override
-        public int getChildCount(Object parent) {
-            if (parent == rootObject) {
+        public int getChildCount( Object parent ) {
+            if ( parent == rootObject ) {
                 return modulesList.size();
-            } else if (parent instanceof ModuleType) {
-                return modulesMap.get((ModuleType)parent).size();
-            } else
+            } else if ( parent instanceof ModuleType ) {
+                return modulesMap.get( (ModuleType) parent ).size();
+            } else {
                 return 0;
+            }
         }
 
         @Override
-        public int getIndexOfChild(Object parent, Object child) {
-            if (parent == rootObject) {
-                return modulesList.indexOf(child);
-            } else if (parent instanceof ModuleType) {
-                return modulesMap.get((ModuleType)parent).indexOf(child);
-            } else
-                throw new IllegalStateException("getIndexOfChild called on leaf.");
+        public int getIndexOfChild( Object parent, Object child ) {
+            if ( parent == rootObject ) {
+                return modulesList.indexOf( child );
+            } else if ( parent instanceof ModuleType ) {
+                return modulesMap.get( (ModuleType) parent ).indexOf( child );
+            } else {
+                throw new IllegalStateException( "getIndexOfChild called on leaf." );
+            }
         }
 
         @Override
-        public boolean isCellEditable(Object node, int column) {
-            if (node instanceof ModuleInterface && column == COL_ENABLED)
+        public boolean isCellEditable( Object node, int column ) {
+            if ( node instanceof ModuleInterface && column == COL_ENABLED ) {
                 return true;
+            }
             return false;
         }
 
         @Override
-        public void setValueAt(Object value, Object node, int column) {
-            if (column == COL_ENABLED && node instanceof ModuleInterface) {
-                boolean enabled = (Boolean)value;
-                ModuleInterface module = (ModuleInterface)node;
-                if (enabled)
-                    disabledModules.remove(module);
-                else
-                    disabledModules.add(module);
+        public void setValueAt( Object value, Object node, int column ) {
+            if ( column == COL_ENABLED && node instanceof ModuleInterface ) {
+                boolean enabled = (Boolean) value;
+                ModuleInterface module = (ModuleInterface) node;
+                if ( enabled ) {
+                    disabledModules.remove( module );
+                } else {
+                    disabledModules.add( module );
+                }
                 changed();
             }
         }
-        
+
     }
-    
+
     private BooleanCellRenderer booleanCellRenderer = new BooleanCellRenderer();
     private BooleanCellEditor booleanCellEditor = new BooleanCellEditor();
-    
+
     private class TreeTableExt extends JXTreeTable {
-    
+
         public TreeTableExt() {
         }
 
         @Override
-        public TableCellRenderer getCellRenderer(int row, int column) {
-            if (isHierarchical(column))
-                return super.getCellRenderer(row, column);
-            
-            Object value = getValueAt(row, column);
-            if (value instanceof Boolean) {
+        public TableCellRenderer getCellRenderer( int row, int column ) {
+            if ( isHierarchical( column ) ) {
+                return super.getCellRenderer( row, column );
+            }
+
+            Object value = getValueAt( row, column );
+            if ( value instanceof Boolean ) {
                 return booleanCellRenderer;
-            } else
-                return super.getCellRenderer(row, column);
+            } else {
+                return super.getCellRenderer( row, column );
+            }
         }
-        
+
         @Override
-        public TableCellEditor getCellEditor(int row, int column) {
-            if (isHierarchical(column))
-                return super.getCellEditor(row, column);
-            
-            Object value = getValueAt(row, column);
-            if (value instanceof Boolean) {
+        public TableCellEditor getCellEditor( int row, int column ) {
+            if ( isHierarchical( column ) ) {
+                return super.getCellEditor( row, column );
+            }
+
+            Object value = getValueAt( row, column );
+            if ( value instanceof Boolean ) {
                 return booleanCellEditor;
-            } else
-                return super.getCellEditor(row, column);
+            } else {
+                return super.getCellEditor( row, column );
+            }
         }
 
 //        @Override
@@ -303,9 +308,6 @@ public class ModuleConfigPanel extends ConfigurationPanel {
 //            } else {
 //                return super.getCellEditor(row, column);
 //        }
-        
-        
-        
     }
-    
+
 }

@@ -1,18 +1,18 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package net.landora.xbmc.database.entities;
 
@@ -47,17 +47,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Movie.findByIdMovie", query = "SELECT m FROM Movie m WHERE m.idMovie = :idMovie")
 })
 public class Movie implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idMovie")
     private Integer idMovie;
-    
+
     @ManyToOne
-    @JoinColumn(name="idFile")
+    @JoinColumn(name = "idFile")
     private VideoFile file;
-    
+
     @Lob
     @Column(name = "c00")
     private String title;
@@ -130,39 +131,39 @@ public class Movie implements Serializable {
     @Lob
     @Column(name = "c23")
     private String parentPathId;
-    
-    @ManyToOne(cascade= CascadeType.PERSIST)
-    @JoinColumn(name="idSet")
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idSet")
     private MovieSet set;
-    
-    @ManyToMany(cascade= CascadeType.PERSIST)
-    @JoinTable(name="studiolinkmovie",
-            joinColumns=@JoinColumn(name="idMovie"),
-            inverseJoinColumns=@JoinColumn(name="idStudio"))
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "studiolinkmovie",
+            joinColumns = @JoinColumn(name = "idMovie"),
+            inverseJoinColumns = @JoinColumn(name = "idStudio"))
     private Set<Studio> studio;
-    
-    @ManyToMany(cascade= CascadeType.PERSIST)
-    @JoinTable(name="genrelinkmovie",
-            joinColumns=@JoinColumn(name="idMovie"),
-            inverseJoinColumns=@JoinColumn(name="idGenre"))
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "genrelinkmovie",
+            joinColumns = @JoinColumn(name = "idMovie"),
+            inverseJoinColumns = @JoinColumn(name = "idGenre"))
     private Set<Genre> genre;
-    
-    @ManyToMany(cascade= CascadeType.PERSIST)
-    @JoinTable(name="countrylinkmovie",
-            joinColumns=@JoinColumn(name="idMovie"),
-            inverseJoinColumns=@JoinColumn(name="idCountry"))
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "countrylinkmovie",
+            joinColumns = @JoinColumn(name = "idMovie"),
+            inverseJoinColumns = @JoinColumn(name = "idCountry"))
     private Set<Country> country;
-    
-    @ManyToMany(cascade= CascadeType.PERSIST)
-    @JoinTable(name="directorlinkmovie",
-            joinColumns=@JoinColumn(name="idMovie"),
-            inverseJoinColumns=@JoinColumn(name="idDirector"))
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "directorlinkmovie",
+            joinColumns = @JoinColumn(name = "idMovie"),
+            inverseJoinColumns = @JoinColumn(name = "idDirector"))
     private Set<Person> director;
-    
-    @ManyToMany(cascade= CascadeType.PERSIST)
-    @JoinTable(name="writerlinkmovie",
-            joinColumns=@JoinColumn(name="idMovie"),
-            inverseJoinColumns=@JoinColumn(name="idWriter"))
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "writerlinkmovie",
+            joinColumns = @JoinColumn(name = "idMovie"),
+            inverseJoinColumns = @JoinColumn(name = "idWriter"))
     private Set<Person> writer;
 
     public Movie() {
@@ -428,10 +429,6 @@ public class Movie implements Serializable {
         this.writer = writer;
     }
 
-    
-    
-    
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -456,5 +453,5 @@ public class Movie implements Serializable {
     public String toString() {
         return "net.landora.xbmc.database.Movie[ idMovie=" + idMovie + " ]";
     }
-    
+
 }

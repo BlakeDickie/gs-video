@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 /*
  * ConfigurationDialog.java
@@ -23,52 +22,53 @@
  */
 package net.landora.video.ui.config;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
 import net.landora.video.ui.ConfigurationPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author bdickie
  */
 public final class ConfigurationDialog extends javax.swing.JDialog implements ConfigurationChangedListener {
-    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    private final Logger log = LoggerFactory.getLogger( getClass() );
 
     private List<ConfigurationPanel> panels;
-    
-    /** Creates new form ConfigurationDialog */
-    public ConfigurationDialog(java.awt.Window parent, List<Class<? extends ConfigurationPanel>> classes) {
-        super(parent, DEFAULT_MODALITY_TYPE);
+
+    /**
+     * Creates new form ConfigurationDialog
+     */
+    public ConfigurationDialog( java.awt.Window parent, List<Class<? extends ConfigurationPanel>> classes ) {
+        super( parent, DEFAULT_MODALITY_TYPE );
         initComponents();
-        
-        panels = new ArrayList<ConfigurationPanel>(classes.size());
-        for (Class<? extends ConfigurationPanel> clazz : classes) {
+
+        panels = new ArrayList<ConfigurationPanel>( classes.size() );
+        for ( Class<? extends ConfigurationPanel> clazz : classes ) {
             try {
                 ConfigurationPanel panel = clazz.newInstance();
-                panels.add(panel);
-            } catch (Exception ex) {
-                log.error("Error creating panel: " + clazz.getName(), ex);
+                panels.add( panel );
+            } catch ( Exception ex ) {
+                log.error( "Error creating panel: " + clazz.getName(), ex );
                 continue;
             }
         }
-        
+
         // TODO: Add sorting to panels.
-        
-        for(ConfigurationPanel panel: panels) {
+        for ( ConfigurationPanel panel : panels ) {
             panel.load();
-            
-            panel.addConfigurationChangedListener(this);
-            
-            tabPanels.addTab(panel.getPanelName(), panel);
-            
-            
+
+            panel.addConfigurationChangedListener( this );
+
+            tabPanels.addTab( panel.getPanelName(), panel );
+
         }
-        
-        setHasChanges(false);
-        
+
+        setHasChanges( false );
+
         pack();
     }
 
@@ -83,29 +83,29 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
     public boolean isHasChanges() {
         return hasChanges;
     }
-    
+
     /**
      * Set the value of hasChanges
      *
      * @param hasChanges new value of hasChanges
      */
-    public void setHasChanges(boolean hasChanges) {
+    public void setHasChanges( boolean hasChanges ) {
         boolean oldHasChanges = this.hasChanges;
         this.hasChanges = hasChanges;
-        firePropertyChange(PROP_HASCHANGES, oldHasChanges, hasChanges);
+        firePropertyChange( PROP_HASCHANGES, oldHasChanges, hasChanges );
     }
 
-    public void configurationPanelChanged(ConfigurationChangedEvent e) {
-        setHasChanges(true);
+    public void configurationPanelChanged( ConfigurationChangedEvent e ) {
+        setHasChanges( true );
     }
 
-    
-    /** This method is called from within the constructor to
+    /**
+     * This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
@@ -172,14 +172,15 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if (!isHasChanges())
+        if ( !isHasChanges() ) {
             cancel();
-        else {
-            int reply = JOptionPane.showConfirmDialog(this, "Save outstanding changes before closing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION);
-            if (reply == JOptionPane.YES_OPTION)
+        } else {
+            int reply = JOptionPane.showConfirmDialog( this, "Save outstanding changes before closing?", "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION );
+            if ( reply == JOptionPane.YES_OPTION ) {
                 saveAndClose();
-            else if (reply == JOptionPane.NO_OPTION)
+            } else if ( reply == JOptionPane.NO_OPTION ) {
                 cancel();
+            }
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -194,33 +195,33 @@ public final class ConfigurationDialog extends javax.swing.JDialog implements Co
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         saveAndClose();
     }//GEN-LAST:event_btnOKActionPerformed
-    
+
     public void cancel() {
-        setVisible(false);
+        setVisible( false );
     }
-    
+
     public void saveAndClose() {
-        if (save())
-            setVisible(false);
+        if ( save() ) {
+            setVisible( false );
+        }
     }
 
     public boolean save() {
-        for(ConfigurationPanel panel: panels) {
-            if (!panel.valid()) {
-                JOptionPane.showMessageDialog(this, "There are issues in " + panel.getPanelName() + " that must be fixed before saving.");
+        for ( ConfigurationPanel panel : panels ) {
+            if ( !panel.valid() ) {
+                JOptionPane.showMessageDialog( this, "There are issues in " + panel.getPanelName() + " that must be fixed before saving." );
                 return false;
             }
         }
-        
-        for(ConfigurationPanel panel: panels) {
+
+        for ( ConfigurationPanel panel : panels ) {
             panel.store();
         }
-        
-        setHasChanges(false);
-        
+
+        setHasChanges( false );
+
         return true;
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;

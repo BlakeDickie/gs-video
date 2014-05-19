@@ -1,21 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.data;
 
 import java.text.NumberFormat;
@@ -31,6 +29,7 @@ import net.landora.video.utils.UIUtils;
  * @author bdickie
  */
 public class AnimeEpisode implements java.io.Serializable, ContextProducer {
+
     private AnimeStub anime;
     private int episodeId;
     private String episodeNumber;
@@ -78,19 +77,20 @@ public class AnimeEpisode implements java.io.Serializable, ContextProducer {
             if (m.group(1).length() == 0) {
                 numEps = anime.getEpisodeCount();
             }
-            
-            if (numEps == null || numEps.intValue() < 1)
+
+            if (numEps == null || numEps.intValue() < 1) {
                 numEps = 99;
-            
+            }
+
             NumberFormat format = NumberFormat.getInstance();
             format.setGroupingUsed(false);
-            format.setMinimumIntegerDigits((int)Math.log10(numEps) + 1);;
+            format.setMinimumIntegerDigits((int) Math.log10(numEps) + 1);;
             return m.group(1) + format.format(Integer.parseInt(m.group(2)));
         }
-        
+
         return episodeNumber;
     }
-    
+
     public void setEpisodeNumber(String episodeNumber) {
         this.episodeNumber = episodeNumber;
     }
@@ -171,10 +171,11 @@ public class AnimeEpisode implements java.io.Serializable, ContextProducer {
     }
 
     public Integer getNormalEpisodeNumber() {
-        if (Character.isDigit(episodeNumber.charAt(0)))
+        if (Character.isDigit(episodeNumber.charAt(0))) {
             return Integer.parseInt(episodeNumber);
-        else
+        } else {
             return null;
+        }
     }
 
     @Override

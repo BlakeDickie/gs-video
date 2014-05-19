@@ -1,28 +1,26 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package net.landora.xbmc.database.entities;
 
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,6 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TvShow.findAll", query = "SELECT t FROM TvShow t"),
     @NamedQuery(name = "TvShow.findByIdShow", query = "SELECT t FROM TvShow t WHERE t.idShow = :idShow")})
 public class TvShow implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -124,23 +123,23 @@ public class TvShow implements Serializable {
     @Lob
     @Column(name = "c23")
     private String unused6;
-    
+
     @ManyToMany()
-    @JoinTable(name="studiolinktvshow",
-            joinColumns=@JoinColumn(name="idShow"),
-            inverseJoinColumns=@JoinColumn(name="idStudio"))
+    @JoinTable(name = "studiolinktvshow",
+            joinColumns = @JoinColumn(name = "idShow"),
+            inverseJoinColumns = @JoinColumn(name = "idStudio"))
     private Set<Studio> studio;
-    
+
     @ManyToMany()
-    @JoinTable(name="genrelinktvshow",
-            joinColumns=@JoinColumn(name="idShow"),
-            inverseJoinColumns=@JoinColumn(name="idGenre"))
+    @JoinTable(name = "genrelinktvshow",
+            joinColumns = @JoinColumn(name = "idShow"),
+            inverseJoinColumns = @JoinColumn(name = "idGenre"))
     private Set<Genre> genre;
-    
+
     @ManyToMany()
-    @JoinTable(name="directorlinktvshow",
-            joinColumns=@JoinColumn(name="idShow"),
-            inverseJoinColumns=@JoinColumn(name="idDirector"))
+    @JoinTable(name = "directorlinktvshow",
+            joinColumns = @JoinColumn(name = "idShow"),
+            inverseJoinColumns = @JoinColumn(name = "idDirector"))
     private Set<Person> director;
 
     public TvShow() {
@@ -374,9 +373,6 @@ public class TvShow implements Serializable {
         this.director = director;
     }
 
-    
-    
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -401,5 +397,5 @@ public class TvShow implements Serializable {
     public String toString() {
         return "net.landora.xbmc.database.TvShow[ idShow=" + idShow + " ]";
     }
-    
+
 }

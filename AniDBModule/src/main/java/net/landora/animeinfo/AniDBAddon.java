@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.animeinfo;
 
 import net.landora.animeinfo.actions.AcknowlegeNotification;
@@ -40,6 +39,7 @@ import net.landora.video.ui.UIAddon;
  * @author bdickie
  */
 public class AniDBAddon extends AbstractAddon {
+
     public static final String ID = "net.landora.animeinfo";
 
     public AniDBAddon() {
@@ -54,32 +54,29 @@ public class AniDBAddon extends AbstractAddon {
     @Override
     public void start() {
         AniDBUDPManager.getInstance();
-        
+
         UIAddon.getInstance().addAction(new AcknowlegeNotification(), new ViewAnimeGroupPage(), new ViewAnimePage());
         notificationViewer = new NotificationViewer();
         ManagerAddon.getInstance().addContentPanel(notificationViewer);
     }
-    
+
     private NotificationViewer notificationViewer;
 
     @Override
     public void ready() {
-        
+
         PeriodicTaskManager.getInstance().addPeriodicTask(new NameReloadPeriodicTask());
         PeriodicTaskManager.getInstance().addPeriodicTask(new CategoryReloadPeriodicTask());
         PeriodicTaskManager.getInstance().addPeriodicTask(new NotificationsPeriodic());
         PeriodicTaskManager.getInstance().addPeriodicTask(new MyListExportPeriodicTask());
-        
+
     }
 
-    
-    
     @Override
     public void stop() {
         super.stop();
-        
+
         AniDBUDPManager.getInstance().shutdown();
     }
-    
-    
+
 }

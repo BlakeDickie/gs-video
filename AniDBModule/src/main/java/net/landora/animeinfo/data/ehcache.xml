@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-        Copyright (C) 2012 Blake Dickie
+        Copyright (C) 2012-2014 Blake Dickie
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -594,17 +594,17 @@ used with JMX monitors.
     The defaultCache has an implicit name "default" which is a reserved cache name.
     -->
     <defaultCache
-            maxElementsInMemory="1000"
-            eternal="false"
-            timeToIdleSeconds="120"
-            timeToLiveSeconds="120"
-            overflowToDisk="false"
-            diskSpoolBufferSizeMB="30"
-            maxElementsOnDisk="10000000"
-            diskPersistent="false"
-            diskExpiryThreadIntervalSeconds="120"
-            memoryStoreEvictionPolicy="LRU"
-            statistics="false"
-            />
+        maxElementsInMemory="1000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="false"
+        diskSpoolBufferSizeMB="30"
+        maxElementsOnDisk="10000000"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120"
+        memoryStoreEvictionPolicy="LRU"
+        statistics="false"
+    />
 
 </ehcache>

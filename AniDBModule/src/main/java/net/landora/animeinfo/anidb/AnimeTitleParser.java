@@ -1,21 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.anidb;
 
 import java.io.InputStream;
@@ -55,7 +53,7 @@ public class AnimeTitleParser {
             reader.require(XMLStreamReader.START_ELEMENT, null, "animetitles");
 
             int t1;
-            while((t1 = reader.nextTag()) != XMLStreamReader.END_ELEMENT) {
+            while ((t1 = reader.nextTag()) != XMLStreamReader.END_ELEMENT) {
                 reader.require(XMLStreamReader.START_ELEMENT, null, "anime");
 
                 int animeId = Integer.parseInt(reader.getAttributeValue(null, "aid"));
@@ -63,20 +61,20 @@ public class AnimeTitleParser {
                 AnimeNameLookupSummary anime = new AnimeNameLookupSummary();
                 anime.setAnimeId(animeId);
 
-                
                 List<AnimeNameLookup> newNames = new ArrayList<AnimeNameLookup>();
 
                 int t2;
-                while((t2 = reader.nextTag()) != XMLStreamReader.END_ELEMENT) {
+                while ((t2 = reader.nextTag()) != XMLStreamReader.END_ELEMENT) {
                     reader.require(XMLStreamReader.START_ELEMENT, null, "title");
 
                     AnimeNameLookup name = new AnimeNameLookup();
-                    for(int i = 0; i < reader.getAttributeCount(); i++) {
+                    for (int i = 0; i < reader.getAttributeCount(); i++) {
                         String aname = reader.getAttributeLocalName(i);
-                        if (aname.equals("type"))
+                        if (aname.equals("type")) {
                             name.setType(reader.getAttributeValue(i));
-                        else if (aname.equals("lang"))
+                        } else if (aname.equals("lang")) {
                             name.setLanguage(reader.getAttributeValue(i));
+                        }
 
                     }
 
@@ -85,7 +83,7 @@ public class AnimeTitleParser {
                     newNames.add(name);
                 }
 
-                for(AnimeNameLookup name: newNames) {
+                for (AnimeNameLookup name : newNames) {
                     if (name.getType().equalsIgnoreCase("main")) {
                         anime.setNameMain(name.getName());
                     } else if (name.getType().equalsIgnoreCase("official") && name.getLanguage().equalsIgnoreCase("en")) {
@@ -94,23 +92,25 @@ public class AnimeTitleParser {
                 }
 
                 mapper.insertAnime(anime);
-                for(AnimeNameLookup name: newNames)
+                for (AnimeNameLookup name : newNames) {
                     mapper.insertAnimeName(name);
-                
+                }
+
             }
             reader.close();
-            
+
             mapper.updateExistingAnimeMainName();
             mapper.deleteCoreAnimeNames();
             mapper.insertExistingAnimeMainName();
-            
+
             session.commit();
         } catch (Exception e) {
             session.rollback();
             log.error("Error saving anime titles.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 

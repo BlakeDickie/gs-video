@@ -1,21 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.data;
 
 import java.util.Calendar;
@@ -25,6 +23,7 @@ import java.util.Calendar;
  * @author bdickie
  */
 public class AnimeStub implements java.io.Serializable {
+
     private int animeId;
     private Calendar lastLoaded;
     private String nameMain;
@@ -33,7 +32,7 @@ public class AnimeStub implements java.io.Serializable {
 
     private Calendar startDate;
     private Calendar endDate;
-    
+
     private String type;
     private String description;
 
@@ -45,7 +44,6 @@ public class AnimeStub implements java.io.Serializable {
     private String pictureFileName;
 
     private boolean hentai;
-    
 
     public AnimeStub() {
     }
@@ -65,7 +63,6 @@ public class AnimeStub implements java.io.Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
 
     public Integer getEpisodeCount() {
         return episodeCount;
@@ -92,10 +89,11 @@ public class AnimeStub implements java.io.Serializable {
     }
 
     public String getDisplayName() {
-        if (nameEnglish != null)
+        if (nameEnglish != null) {
             return nameEnglish;
-        else
+        } else {
             return nameMain;
+        }
     }
 
     public String getNameMain() {
@@ -162,8 +160,6 @@ public class AnimeStub implements java.io.Serializable {
         this.ratingTemporaryVotes = ratingTemporaryVotes;
     }
 
-    
-
     public Calendar getStartDate() {
         return startDate;
     }
@@ -179,9 +175,6 @@ public class AnimeStub implements java.io.Serializable {
     public void setHentai(boolean hentai) {
         this.hentai = hentai;
     }
-
-    
-    
 
     @Override
     public boolean equals(Object obj) {
@@ -203,8 +196,6 @@ public class AnimeStub implements java.io.Serializable {
         return getDisplayName();
     }
 
-
-
     @Override
     public int hashCode() {
         int hash = 5;
@@ -212,6 +203,4 @@ public class AnimeStub implements java.io.Serializable {
         return hash;
     }
 
-    
-    
 }

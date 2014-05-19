@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.filebrowser;
 
 import java.beans.PropertyChangeEvent;
@@ -40,23 +39,21 @@ import org.apache.commons.io.FileUtils;
  * @author bdickie
  */
 public class FileTableModel extends AbstractTableModel {
-    
+
     private static final int COL_FILENAME = 0;
     private static final int COL_STATUS = COL_FILENAME + 1;
     private static final int COL_SIZE = COL_STATUS + 1;
     private static final int COL_VIDEO_INFO = COL_SIZE + 1;
-    
+
     private static final int NUM_COLS = COL_VIDEO_INFO + 1;
-    
+
     private VideoFileWatcher watcher;
-    
-    
+
     public FileTableModel() {
         watcher = new VideoFileWatcher();
         files = new ArrayList<VideoFile>();
     }
-    
-    
+
     private File folder;
 
     public File getFolder() {
@@ -64,11 +61,12 @@ public class FileTableModel extends AbstractTableModel {
     }
 
     public void setFolder(File folder) {
-        if (ComparisionUtils.equals(this.folder, folder))
+        if (ComparisionUtils.equals(this.folder, folder)) {
             return;
-        
+        }
+
         this.folder = folder;
-        
+
         updateFolder();
     }
 
@@ -85,31 +83,32 @@ public class FileTableModel extends AbstractTableModel {
     public VideoFile getFile(int rowIndex) {
         return files.get(rowIndex);
     }
-    
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         VideoFile file = files.get(rowIndex);
-        
-        switch(columnIndex) {
+
+        switch (columnIndex) {
             case COL_FILENAME:
                 return file.getFile().getName();
-            
+
             case COL_STATUS:
                 return file.getStatus();
-                
+
             case COL_SIZE:
                 long length = file.getLength();
-                
+
                 String display = FileUtils.byteCountToDisplaySize(length);
                 return new Representation<Long>(display, length);
-                
+
             case COL_VIDEO_INFO:
                 VideoMetadata video = file.getVideo();
-                if (video == null)
+                if (video == null) {
                     return "";
-                else
+                } else {
                     return video.toString();
-            
+                }
+
             default:
                 return null;
         }
@@ -117,19 +116,19 @@ public class FileTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
-        switch(column) {
+        switch (column) {
             case COL_FILENAME:
                 return "Filename";
-                
+
             case COL_SIZE:
                 return "File Size";
-                
+
             case COL_STATUS:
                 return "Status";
-                
+
             case COL_VIDEO_INFO:
                 return "Video";
-                
+
             default:
                 return null;
         }
@@ -137,59 +136,59 @@ public class FileTableModel extends AbstractTableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        switch(columnIndex) {
+        switch (columnIndex) {
             case COL_FILENAME:
                 return String.class;
             case COL_SIZE:
                 return Representation.class;
             case COL_VIDEO_INFO:
                 return String.class;
-                
+
             default:
                 return Object.class;
         }
     }
-    
-       
+
     private class VideoFileWatcher implements PropertyChangeListener {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            updateFile((VideoFile)evt.getSource());
+            updateFile((VideoFile) evt.getSource());
         }
-        
+
     }
-    
-    
+
     private void updateFile(VideoFile file) {
         int index = files.indexOf(file);
-        if (index >= 0)
+        if (index >= 0) {
             fireTableRowsUpdated(index, index);
+        }
     }
-    
+
     public void refresh() {
         updateFolder();
     }
-    
-    
+
     private List<VideoFile> files;
-    
+
     private void updateFolder() {
-        if (task != null)
+        if (task != null) {
             task.cancel();
-        
-        for(VideoFile file: files) {
+        }
+
+        for (VideoFile file : files) {
             file.removePropertyChangeListener(watcher);
         }
         files.clear();
-        
+
         if (folder != null) {
-            
+
             File[] allFiles = folder.listFiles();
-            for(File file: allFiles) {
-                if (file.isHidden() || !file.isFile() || !ExtensionUtils.isVideoExtension(file))
+            for (File file : allFiles) {
+                if (file.isHidden() || !file.isFile() || !ExtensionUtils.isVideoExtension(file)) {
                     continue;
-                
+                }
+
                 VideoFile videoFile = new VideoFile(file);
                 videoFile.addPropertyChangeListener(watcher);
                 files.add(videoFile);
@@ -199,16 +198,16 @@ public class FileTableModel extends AbstractTableModel {
                 task.startTask();
             }
         }
-        
+
         Collections.sort(files, UIUtils.LEXICAL_SORTER);
-        
+
         fireTableDataChanged();
     }
-    
+
     private LoadVideoInfoTask task;
-    
+
     private class LoadVideoInfoTask extends NBTask<Object, Object> {
-    
+
         private List<VideoFile> videos;
 
         public LoadVideoInfoTask(List<VideoFile> videos) {
@@ -231,7 +230,7 @@ public class FileTableModel extends AbstractTableModel {
                 VideoMetadata md = MetadataProvidersManager.getInstance().getMetadata(info);
                 video.setVideo(md);
 
-                video.setStatus(md == null ? VideoFile.Status.Unknown : VideoFile.Status.Identifed );
+                video.setStatus(md == null ? VideoFile.Status.Unknown : VideoFile.Status.Identifed);
             }
 
             return null;
@@ -244,13 +243,11 @@ public class FileTableModel extends AbstractTableModel {
 
         @Override
         protected void finished() {
-            if (task == this)
+            if (task == this) {
                 task = null;
+            }
         }
-        
-        
-
 
     }
-    
+
 }

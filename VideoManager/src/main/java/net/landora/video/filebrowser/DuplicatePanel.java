@@ -1,24 +1,29 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package net.landora.video.filebrowser;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -39,7 +44,11 @@ import net.landora.video.tasks.TaskCompletedEvent;
 import net.landora.video.ui.ContextProducer;
 import net.landora.video.ui.TableCornerPanel;
 import net.landora.video.ui.TableRowHeader;
-import net.landora.video.utils.*;
+import net.landora.video.utils.BusReciever;
+import net.landora.video.utils.ComparisionUtils;
+import net.landora.video.utils.ConfigurableTableModel;
+import net.landora.video.utils.OrderedRepresentation;
+import net.landora.video.utils.Touple;
 
 /**
  *
@@ -52,52 +61,54 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
      */
     public DuplicatePanel() {
         initComponents();
-        
+
         VideoManagerApp.getInstance().getEventBus().addHandlersWeak(this);
-        
+
         tblVideos.getColumnModel().getSelectionModel().addListSelectionListener(this);
     }
 
     private DefaultTreeModel treeModel;
     private Map<OrderedRepresentation<String>, GroupingValue<FileRecord>> groups;
-    
+
     @Override
     public void loadView() {
         Collection<FileRecord> duplicateFileRecords = SharedDirectoryDBA.getDuplicateFileRecords();
-        
+
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("ROOT");
-        
+
         groups = MetadataUtils.groupFileItems(duplicateFileRecords);
         addToTreeNode(rootNode, groups);
-        
+
         treeModel = new DefaultTreeModel(rootNode);
-        
+
         treeVideos.setModel(treeModel);
-        
+
         treeVideos.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     }
-    
+
     private void addToTreeNode(DefaultMutableTreeNode parent, Map<OrderedRepresentation<String>, GroupingValue<FileRecord>> values) {
         for (Map.Entry<OrderedRepresentation<String>, GroupingValue<FileRecord>> entry : values.entrySet()) {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(entry.getKey());
-            
+
             addToTreeNode(node, entry.getValue().getChildrenGroups());
-            
+
             parent.add(node);
         }
     }
 
     private void reloadIfActive() {
-        if (treeModel != null)
+        if (treeModel != null) {
             loadView();
+        }
     }
-    
+
     @BusReciever
     public void checkFilesCompleted(TaskCompletedEvent e) {
-        if (e.isTaskOf(CheckFilesTask.class))
+        if (e.isTaskOf(CheckFilesTask.class)) {
             reloadIfActive();
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -153,15 +164,16 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
             setSelectedItems(Collections.EMPTY_LIST);
         } else {
             Map<OrderedRepresentation<String>, GroupingValue<FileRecord>> map = groups;
-            for(int i = 1; i < path.getPathCount(); i++) {
+            for (int i = 1; i < path.getPathCount(); i++) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getPathComponent(i);
                 OrderedRepresentation<String> rep = (OrderedRepresentation<String>) node.getUserObject();
                 GroupingValue<FileRecord> groupValue = map.get(rep);
                 if (i + 1 == path.getPathCount()) {
                     setSelectedItems(groupValue.getLeafs());
-                } else
+                } else {
                     map = groupValue.getChildrenGroups();
-                
+                }
+
             }
         }
     }//GEN-LAST:event_treeVideosValueChanged
@@ -178,60 +190,61 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
         maybePopup(evt);
     }//GEN-LAST:event_tblVideosMouseReleased
 
-    
-    private List<Touple<FileRecord,VideoMetadata>> selectedRecords;
-    
-    private void setSelectedItems(List<Touple<FileRecord,VideoMetadata>> records) {
-        if (ComparisionUtils.equals(selectedRecords, records))
+    private List<Touple<FileRecord, VideoMetadata>> selectedRecords;
+
+    private void setSelectedItems(List<Touple<FileRecord, VideoMetadata>> records) {
+        if (ComparisionUtils.equals(selectedRecords, records)) {
             return;
-        
+        }
+
         this.selectedRecords = records;
-        
+
         LocalPathManager localPathManager = LocalPathManager.getInstance();
-        
-        List<Map<String,String>> values = new ArrayList<Map<String, String>>();
+
+        List<Map<String, String>> values = new ArrayList<Map<String, String>>();
         for (Touple<FileRecord, VideoMetadata> touple : records) {
-            LinkedHashMap<String,String> v = new LinkedHashMap<String, String>();
-            
+            LinkedHashMap<String, String> v = new LinkedHashMap<String, String>();
+
             v.putAll(touple.getSecond().getAllInformation(true));
-            
+
             v.put("ED2K", touple.getFirst().getE2dkHash());
-            
+
             File path = localPathManager.getLocalPath(touple.getFirst());
-            if (path != null)
+            if (path != null) {
                 v.put("Path", path.getPath());
-            
+            }
+
             values.add(v);
         }
-        
+
         List<String> rowsValues = new ArrayList<String>();
         for (Map<String, String> map : values) {
             combineValues(rowsValues, new ArrayList<String>(map.keySet()));
         }
-        
+
         String[][] dataMap = new String[rowsValues.size()][records.size()];
         Object[] ids = new Object[records.size()];
-        
+
         for (int i = 0; i < records.size(); i++) {
             Touple<FileRecord, VideoMetadata> touple = records.get(i);
             FileRecord fileRecord = touple.getFirst();
-            Map<String,String> v = values.get(i);
-            
+            Map<String, String> v = values.get(i);
+
             ids[i] = fileRecord.getFilename();
-            
+
             for (int j = 0; j < rowsValues.size(); j++) {
                 String rowValue = rowsValues.get(j);
-                
+
                 String value = v.get(rowValue);
-                
+
                 dataMap[j][i] = (value == null ? "" : value);
             }
         }
-        
+
         List<Object> headers = new ArrayList<Object>();
         for (int i = 0; i < rowsValues.size(); i++) {
             String header = rowsValues.get(i);
-            
+
             boolean allEqual = true;
             String currentValue = dataMap[i][0];
             for (int j = 1; j < records.size(); j++) {
@@ -248,38 +261,40 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
                 headers.add(sv);
             }
         }
-        
+
         ConfigurableTableModel model = new ConfigurableTableModel(ids);
-        
+
         model.setDataVector(dataMap, ids);
         tblVideos.setModel(model);
-        
+
         scrTables.setRowHeaderView(new TableRowHeader(tblVideos, headers, new TableRowHeaderRenderer()));
         scrTables.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, new TableCornerPanel(tblVideos));
     }
-    
+
     private void combineValues(List<String> insertTo, List<String> toInsert) {
         if (insertTo.isEmpty()) {
             insertTo.addAll(toInsert);
             return;
         }
-        
+
         for (int i = 0; i < toInsert.size(); i++) {
             String newValue = toInsert.get(i);
-            
-            if (insertTo.contains(newValue))
+
+            if (insertTo.contains(newValue)) {
                 continue;
-            
+            }
+
             for (int j = 0; j < insertTo.size(); j++) {
                 boolean good = true;
-                
+
                 for (int k = 0; k < toInsert.size(); k++) {
-                    if (k == i)
+                    if (k == i) {
                         continue;
-                    
+                    }
+
                     String checkValue = toInsert.get(k);
                     boolean before1 = k < i;
-                    
+
                     Boolean before2 = null;
                     for (int l = 0; l < insertTo.size(); l++) {
                         if (insertTo.get(l).equals(checkValue)) {
@@ -287,27 +302,26 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
                             break;
                         }
                     }
-                    
+
                     if (before2 != null && before1 != before2.booleanValue()) {
                         good = false;
                         break;
                     }
                 }
-                
-                
-                
+
                 if (good) {
                     insertTo.add(j, newValue);
                     break;
                 }
             }
-            
-            if (!insertTo.contains(newValue))
+
+            if (!insertTo.contains(newValue)) {
                 insertTo.add(newValue);
-            
+            }
+
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
@@ -318,32 +332,34 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting())
+        if (e.getValueIsAdjusting()) {
             return;
-        
+        }
+
         LocalPathManager localPathManager = LocalPathManager.getInstance();
-        
+
         int[] columns = tblVideos.getSelectedColumns();
         List<Object> pairs = new ArrayList<Object>();
         for (int c : columns) {
             Touple<FileRecord, VideoMetadata> t = selectedRecords.get(c);
             FileRecord record = t.getFirst();
-            
+
             File file = localPathManager.getLocalPath(record);
-            if (file == null)
+            if (file == null) {
                 pairs.add(new MetaPair(t.getFirst(), t.getSecond()));
-            else {
+            } else {
                 VideoFile video = new VideoFile(file);
                 video.setInfo(record);
                 video.setVideo(t.getSecond());
                 pairs.add(video);
             }
         }
-        
+
         setCurrentContext(pairs);
     }
-    
+
     private static class MetaPair implements ContextProducer {
+
         private FileRecord record;
         private VideoMetadata md;
 
@@ -357,6 +373,6 @@ public class DuplicatePanel extends ContentPanel implements ListSelectionListene
             addTo.add(md);
             addTo.add(record);
         }
-        
+
     }
 }

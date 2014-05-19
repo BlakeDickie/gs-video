@@ -1,22 +1,28 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package net.landora.video.manager;
 
-import java.beans.*;
+import java.beans.BeanDescriptor;
+import java.beans.EventSetDescriptor;
+import java.beans.IndexedPropertyDescriptor;
+import java.beans.IntrospectionException;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
 
 /**
  *
@@ -30,7 +36,6 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
         BeanDescriptor beanDescriptor = new BeanDescriptor  ( net.landora.video.manager.ContentPanel.class , null ); // NOI18N//GEN-HEADEREND:BeanDescriptor
 
         // Here you can add code for customizing the BeanDescriptor.
-
         return beanDescriptor;     }//GEN-LAST:BeanDescriptor
     // Property identifiers//GEN-FIRST:Properties
     private static final int PROPERTY_accessibleContext = 0;
@@ -254,7 +259,6 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
         }//GEN-HEADEREND:Properties
 
         // Here you can add code for customizing the properties array.
-
         return properties;     }//GEN-LAST:Properties
     // EventSet identifiers//GEN-FIRST:Events
     private static final int EVENT_ancestorListener = 0;
@@ -296,7 +300,6 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
         }//GEN-HEADEREND:Events
 
         // Here you can add code for customizing the event sets array.
-
         return eventSets;     }//GEN-LAST:Events
     // Method identifiers//GEN-FIRST:Methods
     private static final int METHOD_action0 = 0;
@@ -742,7 +745,6 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
         catch( Exception e) {}//GEN-HEADEREND:Methods
 
         // Here you can add code for customizing the methods array.
-        
         return methods;     }//GEN-LAST:Methods
     private static java.awt.Image iconColor16 = null;//GEN-BEGIN:IconsDef
     private static java.awt.Image iconColor32 = null;
@@ -759,8 +761,7 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
     // Here you can add code for customizing the Superclass BeanInfo.
 //GEN-LAST:Superclass
     /**
-     * Gets the bean's
-     * <code>BeanDescriptor</code>s.
+     * Gets the bean's <code>BeanDescriptor</code>s.
      *
      * @return BeanDescriptor describing the editable properties of this bean.
      * May return null if the information should be obtained by automatic
@@ -771,15 +772,15 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
     }
 
     /**
-     * Gets the bean's
-     * <code>PropertyDescriptor</code>s.
+     * Gets the bean's <code>PropertyDescriptor</code>s.
      *
      * @return An array of PropertyDescriptors describing the editable
      * properties supported by this bean. May return null if the information
-     * should be obtained by automatic analysis. <p> If a property is indexed,
-     * then its entry in the result array will belong to the
-     * IndexedPropertyDescriptor subclass of PropertyDescriptor. A client of
-     * getPropertyDescriptors can use "instanceof" to check if a given
+     * should be obtained by automatic analysis.
+     * <p>
+     * If a property is indexed, then its entry in the result array will belong
+     * to the IndexedPropertyDescriptor subclass of PropertyDescriptor. A client
+     * of getPropertyDescriptors can use "instanceof" to check if a given
      * PropertyDescriptor is an IndexedPropertyDescriptor.
      */
     public PropertyDescriptor[] getPropertyDescriptors() {
@@ -787,8 +788,7 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
     }
 
     /**
-     * Gets the bean's
-     * <code>EventSetDescriptor</code>s.
+     * Gets the bean's <code>EventSetDescriptor</code>s.
      *
      * @return An array of EventSetDescriptors describing the kinds of events
      * fired by this bean. May return null if the information should be obtained
@@ -799,8 +799,7 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
     }
 
     /**
-     * Gets the bean's
-     * <code>MethodDescriptor</code>s.
+     * Gets the bean's <code>MethodDescriptor</code>s.
      *
      * @return An array of MethodDescriptors describing the methods implemented
      * by this bean. May return null if the information should be obtained by
@@ -816,8 +815,9 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
      * customizing the bean.
      *
      * @return Index of default property in the PropertyDescriptor array
-     * returned by getPropertyDescriptors. <P>	Returns -1 if there is no default
-     * property.
+     * returned by getPropertyDescriptors.
+     * <P>
+     * Returns -1 if there is no default property.
      */
     public int getDefaultPropertyIndex() {
         return defaultPropertyIndex;
@@ -828,7 +828,9 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
      * commonly be used by human's when using the bean.
      *
      * @return Index of default event in the EventSetDescriptor array returned
-     * by getEventSetDescriptors. <P>	Returns -1 if there is no default event.
+     * by getEventSetDescriptors.
+     * <P>
+     * Returns -1 if there is no default event.
      */
     public int getDefaultEventIndex() {
         return defaultEventIndex;
@@ -837,12 +839,17 @@ public class ContentPanelBeanInfo extends SimpleBeanInfo {
     /**
      * This method returns an image object that can be used to represent the
      * bean in toolboxes, toolbars, etc. Icon images will typically be GIFs, but
-     * may in future include other formats. <p> Beans aren't required to provide
-     * icons and may return null from this method. <p> There are four possible
-     * flavors of icons (16x16 color, 32x32 color, 16x16 mono, 32x32 mono). If a
-     * bean choses to only support a single icon we recommend supporting 16x16
-     * color. <p> We recommend that icons have a "transparent" background so
-     * they can be rendered onto an existing background.
+     * may in future include other formats.
+     * <p>
+     * Beans aren't required to provide icons and may return null from this
+     * method.
+     * <p>
+     * There are four possible flavors of icons (16x16 color, 32x32 color, 16x16
+     * mono, 32x32 mono). If a bean choses to only support a single icon we
+     * recommend supporting 16x16 color.
+     * <p>
+     * We recommend that icons have a "transparent" background so they can be
+     * rendered onto an existing background.
      *
      * @param iconKind The kind of icon requested. This should be one of the
      * constant values ICON_COLOR_16x16, ICON_COLOR_32x32, ICON_MONO_16x16, or

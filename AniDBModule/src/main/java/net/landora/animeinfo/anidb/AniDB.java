@@ -1,30 +1,42 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.anidb;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import net.landora.animeinfo.data.*;
+import net.landora.animeinfo.data.Anime;
+import net.landora.animeinfo.data.AnimeCategory;
+import net.landora.animeinfo.data.AnimeCategoryWeight;
+import net.landora.animeinfo.data.AnimeDBA;
+import net.landora.animeinfo.data.AnimeEpisode;
+import net.landora.animeinfo.data.AnimeFile;
+import net.landora.animeinfo.data.AnimeGroup;
+import net.landora.animeinfo.data.AnimeListItem;
+import net.landora.animeinfo.data.AnimeListState;
+import net.landora.animeinfo.data.AnimeManager;
+import net.landora.animeinfo.data.AnimeMessage;
+import net.landora.animeinfo.data.AnimeName;
+import net.landora.animeinfo.data.AnimeNameLookup;
+import net.landora.animeinfo.data.AnimeNotification;
+import net.landora.animeinfo.data.AnimeRelation;
+import net.landora.animeinfo.data.RelationType;
 import net.landora.video.utils.Touple;
-
 
 /**
  *
@@ -34,8 +46,9 @@ public class AniDB {
 
     public static Anime downloadAnime(int animeId) {
         AnimeRecord record = getAnimeRecord(animeId);
-        if (record == null)
+        if (record == null) {
             return null;
+        }
 
         Anime anime = new Anime();
         anime.setAnimeId(animeId);
@@ -60,7 +73,7 @@ public class AniDB {
         }
 
         List<AnimeCategoryWeight> categories = new ArrayList<AnimeCategoryWeight>();
-        for(AnimeRecord.Category cat: record.getCategory()) {
+        for (AnimeRecord.Category cat : record.getCategory()) {
             AnimeCategory category = AnimeDBA.getAnimeCategory(cat.getCategoryId());
             if (category != null) {
                 AnimeCategoryWeight weight = new AnimeCategoryWeight();
@@ -68,14 +81,14 @@ public class AniDB {
                 weight.setCategory(category);
                 weight.setWeight(cat.getWeight());
                 categories.add(weight);
-                
+
             }
         }
         anime.setCategories(categories);
 
         List<AnimeNameLookup> lookupNames = AnimeDBA.getLookupNames(animeId);
         List<AnimeName> names = new ArrayList<AnimeName>(lookupNames.size());
-        for(AnimeNameLookup lookup: lookupNames) {
+        for (AnimeNameLookup lookup : lookupNames) {
             AnimeName name = new AnimeName();
             name.setAnime(anime);
             name.setLanguage(lookup.getLanguage());
@@ -84,7 +97,7 @@ public class AniDB {
             names.add(name);
         }
 
-        for(AnimeName name: names) {
+        for (AnimeName name : names) {
             if (name.getType().equalsIgnoreCase("main")) {
                 anime.setNameMain(name.getName());
             } else if (name.getType().equalsIgnoreCase("official") && name.getLanguage().equalsIgnoreCase("en")) {
@@ -93,9 +106,8 @@ public class AniDB {
         }
         anime.setNames(names);
 
-
         List<AnimeRelation> relations = new ArrayList<AnimeRelation>();
-        for(AnimeRecord.Relation r: record.getRelatedAnime()) {
+        for (AnimeRecord.Relation r : record.getRelatedAnime()) {
             AnimeRelation relation = new AnimeRelation();
             relation.setAnime(anime);
             relation.setRelatedAnimeId(r.getAid());
@@ -105,10 +117,8 @@ public class AniDB {
         anime.setRelations(relations);
 
         // ToDo Ratings
-
         return anime;
     }
-
 
     private static AnimeRecord getAnimeRecord(int animeId) {
 
@@ -118,10 +128,11 @@ public class AniDB {
         //command.addArgument("amask", "3C00FAF1D100F8");
 
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
-        if (reply.getReturnCode() == 330)
+        if (reply.getReturnCode() == 330) {
             return null;
-        else if (reply.getReturnCode() != 230)
+        } else if (reply.getReturnCode() != 230) {
             throw new AniDBConnectionError(reply);
+        }
 
         AnimeRecord record = new AnimeRecord();
         record.setAid(animeId);
@@ -137,7 +148,7 @@ public class AniDB {
         if (relationIds.length() != 0) {
             String[] ids = relationIds.split("'");
             String[] types = relationTypes.split("'");
-            for(int i = 0; i < Math.min(ids.length, types.length); i++) {
+            for (int i = 0; i < Math.min(ids.length, types.length); i++) {
                 AnimeRecord.Relation relation = new AnimeRecord.Relation(Integer.parseInt(ids[i]), RelationType.lookupType(Integer.parseInt(types[i])));
                 record.getRelatedAnime().add(relation);
             }
@@ -158,12 +169,12 @@ public class AniDB {
         if (categoryIds.length() != 0) {
             String[] ids = categoryIds.split(",");
             String[] weights = categoryWeights.split(",");
-            for(int i = 0; i < Math.min(ids.length, weights.length); i++) {
+            for (int i = 0; i < Math.min(ids.length, weights.length); i++) {
                 AnimeRecord.Category category = new AnimeRecord.Category(Integer.parseInt(ids[i]), Integer.parseInt(weights[i]));
                 record.getCategory().add(category);
             }
         }
-        
+
         record.setRating(line.getValueAsInt(col++));
         record.setRatingCount(line.getValueAsInt(col++));
         record.setTempRating(line.getValueAsInt(col++));
@@ -186,15 +197,16 @@ public class AniDB {
         StringBuilder buffer = new StringBuilder();
 
         int parts = 1; // There will be at least 1 part, once we load the first part was can find the number of parts.
-        for(int part = 0; part < parts; part++) {
+        for (int part = 0; part < parts; part++) {
 
             AniDBCommand call = new AniDBCommand("ANIMEDESC");
             call.addArgument("aid", animeId);
             call.addArgument("part", part);
 
             AniDBReply reply = AniDBUDPManager.getInstance().sendData(call);
-            if (part == 0 && reply.getReturnCode() == 333)
+            if (part == 0 && reply.getReturnCode() == 333) {
                 return null;
+            }
             if (reply.getReturnCode() != 233) {
                 throw new AniDBConnectionError(reply);
             }
@@ -212,7 +224,6 @@ public class AniDB {
 
         AniDBCommand command = new AniDBCommand("EPISODE");
         command.addArgument("eid", episodeId);
-        
 
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
         return handleEpisodeResult(reply);
@@ -224,7 +235,6 @@ public class AniDB {
         command.addArgument("aid", animeId);
         command.addArgument("epno", episodeNumber);
 
-
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
         return handleEpisodeResult(reply);
     }
@@ -235,16 +245,16 @@ public class AniDB {
         command.addArgument("aid", animeId);
         command.addArgument("epno", episodeNumber);
 
-
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
         return handleEpisodeResult(reply);
     }
 
     private static AnimeEpisode handleEpisodeResult(AniDBReply reply) {
-        if (reply.getReturnCode() == 340)
+        if (reply.getReturnCode() == 340) {
             return null;
-        else if (reply.getReturnCode() != 240)
+        } else if (reply.getReturnCode() != 240) {
             throw new AniDBConnectionError(reply);
+        }
 
         AniDBReply.ReplyLine line = reply.getFirstLine();
         int col = 0;
@@ -271,7 +281,6 @@ public class AniDB {
 
         episode.setAirDate(line.getValueAsDate(col++));
 
-
         return episode;
     }
 
@@ -283,7 +292,6 @@ public class AniDB {
         command.addArgument("fid", fileId);
         command.addArgument("fmask", FILE_FMASK);
         command.addArgument("amask", FILE_AMASK);
-
 
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
         return handleFileResult(reply);
@@ -297,21 +305,19 @@ public class AniDB {
         command.addArgument("fmask", FILE_FMASK);
         command.addArgument("amask", FILE_AMASK);
 
-
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
         return handleFileResult(reply);
     }
 
-
-
     static final String FILE_FMASK = "71C04B0000";
     static final String FILE_AMASK = "000000C1";
-    
+
     private static AnimeFile handleFileResult(AniDBReply reply) {
-        if (reply.getReturnCode() == 320)
+        if (reply.getReturnCode() == 320) {
             return null;
-        else if (reply.getReturnCode() != 220)
+        } else if (reply.getReturnCode() != 220) {
             throw new AniDBConnectionError(reply);
+        }
 
         AniDBReply.ReplyLine line = reply.getFirstLine();
         int col = 0;
@@ -337,13 +343,11 @@ public class AniDB {
         } else {
             file.setGeneric(true);
         }
-        
-        
+
         file.setSource(line.getValue(col++));
         file.setVideoCodec(line.getValue(col++));
         file.setVideoResolution(line.getValue(col++));
         file.setFileType(line.getValue(col++));
-        
 
         String longGroupName = line.getValue(col++);
         String shortGroupName = line.getValue(col++);
@@ -362,18 +366,15 @@ public class AniDB {
             file.setGroup(group);
         }
 
-
         return file;
     }
-    
-    
+
     public static AnimeListItem getAnimeListItemByFileId(int fileId) {
 
         AniDBCommand command = new AniDBCommand("MYLIST");
 //        command.addArgument("ed2k", "57560987b519c1c62c15cdd9c89affd6");
 //        command.addArgument("size", "346918566");
         command.addArgument("fid", fileId);
-
 
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
         return handleListResult(reply);
@@ -384,34 +385,33 @@ public class AniDB {
         AniDBCommand command = new AniDBCommand("MYLIST");
         command.addArgument("lid", listId);
 
-
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
         return handleListResult(reply);
     }
 
-    
     private static AnimeListItem handleListResult(AniDBReply reply) {
-        if (reply.getReturnCode() == 321)
+        if (reply.getReturnCode() == 321) {
             return null;
-        else if (reply.getReturnCode() != 221 && reply.getReturnCode() != 310)
+        } else if (reply.getReturnCode() != 221 && reply.getReturnCode() != 310) {
             throw new AniDBConnectionError(reply);
+        }
 
         AniDBReply.ReplyLine line = reply.getFirstLine();
         int col = 0;
 
         AnimeListItem item = new AnimeListItem();
         int listId = line.getValueAsInt(col++);
-        
+
         int fileId = line.getValueAsInt(col++);
         int episodeId = line.getValueAsInt(col++);
         int animeId = line.getValueAsInt(col++);
         int groupId = line.getValueAsInt(col++);
         item.setFile(AnimeManager.getInstance().findFile(fileId));
-        
+
         item.setAddedDate(line.getValueAsDateTime(col++));
         item.setState(AnimeListState.lookupType(line.getValueAsInt(col++)));
         item.setViewDate(line.getValueAsDateTime(col++));
-        
+
         item.setStorage(line.getValue(col++));
         item.setSource(line.getValue(col++));
         item.setOther(line.getValue(col++));
@@ -419,89 +419,90 @@ public class AniDB {
 
         return item;
     }
-    
+
     public static AnimeListItem addListitem(int fileId, Calendar viewDate, AnimeListState listState) {
         AniDBCommand command = new AniDBCommand("MYLISTADD");
         command.addArgument("fid", fileId);
         command.addArgument("state", listState.getStateId());
         command.addArgument("viewed", (viewDate != null ? 1 : 0));
-        if (viewDate != null)
+        if (viewDate != null) {
             command.addArgument("viewdate", viewDate);
-
+        }
 
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
-        switch(reply.getReturnCode()) {
+        switch (reply.getReturnCode()) {
             case 210:
                 // Item added
                 break;
             case 310:
                 return handleListResult(reply);
             case 320:
-                // No Such File
+            // No Such File
             case 330:
-                // No Such Anime
+            // No Such Anime
             case 350:
-                // No Such Group
+            // No Such Group
             default:
                 throw new AniDBConnectionError(reply);
         }
-        
+
         return getAnimeListItemByFileId(fileId);
     }
-    
+
     public static AnimeListItem addGenericListitem(AnimeEpisode episode, Calendar viewDate, AnimeListState listState) {
         AniDBCommand command = new AniDBCommand("MYLISTADD");
         command.addArgument("aid", episode.getAnime().getAnimeId());
         command.addArgument("generic", "1");
         command.addArgument("epno", episode.getEpisodeNumber());
 
-
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
-        switch(reply.getReturnCode()) {
+        switch (reply.getReturnCode()) {
             case 210:
                 // Item added
                 break;
             case 310:
                 return handleListResult(reply);
             case 320:
-                // No Such File
+            // No Such File
             case 330:
-                // No Such Anime
+            // No Such Anime
             case 350:
-                // No Such Group
+            // No Such Group
             default:
                 throw new AniDBConnectionError(reply);
         }
-        
+
         command = new AniDBCommand("MYLIST");
         command.addArgument("aid", episode.getAnime().getAnimeId());
         command.addArgument("gname", "none");
         command.addArgument("epno", episode.getEpisodeNumber());
         command.addArgument("state", listState.getStateId());
         command.addArgument("viewed", (viewDate != null ? 1 : 0));
-        if (viewDate != null)
+        if (viewDate != null) {
             command.addArgument("viewdate", viewDate);
-        
+        }
+
         reply = AniDBUDPManager.getInstance().sendData(command);
-        
+
         return handleListResult(reply);
     }
-    
+
     public static boolean updateListItem(AnimeListItem item) {
         AniDBCommand command = new AniDBCommand("MYLISTADD");
         command.addArgument("fid", item.getFile().getFileId());
         command.addArgument("edit", 1);
         command.addArgument("state", item.getState().getStateId());
         command.addArgument("viewed", (item.getViewDate() != null ? 1 : 0));
-        if (item.getViewDate() != null)
+        if (item.getViewDate() != null) {
             command.addArgument("viewdate", item.getViewDate());
+        }
         command.addArgument("source", item.getSource());
         command.addArgument("storage", item.getStorage());
         command.addArgument("other", item.getOther());
         command.addArgument("filestate", item.getFileState().getStateId());
-        
+
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
-        switch(reply.getReturnCode()) {
+        switch (reply.getReturnCode()) {
             case 311:
                 // Item edited
                 return true;
@@ -512,13 +513,13 @@ public class AniDB {
                 throw new AniDBConnectionError(reply);
         }
     }
-    
+
     public static boolean deleteListItem(AnimeListItem item) {
         AniDBCommand command = new AniDBCommand("MYLISTDEL");
         command.addArgument("fid", item.getFile().getFileId());
-        
+
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(command);
-        switch(reply.getReturnCode()) {
+        switch (reply.getReturnCode()) {
             case 211:
                 // Item edited
                 return true;
@@ -529,8 +530,7 @@ public class AniDB {
                 throw new AniDBConnectionError(reply);
         }
     }
-    
-    
+
     public static boolean hasNotifications() {
 
         AniDBCommand call = new AniDBCommand("NOTIFY");
@@ -541,9 +541,8 @@ public class AniDB {
         }
         return reply.getFirstValueAsInt(0) > 0 || reply.getFirstValueAsInt(1) > 0;
     }
-    
-    
-    public static List<Touple<String,String>> getNotifications() {
+
+    public static List<Touple<String, String>> getNotifications() {
 
         AniDBCommand call = new AniDBCommand("NOTIFYLIST");
 
@@ -551,16 +550,15 @@ public class AniDB {
         if (reply.getReturnCode() != 291) {
             throw new AniDBConnectionError(reply);
         }
-        
-        List<Touple<String,String>> notifications = new ArrayList<Touple<String,String>>();
-        for(AniDBReply.ReplyLine line: reply.getLines()) {
+
+        List<Touple<String, String>> notifications = new ArrayList<Touple<String, String>>();
+        for (AniDBReply.ReplyLine line : reply.getLines()) {
             notifications.add(new Touple<String, String>(line.getValue(0), line.getValue(1)));
         }
-        
+
         return notifications;
     }
-    
-    
+
     public static void getNotification(String id) {
 
         AniDBCommand call = new AniDBCommand("NOTIFYGET");
@@ -571,12 +569,12 @@ public class AniDB {
         if (reply.getReturnCode() != 293) {
             throw new AniDBConnectionError(reply);
         }
-        
+
         int typeId = reply.getFirstValueAsInt(1);
         Calendar date = reply.getFirstLine().getValueAsDateTime(3);
-        
+
         boolean allSaved = true;
-        for(String fileIdStr: reply.getFirstValue(5).split(",")) {
+        for (String fileIdStr : reply.getFirstValue(5).split(",")) {
             int fileId = Integer.parseInt(fileIdStr);
             AnimeNotification notification = AnimeDBA.getAnimeNotificationByFileId(fileId);
             if (notification == null) {
@@ -584,11 +582,12 @@ public class AniDB {
                 notification.setFile(AnimeManager.getInstance().findFile(fileId));
                 notification.setAddedDate(date);
                 notification.setTypeId(typeId);
-                if (!AnimeDBA.saveAnimeNotification(notification))
+                if (!AnimeDBA.saveAnimeNotification(notification)) {
                     allSaved = false;
+                }
             }
         }
-        
+
         if (allSaved) {
             call = new AniDBCommand("NOTIFYACK");
             call.addArgument("type", "N");
@@ -596,8 +595,7 @@ public class AniDB {
             AniDBUDPManager.getInstance().sendData(call);
         }
     }
-    
-    
+
     public static void getMessage(String id) {
 
         AniDBCommand call = new AniDBCommand("NOTIFYGET");
@@ -608,15 +606,14 @@ public class AniDB {
         if (reply.getReturnCode() != 292) {
             throw new AniDBConnectionError(reply);
         }
-        
+
         int msgId = reply.getFirstValueAsInt(0);
         int typeId = reply.getFirstValueAsInt(4);
         Calendar date = reply.getFirstLine().getValueAsDateTime(3);
         String fromUser = reply.getFirstValue(2);
         String title = reply.getFirstValue(5);
         String body = reply.getFirstValue(6);
-        
-        
+
         boolean allSaved = true;
         AnimeMessage msg = AnimeDBA.getAnimeMessageByMessageId(msgId);
         if (msg == null) {
@@ -627,11 +624,12 @@ public class AniDB {
             msg.setFromUser(fromUser);
             msg.setTitle(title);
             msg.setTypeId(typeId);
-            
-            if (!AnimeDBA.saveAnimeMessage(msg))
+
+            if (!AnimeDBA.saveAnimeMessage(msg)) {
                 allSaved = false;
+            }
         }
-        
+
         if (allSaved) {
             call = new AniDBCommand("NOTIFYACK");
             call.addArgument("type", "M");
@@ -639,15 +637,14 @@ public class AniDB {
             AniDBUDPManager.getInstance().sendData(call);
         }
     }
-    
+
     public static boolean queueMyListExport(String templateName) {
-        
-                
+
         AniDBCommand call = new AniDBCommand("MYLISTEXPORT");
         call.addArgument("template", templateName);
 
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(call);
-        switch(reply.getReturnCode()) {
+        switch (reply.getReturnCode()) {
             case 217:
                 return true;
             case 318:
@@ -656,21 +653,22 @@ public class AniDB {
                 throw new AniDBConnectionError(reply);
         }
     }
-    
+
     public static AnimeGroup getAnimeGroup(int groupId) {
         AniDBCommand call = new AniDBCommand("GROUP");
         call.addArgument("gid", groupId);
         AniDBReply reply = AniDBUDPManager.getInstance().sendData(call);
-        if (reply.getReturnCode() == 350)
+        if (reply.getReturnCode() == 350) {
             return null;
-        else if (reply.getReturnCode() != 250)
+        } else if (reply.getReturnCode() != 250) {
             throw new AniDBConnectionError(reply);
-        
+        }
+
         AnimeGroup group = new AnimeGroup();
-        
+
         int col = 0;
         group.setGroupId(reply.getFirstValueAsInt(col++));
-        
+
         col++; // Rating
         col++; //Votes
         col++; //acount
@@ -681,9 +679,9 @@ public class AniDB {
         col++; //irc server
         group.setUrl(reply.getFirstValue(col++));
         col++; //pic name
-        
+
         group.setFullyLoaded(true);
-        
+
         return group;
     }
 }

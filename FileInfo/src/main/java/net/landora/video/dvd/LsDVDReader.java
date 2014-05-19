@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.dvd;
 
 import java.io.BufferedReader;
@@ -27,7 +26,12 @@ import net.landora.video.module.AbstractModule;
 import net.landora.video.programs.CommonPrograms;
 import net.landora.video.programs.ProgramsAddon;
 import net.landora.video.properties.AudioFormat;
-import net.landora.video.properties.dvd.*;
+import net.landora.video.properties.dvd.DVDAudio;
+import net.landora.video.properties.dvd.DVDChapter;
+import net.landora.video.properties.dvd.DVDDisk;
+import net.landora.video.properties.dvd.DVDSubtitle;
+import net.landora.video.properties.dvd.DVDTitle;
+import net.landora.video.properties.dvd.DVDVideo;
 import net.landora.video.utils.MutableObject;
 import net.landora.video.utils.OSUtils;
 import net.landora.video.utils.SAXHandler;
@@ -41,7 +45,9 @@ import org.xml.sax.SAXException;
  */
 public class LsDVDReader extends AbstractModule implements net.landora.video.properties.DVDReader {
 
-    /** Creates a new instance of DVDReader */
+    /**
+     * Creates a new instance of DVDReader
+     */
     public LsDVDReader() {
     }
 
@@ -62,13 +68,12 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
             process.redirectErrorStream(true);
             Process p = process.start();
 
-
             String xml = readAndStripDVDReadMessages(p);
-            
 
-            if (xml.startsWith("Can't open disc") || xml.startsWith("Can't find device"))
+            if (xml.startsWith("Can't open disc") || xml.startsWith("Can't find device")) {
                 return null;
-            
+            }
+
             XMLUtilities.saxParse(xml.replaceAll("&", "&amp;"),
                     new LsDVDParser(), false);
             disk.setDvdDevice(dvdPath);
@@ -78,20 +83,18 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
         }
     }
 
-
     private static String readAndStripDVDReadMessages(Process p) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
         StringBuilder output = new StringBuilder();
         boolean prolog = true;
         String line;
-        while((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
         }
         p.waitFor();
-        
 
         return output.toString();
     }
-    
+
     private static final Set<String> textTags;
 
     static {
@@ -153,8 +156,9 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
                     title.setLength(length);
                 }
             } else if (localName.equalsIgnoreCase("fps")) {
-                if (title != null)
+                if (title != null) {
                     video.setFps(value);
+                }
             } else if (localName.equalsIgnoreCase("aspect")) {
                 if (title != null) {
                     video.setAspect(value);
@@ -195,11 +199,11 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
                 } else if (subtitle != null) {
                     subtitle.setContent(value);
                 }
-            } else if (localName.equalsIgnoreCase("format") &&
-                    audio != null) {
+            } else if (localName.equalsIgnoreCase("format")
+                    && audio != null) {
                 audio.setFormat(AudioFormat.getFormat(value));
-            } else if (localName.equalsIgnoreCase("channels") &&
-                    audio != null) {
+            } else if (localName.equalsIgnoreCase("channels")
+                    && audio != null) {
                 audio.setChannels(Integer.parseInt(value));
             }
 
@@ -247,14 +251,14 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
             errorMessage.setValue("lsdvd is only avaliable on Linux.");
             return;
         }
-        
+
         usable.setValue(true);
-        
+
         if (!ProgramsAddon.getInstance().isAvaliable(CommonPrograms.LSDVD)) {
             errorMessage.setValue("lsdvd not installed or configured.");
             return;
         }
-        
+
         configured.setValue(true);
     }
 
@@ -272,6 +276,4 @@ public class LsDVDReader extends AbstractModule implements net.landora.video.pro
         return MODULE_PRIORITY_PREFERRED;
     }
 
-    
-    
 }

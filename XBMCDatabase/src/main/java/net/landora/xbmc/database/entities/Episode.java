@@ -1,18 +1,18 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package net.landora.xbmc.database.entities;
 
@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Episode.findByIdEpisode", query = "SELECT e FROM Episode e WHERE e.idEpisode = :idEpisode"),
     @NamedQuery(name = "Episode.findByFile", query = "SELECT e FROM Episode e WHERE e.file = :file")})
 public class Episode implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +55,7 @@ public class Episode implements Serializable {
     @Column(name = "idEpisode")
     private Integer idEpisode;
     @ManyToOne
-    @JoinColumn(name="idFile")
+    @JoinColumn(name = "idFile")
     private VideoFile file;
     @Lob
     @Column(name = "c00")
@@ -125,21 +126,21 @@ public class Episode implements Serializable {
     @Lob
     @Column(name = "c23")
     private String unused4;
-    
+
     @ManyToOne
     @JoinColumn(name = "idShow")
     private TvShow show;
-    
-    @ManyToMany(cascade= CascadeType.PERSIST)
-    @JoinTable(name="directorlinkepisode",
-            joinColumns=@JoinColumn(name="idEpisode"),
-            inverseJoinColumns=@JoinColumn(name="idDirector"))
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "directorlinkepisode",
+            joinColumns = @JoinColumn(name = "idEpisode"),
+            inverseJoinColumns = @JoinColumn(name = "idDirector"))
     private Set<Person> director;
-    
-    @ManyToMany(cascade= CascadeType.PERSIST)
-    @JoinTable(name="writerlinkepisode",
-            joinColumns=@JoinColumn(name="idEpisode"),
-            inverseJoinColumns=@JoinColumn(name="idWriter"))
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "writerlinkepisode",
+            joinColumns = @JoinColumn(name = "idEpisode"),
+            inverseJoinColumns = @JoinColumn(name = "idWriter"))
     private Set<Person> writer;
 
     public Episode() {
@@ -357,9 +358,6 @@ public class Episode implements Serializable {
         this.unused4 = unused4;
     }
 
-    
-    
-    
     public TvShow getShow() {
         return show;
     }
@@ -383,8 +381,6 @@ public class Episode implements Serializable {
     public void setWriter(Set<Person> writer) {
         this.writer = writer;
     }
-
-    
 
     @Override
     public int hashCode() {
@@ -410,5 +406,5 @@ public class Episode implements Serializable {
     public String toString() {
         return "net.landora.xbmc.database.Episode[ idEpisode=" + idEpisode + " ]";
     }
-    
+
 }

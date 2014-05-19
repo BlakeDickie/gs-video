@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -38,20 +38,21 @@ public class BasicSkin extends MenuSkin {
 
     public BasicSkin() {
         super("GS Basic");
-        
+
     }
 
     @Override
     public void initSkin() {
         String family = UIUtils.getFirstAvaliableFamily("Corbel", "Arial");
-        
-        if (family == null)
+
+        if (family == null) {
             family = Font.SANS_SERIF;
-        
+        }
+
         mainFont = new Font(family, Font.BOLD, 20);
         secondaryFont = new Font(family, Font.BOLD, 16);
     }
-    
+
     private Font mainFont;
     private Font secondaryFont;
 
@@ -85,7 +86,7 @@ public class BasicSkin extends MenuSkin {
                 new GradientPaint(0, 0, Color.black, 100, 100, Color.GRAY),
                 true);
     }
-    
+
     @Override
     public Painter getWindowPainter() {
         return new MattePainter(Color.BLACK);

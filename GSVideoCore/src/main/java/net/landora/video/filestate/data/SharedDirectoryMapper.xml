@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-        Copyright (C) 2012 Blake Dickie
+        Copyright (C) 2012-2014 Blake Dickie
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -26,24 +26,24 @@
     
     <insert id="insertSharedDirectory" parameterType="SharedDirectory" useGeneratedKeys="true" keyProperty="directoryId">
         Insert Into SharedDirectory (
-            directoryUuid,
-            directoryName,
-            directoryDefaultPath,
-            renameNewFiles
+        directoryUuid,
+        directoryName,
+        directoryDefaultPath,
+        renameNewFiles
         ) Values (
-            #{uuid,jdbcType=VARCHAR},
-            #{name,jdbcType=VARCHAR},
-            #{defaultPath,jdbcType=VARCHAR},
-            #{renameNewFiles,jdbcType=BOOLEAN}
+        #{uuid,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{defaultPath,jdbcType=VARCHAR},
+        #{renameNewFiles,jdbcType=BOOLEAN}
         );
     </insert>
 
     <update id="updateSharedDirectory" parameterType="SharedDirectory">
         Update SharedDirectory Set
-            directoryUuid = #{uuid,jdbcType=VARCHAR},
-            directoryName = #{name,jdbcType=VARCHAR},
-            directoryDefaultPath = #{defaultPath,jdbcType=VARCHAR},
-            renameNewFiles = #{renameNewFiles,jdbcType=BOOLEAN}
+        directoryUuid = #{uuid,jdbcType=VARCHAR},
+        directoryName = #{name,jdbcType=VARCHAR},
+        directoryDefaultPath = #{defaultPath,jdbcType=VARCHAR},
+        renameNewFiles = #{renameNewFiles,jdbcType=BOOLEAN}
         Where directoryId = #{directoryId}
     </update>
 
@@ -98,42 +98,42 @@
     
     <insert id="insertFileRecord" parameterType="FileRecord" useGeneratedKeys="true" keyProperty="fileId">
         Insert Into SharedFile (
-            directoryId,
-            subpath,
-            autoRename,
-            filename,
-            fileSize,
-            ed2k,
-            metadata_source,
-            metadata_id,
-            last_modified,
-            videoId
+        directoryId,
+        subpath,
+        autoRename,
+        filename,
+        fileSize,
+        ed2k,
+        metadata_source,
+        metadata_id,
+        last_modified,
+        videoId
         ) Values (
-            #{directory.directoryId,jdbcType=INTEGER},
-            #{subPath,jdbcType=VARCHAR},
-            #{rename,jdbcType=BOOLEAN},
-            #{filename,jdbcType=VARCHAR},
-            #{fileSize,jdbcType=INTEGER},
-            #{e2dkHash,jdbcType=VARCHAR},
-            #{metadataSource,jdbcType=VARCHAR},
-            #{metadataId,jdbcType=VARCHAR},
-            #{lastModifiedDate,jdbcType=TIMESTAMP},
-            #{videoId,jdbcType=VARCHAR}
+        #{directory.directoryId,jdbcType=INTEGER},
+        #{subPath,jdbcType=VARCHAR},
+        #{rename,jdbcType=BOOLEAN},
+        #{filename,jdbcType=VARCHAR},
+        #{fileSize,jdbcType=INTEGER},
+        #{e2dkHash,jdbcType=VARCHAR},
+        #{metadataSource,jdbcType=VARCHAR},
+        #{metadataId,jdbcType=VARCHAR},
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+        #{videoId,jdbcType=VARCHAR}
         );
     </insert>
 
     <update id="updateFileRecord" parameterType="FileRecord">
         Update SharedFile Set
-            directoryId = #{directory.directoryId,jdbcType=INTEGER},
-            subpath = #{subPath,jdbcType=VARCHAR},
-            autoRename = #{rename,jdbcType=BOOLEAN},
-            filename = #{filename,jdbcType=VARCHAR},
-            fileSize = #{fileSize,jdbcType=INTEGER},
-            ed2k = #{e2dkHash,jdbcType=VARCHAR},
-            metadata_source = #{metadataSource,jdbcType=VARCHAR},
-            metadata_id = #{metadataId,jdbcType=VARCHAR},
-            videoId = #{videoId,jdbcType=VARCHAR},
-            last_modified = #{lastModifiedDate,jdbcType=TIMESTAMP}
+        directoryId = #{directory.directoryId,jdbcType=INTEGER},
+        subpath = #{subPath,jdbcType=VARCHAR},
+        autoRename = #{rename,jdbcType=BOOLEAN},
+        filename = #{filename,jdbcType=VARCHAR},
+        fileSize = #{fileSize,jdbcType=INTEGER},
+        ed2k = #{e2dkHash,jdbcType=VARCHAR},
+        metadata_source = #{metadataSource,jdbcType=VARCHAR},
+        metadata_id = #{metadataId,jdbcType=VARCHAR},
+        videoId = #{videoId,jdbcType=VARCHAR},
+        last_modified = #{lastModifiedDate,jdbcType=TIMESTAMP}
         Where fileId = #{fileId}
     </update>
 

@@ -1,21 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.anidb;
 
 import java.net.DatagramPacket;
@@ -44,8 +42,9 @@ public class AniDBUDPManager {
 
     // <editor-fold defaultstate="collapsed" desc="Singleton">
     /**
-     * SingletonHolder is loaded on the first execution of Singleton.getInstance()
-     * or the first access to SingletonHolder.instance , not before.
+     * SingletonHolder is loaded on the first execution of
+     * Singleton.getInstance() or the first access to SingletonHolder.instance ,
+     * not before.
      */
     private static class SingletonHolder {
 
@@ -56,7 +55,6 @@ public class AniDBUDPManager {
         return SingletonHolder.instance;
     }
     // </editor-fold>
-
 
     private AniDBUDPManager() {
         try {
@@ -84,7 +82,7 @@ public class AniDBUDPManager {
     private InetAddress serverAddress;
     private int serverPort;
     private Properties properties;
-    
+
     private DatagramSocket socket;
 
     private long autoLogoutDelay;
@@ -94,7 +92,7 @@ public class AniDBUDPManager {
     private int initialCalls = 0;
 
     private long lastMessageSent;
-    
+
     private String sessionId;
 
     public synchronized String getSessionId() {
@@ -113,10 +111,11 @@ public class AniDBUDPManager {
             loginCommand.addArgument("enc", UDP_ENCODING);
 
             AniDBReply reply = sendData(loginCommand);
-            if (reply == null)
+            if (reply == null) {
                 throw new AniDBConnectionError("Unable to login to AniDB.");
-            
-            switch(reply.getReturnCode()) {
+            }
+
+            switch (reply.getReturnCode()) {
                 case 200:
                 case 201:
                     String message = reply.getReturnMessage();
@@ -132,45 +131,46 @@ public class AniDBUDPManager {
     }
 
     private synchronized void logout() {
-        if (sessionId == null)
+        if (sessionId == null) {
             return;
+        }
 
         AniDBCommand logoutCommand = new AniDBCommand("LOGOUT");
         sendData(logoutCommand);
         sessionId = null;
     }
 
-
     public synchronized AniDBReply sendData(AniDBCommand call) {
-        if (isShutdown)
+        if (isShutdown) {
             throw new AniDBConnectionError("Shutdown is progress.");
+        }
 
-
-        for(int i = 0; i < 2; i++) {
-            if (i == 1 && log.isTraceEnabled())
+        for (int i = 0; i < 2; i++) {
+            if (i == 1 && log.isTraceEnabled()) {
                 log.trace("Retrying failed AniDB call.");
+            }
 
             String replyStr = sendData(call.getResult());
-            
-            if (replyStr == null)
+
+            if (replyStr == null) {
                 continue;
+            }
 
             AniDBReply reply = new AniDBReply(replyStr);
 
-            switch(reply.getReturnCode()) {
+            switch (reply.getReturnCode()) {
                 case 501:
                 case 506:
                     // Need to reauthenticate.
-                    
+
                     sessionId = null;
                     break;
 
                 default:
                     return reply;
             }
-            
-        }
 
+        }
 
         return null;
     }
@@ -183,11 +183,10 @@ public class AniDBUDPManager {
             } else {
                 long nextMessageTime = lastMessageSent + messageDelay;
 
-                while(System.currentTimeMillis() < nextMessageTime) {
+                while (System.currentTimeMillis() < nextMessageTime) {
                     Thread.sleep(Math.max(1, nextMessageTime - System.currentTimeMillis()));
                 }
             }
-
 
             if (log.isTraceEnabled()) {
                 log.trace("Sending AniDB Command:\n" + message);
@@ -219,7 +218,7 @@ public class AniDBUDPManager {
     }
 
     public static void main(String[] args) throws Exception {
-        
+
         AniDBCommand command = new AniDBCommand("NOTIFYGET");
 //        command.addArgument("aid", "5025");
 //        command.addArgument("fid", "299092");
@@ -243,21 +242,20 @@ public class AniDBUDPManager {
 
         isShutdown = true;
     }
-    
-    private static String testCase =
-            "233 ANIMEDESC\n" +
-            "0|1|In this world, there exist people with special abilities to manipulate objects and transform those objects into other objects. These people are known as alchemist. However, this manipulation process does not come without cost, as the basic alchemy rules stated that something with equivalent cost is needed to perform the manipulation.<br /><br />The main character is a famous alchemist named Edward Elric, who loses his little brother Alphonse in an accident. Edward manages to contain his brother`s soul in a large piece of armor suit. But by doing so Edward loses his arm and leg, so now they are on a journey to regain their original bodies.(from AnimeNFO).\n";
 
+    private static String testCase
+            = "233 ANIMEDESC\n"
+            + "0|1|In this world, there exist people with special abilities to manipulate objects and transform those objects into other objects. These people are known as alchemist. However, this manipulation process does not come without cost, as the basic alchemy rules stated that something with equivalent cost is needed to perform the manipulation.<br /><br />The main character is a famous alchemist named Edward Elric, who loses his little brother Alphonse in an accident. Edward manages to contain his brother`s soul in a large piece of armor suit. But by doing so Edward loses his arm and leg, so now they are on a journey to regain their original bodies.(from AnimeNFO).\n";
 
     private class LogoutHandler extends Thread {
 
         @Override
         public void run() {
-            synchronized(AniDBUDPManager.this) {
-                
+            synchronized (AniDBUDPManager.this) {
+
             }
         }
-        
+
     }
 
     private class AutoLogoutThread extends Thread {
@@ -269,14 +267,14 @@ public class AniDBUDPManager {
 
         @Override
         public void run() {
-            while(!isShutdown) {
+            while (!isShutdown) {
                 try {
                     // Check every 1 min.
                     Thread.sleep(60000);
-                } catch (InterruptedException ignore) { }
+                } catch (InterruptedException ignore) {
+                }
 
-
-                synchronized(AniDBUDPManager.this) {
+                synchronized (AniDBUDPManager.this) {
                     if (sessionId != null && System.currentTimeMillis() > lastMessageSent + autoLogoutDelay) {
                         logout();
                     }
@@ -284,8 +282,6 @@ public class AniDBUDPManager {
             }
         }
 
-
-        
     }
 
 }

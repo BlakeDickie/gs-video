@@ -1,20 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 /*
  * NotificationViewer.java
@@ -23,7 +22,11 @@
  */
 package net.landora.animeinfo.notifications;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -44,23 +47,24 @@ import org.apache.commons.collections.map.MultiValueMap;
  */
 public class NotificationViewer extends ContentPanel {
 
-    /** Creates new form NotificationViewer */
+    /**
+     * Creates new form NotificationViewer
+     */
     public NotificationViewer() {
         initComponents();
-        
+
         setTitle("Anime Notifications");
-        
-        
+
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-        
+
         notificationsNode = new DefaultMutableTreeNode("Notifications");
         root.add(notificationsNode);
-        
+
         treeModel = new DefaultTreeModel(root);
-        
+
         treeItems.setModel(treeModel);
 //        LazyTreeLoadingManager.getInstance().setup(treeItems);
-        
+
         VideoManagerApp.getInstance().getEventBus().addHandlersWeak(this);
     }
 
@@ -68,63 +72,61 @@ public class NotificationViewer extends ContentPanel {
     public void loadView() {
         loadNotifications();
     }
-    
-    
+
     @BusReciever
     public void taskCompleted(TaskCompletedEvent event) {
-        if (event.isTaskOf(NotificationsTask.class))
+        if (event.isTaskOf(NotificationsTask.class)) {
             loadNotifications();
+        }
     }
-    
-    
+
     private DefaultTreeModel treeModel;
     private DefaultMutableTreeNode notificationsNode;
-    
+
     public void loadNotifications() {
         List<AnimeNotification> notifications = AnimeDBA.getOutstandAnimeNotifications();
-        
+
         Set<AnimeStub> animes = new HashSet<AnimeStub>();
-        for(AnimeNotification notification: notifications) {
+        for (AnimeNotification notification : notifications) {
             animes.add(notification.getFile().getEpisode().getAnime());
         }
-        
+
         List<AnimeStub> sortedAnime = new ArrayList<AnimeStub>(animes);
         Collections.sort(sortedAnime, UIUtils.LEXICAL_SORTER);
-        
+
         notificationsNode.removeAllChildren();
-        
-        for(AnimeStub anime: sortedAnime) {
+
+        for (AnimeStub anime : sortedAnime) {
             DefaultMutableTreeNode animeNode = new DefaultMutableTreeNode(anime);
-            
+
             MultiValueMap map = new MultiValueMap();
-            for(AnimeNotification notificaton: notifications) {
+            for (AnimeNotification notificaton : notifications) {
                 if (notificaton.getFile().getEpisode().getAnime().equals(anime)) {
                     map.put(notificaton.getFile().getEpisode(), notificaton);
                 }
             }
             List<AnimeEpisode> episodes = new ArrayList<AnimeEpisode>(map.keySet());
             Collections.sort(episodes, UIUtils.LEXICAL_SORTER);
-            
-            for(AnimeEpisode episode: episodes) {
+
+            for (AnimeEpisode episode : episodes) {
                 DefaultMutableTreeNode episodeNode = new DefaultMutableTreeNode(episode);
                 List<AnimeNotification> list = (List<AnimeNotification>) map.get(episode);
                 Collections.sort(list, UIUtils.LEXICAL_SORTER);
-                for(AnimeNotification notification: list) {
+                for (AnimeNotification notification : list) {
                     episodeNode.add(new DefaultMutableTreeNode(notification, false));
                 }
                 animeNode.add(episodeNode);
             }
             notificationsNode.add(animeNode);
         }
-        
-        
+
         treeModel.nodeStructureChanged(notificationsNode);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -207,8 +209,8 @@ public class NotificationViewer extends ContentPanel {
 
     private void treeItemsValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeItemsValueChanged
         List<Object> items = new ArrayList<Object>();
-        for(TreePath path: treeItems.getSelectionPaths()) {
-            DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)(path.getLastPathComponent());
+        for (TreePath path : treeItems.getSelectionPaths()) {
+            DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) (path.getLastPathComponent());
             addChildren(treeNode, items);
         }
         setCurrentContext(items);
@@ -228,7 +230,7 @@ public class NotificationViewer extends ContentPanel {
 
     private void addChildren(DefaultMutableTreeNode node, List<Object> items) {
         if (node.getAllowsChildren()) {
-            for(int i = 0; i < node.getChildCount(); i++) {
+            for (int i = 0; i < node.getChildCount(); i++) {
                 DefaultMutableTreeNode n = (DefaultMutableTreeNode) node.getChildAt(i);
                 addChildren(n, items);
             }
@@ -236,7 +238,7 @@ public class NotificationViewer extends ContentPanel {
             items.add(node.getUserObject());
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

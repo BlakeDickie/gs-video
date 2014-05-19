@@ -1,21 +1,19 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package net.landora.animeinfo.data;
 
 import java.util.Calendar;
@@ -36,19 +34,20 @@ import org.slf4j.LoggerFactory;
  * @author bdickie
  */
 public class AnimeDBA {
+
     private static Logger log = LoggerFactory.getLogger(AnimeDBA.class);
 
     public static final int ED2K_FILE_CACHE_AGE = 14;
     public static final int ED2K_FILE_CACHE_AGE_UNITS = Calendar.DATE;
 
     private static final CacheManager cacheManager;
-    
-    private static final SimpleCache<Integer,Anime> animeCache;
-    private static final SimpleCache<Integer,AnimeFile> fileCache;
-    private static final SimpleCache<Integer,AnimeListItem> myListCache;
-    private static final SimpleCache<Integer,AnimeNotification> notificationCache;
-    private static final SimpleCache<Touple<String,Long>,AnimeFile> fileED2KCache;
-    
+
+    private static final SimpleCache<Integer, Anime> animeCache;
+    private static final SimpleCache<Integer, AnimeFile> fileCache;
+    private static final SimpleCache<Integer, AnimeListItem> myListCache;
+    private static final SimpleCache<Integer, AnimeNotification> notificationCache;
+    private static final SimpleCache<Touple<String, Long>, AnimeFile> fileED2KCache;
+
     static {
         cacheManager = CacheManager.create(AnimeDBA.class.getResource("ehcache.xml"));
         animeCache = new SimpleCache<Integer, Anime>("animeCache", cacheManager);
@@ -57,8 +56,7 @@ public class AnimeDBA {
         myListCache = new SimpleCache<Integer, AnimeListItem>("myListCache", cacheManager);
         notificationCache = new SimpleCache<Integer, AnimeNotification>("notificationCache", cacheManager);
     }
-    
-    
+
     public static void saveAnimeWithNames(Anime anime) {
         SqlSession session = null;
 
@@ -67,39 +65,43 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             int rows = mapper.updateAnime(anime);
-            if (rows == 0)
+            if (rows == 0) {
                 mapper.insertAnime(anime);
-            else {
+            } else {
                 mapper.deleteAnimeNames(anime);
                 mapper.deleteAnimeCategoryWeight(anime);
                 mapper.deleteAnimeRelations(anime);
             }
 
-            for(AnimeName name: anime.getNames())
+            for (AnimeName name : anime.getNames()) {
                 mapper.insertAnimeName(name);
-            for(AnimeCategoryWeight category: anime.getCategories())
+            }
+            for (AnimeCategoryWeight category : anime.getCategories()) {
                 mapper.insertAnimeCategoryWeight(category);
-            for(AnimeRelation relation: anime.getRelations())
+            }
+            for (AnimeRelation relation : anime.getRelations()) {
                 mapper.insertAnimeRelation(relation);
+            }
 
             session.commit();
-            
+
             animeCache.put(anime.getAnimeId(), anime);
         } catch (Exception e) {
             session.rollback();
             log.error("Error saving anime.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
-
     public static Anime getAnime(int animeId) {
         Anime result = animeCache.get(animeId);
-        if (result != null)
+        if (result != null) {
             return result;
-        
+        }
+
         SqlSession session = null;
 
         try {
@@ -107,20 +109,21 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             result = mapper.selectAnime(animeId);
-            if (result != null)
+            if (result != null) {
                 animeCache.put(result.getAnimeId(), result);
-            
+            }
+
             return result;
         } catch (Exception e) {
             session.rollback();
             log.error("Error getting anime.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
 
     public static AnimeCategory getAnimeCategory(int categoryId) {
         SqlSession session = null;
@@ -135,8 +138,9 @@ public class AnimeDBA {
             log.error("Error getting anime.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
@@ -153,12 +157,11 @@ public class AnimeDBA {
             log.error("Error getting anime.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
 
     public static void saveEpisode(AnimeEpisode episode) {
         SqlSession session = null;
@@ -168,21 +171,20 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             int rows = mapper.updateEpisode(episode);
-            if (rows == 0)
+            if (rows == 0) {
                 mapper.insertEpisode(episode);
+            }
 
             session.commit();
         } catch (Exception e) {
             session.rollback();
             log.error("Error saving anime.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
-
 
     public static AnimeEpisode getAnimeEpisode(int episodeId) {
         SqlSession session = null;
@@ -197,13 +199,11 @@ public class AnimeDBA {
             log.error("Error getting anime.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
-
 
     public static AnimeEpisode findAnimeEpisode(int animeId, int episodeNumber) {
         SqlSession session = null;
@@ -218,13 +218,11 @@ public class AnimeDBA {
             log.error("Error getting anime.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
-
 
     public static AnimeEpisode findAnimeEpisode(int animeId, String episodeNumber) {
         SqlSession session = null;
@@ -239,13 +237,11 @@ public class AnimeDBA {
             log.error("Error getting anime.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-    
-
 
     public static void saveGroup(AnimeGroup group) {
         SqlSession session = null;
@@ -255,21 +251,20 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             int rows = mapper.updateGroup(group);
-            if (rows == 0)
+            if (rows == 0) {
                 mapper.insertGroup(group);
+            }
 
             session.commit();
         } catch (Exception e) {
             session.rollback();
             log.error("Error saving group.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
-
 
     public static AnimeGroup getAnimeGroup(int groupId) {
         SqlSession session = null;
@@ -284,12 +279,11 @@ public class AnimeDBA {
             log.error("Error getting anime.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
 
     public static void saveFile(AnimeFile file) {
         SqlSession session = null;
@@ -299,32 +293,32 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             file.setCurrentSaveRevision(AnimeFile.SAVE_REVISION);
-            
+
             int rows = mapper.updateFile(file);
-            if (rows == 0)
+            if (rows == 0) {
                 mapper.insertFile(file);
+            }
 
             session.commit();
-            
+
             addToAnimeFileCache(file);
-            
+
         } catch (Exception e) {
             session.rollback();
             log.error("Error saving file.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
-
-
-
     public static AnimeFile getAnimeFile(int fileId) {
         AnimeFile file = fileCache.get(fileId);
-        if (file != null)
+        if (file != null) {
             return file;
-        
+        }
+
         SqlSession session = null;
 
         try {
@@ -332,33 +326,36 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             file = mapper.selectFile(fileId);
-            if (file != null)
+            if (file != null) {
                 addToAnimeFileCache(file);
+            }
             return file;
         } catch (Exception e) {
             log.error("Error getting file.", e);
             session.rollback();
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
     private static void addToAnimeFileCache(AnimeFile file) {
         fileCache.put(file.getFileId(), file);
-            if (file.getEd2k() != null && !file.getEd2k().isEmpty() && file.getSize() != null)
-                fileED2KCache.put(new Touple<String, Long>(file.getEd2k(), file.getSize()), file);
+        if (file.getEd2k() != null && !file.getEd2k().isEmpty() && file.getSize() != null) {
+            fileED2KCache.put(new Touple<String, Long>(file.getEd2k(), file.getSize()), file);
+        }
     }
 
-
     public static AnimeFile getAnimeFile(String ed2k, long size) {
-        Touple<String,Long> info = new Touple<String, Long>(ed2k, size);
-        
+        Touple<String, Long> info = new Touple<String, Long>(ed2k, size);
+
         AnimeFile file = fileED2KCache.get(info);
-        if (file != null)
+        if (file != null) {
             return file;
-        
+        }
+
         SqlSession session = null;
 
         try {
@@ -366,21 +363,20 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             file = mapper.selectFileByED2K(ed2k, size);
-            if (file != null)
+            if (file != null) {
                 addToAnimeFileCache(file);
+            }
             return file;
         } catch (Exception e) {
             session.rollback();
             log.error("Error getting file.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
-
 
     public static AnimeFile getGenericAnimeFile(AnimeEpisode episode) {
         SqlSession session = null;
@@ -395,8 +391,9 @@ public class AnimeDBA {
             log.error("Error getting file.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
@@ -413,8 +410,9 @@ public class AnimeDBA {
             log.error("Error getting anime name.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
@@ -426,21 +424,21 @@ public class AnimeDBA {
             AnimeNameLookupMapper mapper = session.getMapper(AnimeNameLookupMapper.class);
 
             List<AnimeNameLookup> lookups = mapper.selectNames(name);
-            if (!lookups.isEmpty())
+            if (!lookups.isEmpty()) {
                 return lookups;
-            else
+            } else {
                 return mapper.selectNamesFull(name);
+            }
         } catch (Exception e) {
             session.rollback();
             log.error("Error getting anime name.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-
-
 
     public static AnimeEpisode findCachedED2K(String ed2k, long size) {
         SqlSession session = null;
@@ -455,15 +453,17 @@ public class AnimeDBA {
             log.error("Error getting anime name.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static void addCachedED2K(String ed2k, long size, int episodeId) {
-        if (size == 0)
+        if (size == 0) {
             return;
-        
+        }
+
         SqlSession session = null;
 
         try {
@@ -477,14 +477,16 @@ public class AnimeDBA {
             session.rollback();
             log.error("Error saving file.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
     public static void addCachedED2KFileFailure(String ed2k, long size) {
-        if (size == 0)
+        if (size == 0) {
             return;
+        }
 
         SqlSession session = null;
 
@@ -499,15 +501,16 @@ public class AnimeDBA {
             session.rollback();
             log.error("Error saving file.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
 
     public static boolean checkForCachedED2KFileFailure(String ed2k, long size) {
-        if (size == 0)
+        if (size == 0) {
             return false;
-
+        }
 
         SqlSession session = null;
 
@@ -522,20 +525,20 @@ public class AnimeDBA {
             int entries = mapper.findCachedED2KFileFailure(ed2k, size);
 
             session.commit();
-            
+
             return entries > 0;
-            
+
         } catch (Exception e) {
             session.rollback();
             log.error("Error checking for ed2k failure.", e);
             return false;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
-    
+
     public static void saveListItem(AnimeListItem list) {
         SqlSession session = null;
 
@@ -544,22 +547,23 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             int rows = mapper.updateListItem(list);
-            if (rows == 0)
+            if (rows == 0) {
                 mapper.insertListItem(list);
+            }
 
             session.commit();
-            
+
             myListCache.put(list.getFile().getFileId(), list);
         } catch (Exception e) {
             session.rollback();
             log.error("Error saving list item.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
-    
+
     public static void deleteListItem(AnimeListItem list) {
         SqlSession session = null;
 
@@ -570,22 +574,24 @@ public class AnimeDBA {
             mapper.deleteListItem(list);
 
             session.commit();
-            
+
             myListCache.put(list.getFile().getFileId(), null);
         } catch (Exception e) {
             session.rollback();
             log.error("Error saving list item.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static AnimeListItem getAnimeListByFileId(int fileId) {
         AnimeListItem result = myListCache.get(fileId);
-        if (result != null)
+        if (result != null) {
             return result;
-        
+        }
+
         SqlSession session = null;
 
         try {
@@ -593,20 +599,21 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             result = mapper.selectListByFileId(fileId);
-            if (result != null)
+            if (result != null) {
                 myListCache.put(fileId, result);
+            }
             return result;
         } catch (Exception e) {
             session.rollback();
             log.error("Error getting list.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
-    
+
     public static boolean saveAnimeNotification(AnimeNotification notification) {
         SqlSession session = null;
 
@@ -615,29 +622,33 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             int rows = mapper.updateAnimeNotification(notification);
-            if (rows == 0)
+            if (rows == 0) {
                 mapper.insertAnimeNotification(notification);
+            }
 
             session.commit();
-            
+
             notificationCache.put(notification.getFile().getFileId(), notification);
             return true;
         } catch (Exception e) {
             log.error("Error saving list item.", e);
-            if (session != null)
+            if (session != null) {
                 session.rollback();
+            }
             return false;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static AnimeNotification getAnimeNotificationByFileId(int fileId) {
         AnimeNotification result = notificationCache.get(fileId);
-        if (result != null)
+        if (result != null) {
             return result;
-        
+        }
+
         SqlSession session = null;
 
         try {
@@ -645,19 +656,21 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             result = mapper.selectAnimeNotificationByFileId(fileId);
-            if (result != null)
+            if (result != null) {
                 notificationCache.put(fileId, result);
+            }
             return result;
         } catch (Exception e) {
             session.rollback();
             log.error("Error getting notification.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static List<AnimeNotification> getOutstandAnimeNotifications() {
         SqlSession session = null;
 
@@ -671,11 +684,12 @@ public class AnimeDBA {
             log.error("Error getting messages.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static List<AnimeStub> getAnimeWithWaitingNotification() {
         SqlSession session = null;
 
@@ -690,11 +704,12 @@ public class AnimeDBA {
             log.error("Error getting messages.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static List<AnimeEpisode> getEpisodesForNotifications(int animeId) {
         SqlSession session = null;
 
@@ -709,11 +724,12 @@ public class AnimeDBA {
             log.error("Error getting messages.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static List<AnimeNotification> getNotificationsForEpisode(int animeId) {
         SqlSession session = null;
 
@@ -728,14 +744,12 @@ public class AnimeDBA {
             log.error("Error getting messages.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
-    
-    
-    
+
     public static boolean markDownloadedEpisodesAsCompletedNotifications() {
         SqlSession session = null;
 
@@ -749,18 +763,17 @@ public class AnimeDBA {
             return true;
         } catch (Exception e) {
             log.error("Error saving list item.", e);
-            if (session != null)
+            if (session != null) {
                 session.rollback();
+            }
             return false;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
-    
-    
-    
+
     public static boolean saveAnimeMessage(AnimeMessage msg) {
         SqlSession session = null;
 
@@ -769,22 +782,25 @@ public class AnimeDBA {
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
             int rows = mapper.updateAnimeMessage(msg);
-            if (rows == 0)
+            if (rows == 0) {
                 mapper.insertAnimeMessage(msg);
+            }
 
             session.commit();
             return true;
         } catch (Exception e) {
             log.error("Error saving message.", e);
-            if (session != null)
+            if (session != null) {
                 session.rollback();
+            }
             return false;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static AnimeMessage getAnimeMessageByMessageId(int msgId) {
         SqlSession session = null;
 
@@ -798,11 +814,12 @@ public class AnimeDBA {
             log.error("Error getting message.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static List<AnimeMessage> getOutstandAnimeMessages() {
         SqlSession session = null;
 
@@ -816,11 +833,12 @@ public class AnimeDBA {
             log.error("Error getting messages.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
+
     public static byte[] getAnimePicture(String filename) {
         SqlSession session = null;
 
@@ -828,22 +846,23 @@ public class AnimeDBA {
             session = AnimeDataManager.getInstance().openSession();
             AnimeMapper mapper = session.getMapper(AnimeMapper.class);
 
-            Map map =  mapper.getAnimePicture(filename);
-            if (map == null)
+            Map map = mapper.getAnimePicture(filename);
+            if (map == null) {
                 return null;
-            else
-                return (byte[])map.get("image_data");
+            } else {
+                return (byte[]) map.get("image_data");
+            }
         } catch (Exception e) {
             session.rollback();
             log.error("Error getting anime picture.", e);
             return null;
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
-    
+
     public static void saveAnimePicture(String filename, byte[] data) {
         SqlSession session = null;
 
@@ -858,10 +877,10 @@ public class AnimeDBA {
             session.rollback();
             log.error("Error saving anime picture.", e);
         } finally {
-            if (session != null)
+            if (session != null) {
                 session.close();
+            }
         }
     }
-    
 
 }

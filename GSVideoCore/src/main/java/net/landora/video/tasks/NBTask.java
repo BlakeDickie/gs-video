@@ -1,22 +1,24 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.tasks;
 
+import net.landora.video.VideoManagerApp;
+import org.apache.commons.io.input.ProxyInputStream;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,170 +28,169 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import javax.swing.SwingUtilities;
-import net.landora.video.VideoManagerApp;
-import org.apache.commons.io.input.ProxyInputStream;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author bdickie
  */
-public abstract class NBTask<R,I> {
+public abstract class NBTask<R, I> {
 
     private static final ExecutorService executor;
+
     static {
         executor = Executors.newCachedThreadPool();
     }
-    
+
     private TaskProgress progress;
     private String name;
     private Future<?> future;
     private boolean finished;
 
-    public NBTask(String name) {
+    public NBTask( String name ) {
         this.name = name;
         progress = TaskProgressManager.getInstance().newTaskProgress();
     }
-    
+
     public void startTask() {
-        synchronized(awtLock) {
-            future = executor.submit(new RunTask());
+        synchronized ( awtLock ) {
+            future = executor.submit( new RunTask() );
         }
     }
-    
+
     protected boolean isCancellable() {
         return false;
     }
-    
+
     private List<I> awtArgs;
     private final Object awtLock = new Object();
-    
-    protected final void passToAWT(I...args) {
-        synchronized(awtLock) {
-            if (awtArgs == null) {
+
+    protected final void passToAWT( I... args ) {
+        synchronized ( awtLock ) {
+            if ( awtArgs == null ) {
                 awtArgs = new ArrayList<I>();
-                SwingUtilities.invokeLater(new AWTRunner());
+                SwingUtilities.invokeLater( new AWTRunner() );
             }
-            awtArgs.addAll(Arrays.asList(args));
+            awtArgs.addAll( Arrays.asList( args ) );
         }
-        
+
     }
-    
+
     private class AWTRunner implements Runnable {
 
         @Override
         public void run() {
             List<I> args;
-            synchronized(awtLock) {
+            synchronized ( awtLock ) {
                 args = awtArgs;
                 awtArgs = null;
-                
-                if (future.isCancelled())
+
+                if ( future.isCancelled() ) {
                     return;
+                }
             }
-            doInAWT(args);
+            doInAWT( args );
         }
-        
+
     }
-    
-    protected void doInAWT(List<I> passedArgs) {
+
+    protected void doInAWT( List<I> passedArgs ) {
     }
-    
+
     protected abstract R doInBackground() throws Throwable;
-    
-    protected abstract void success(R result);
-    
-    protected void failure(Throwable t) {
-        LoggerFactory.getLogger(getClass()).error("Error running background task: " + getClass().getSimpleName(), t);
+
+    protected abstract void success( R result );
+
+    protected void failure( Throwable t ) {
+        LoggerFactory.getLogger( getClass() ).error( "Error running background task: " + getClass().getSimpleName(), t );
     }
-    
+
     protected void cancelled() {
-        
+
     }
-    
+
     protected void finished() {
-        
+
     }
 
     protected void switchToIndeterminate() {
         progress.progressIndeterminate();
     }
 
-    protected void switchToDeterminate(int workunits, long estimate) {
-        progress.progressDeterminate(workunits, estimate);
+    protected void switchToDeterminate( int workunits, long estimate ) {
+        progress.progressDeterminate( workunits, estimate );
         this.estimate = estimate;
     }
 
-    protected void switchToDeterminate(int workunits) {
-        progress.progressDeterminate(workunits, estimate);
+    protected void switchToDeterminate( int workunits ) {
+        progress.progressDeterminate( workunits, estimate );
     }
 
     private long estimate;
 
     boolean started = false;
-    
-    protected void start(int workunits, long estimate) {
-        progress.startDeterminate(name, workunits, estimate);
+
+    protected void start( int workunits, long estimate ) {
+        progress.startDeterminate( name, workunits, estimate );
         this.estimate = estimate;
         started = true;
     }
 
-    protected void start(int workunits) {
-        progress.startDeterminate(name, workunits, 100);
+    protected void start( int workunits ) {
+        progress.startDeterminate( name, workunits, 100 );
         started = true;
     }
 
     protected void start() {
-        progress.startIndeterminate(name);
+        progress.startIndeterminate( name );
         started = true;
     }
 
-    protected void setDisplayName(String newDisplayName) {
-        progress.setName(newDisplayName);
+    protected void setDisplayName( String newDisplayName ) {
+        progress.setName( newDisplayName );
     }
 
-    protected void progress(String message, int workunit) {
-        progress.setMessage(message);
-        progress.progressDeterminate(workunit, estimate);
+    protected void progress( String message, int workunit ) {
+        progress.setMessage( message );
+        progress.progressDeterminate( workunit, estimate );
     }
 
-    protected void progress(String message) {
-        progress.setMessage(message);
+    protected void progress( String message ) {
+        progress.setMessage( message );
     }
 
-    protected void progress(int workunit) {
-        progress.progressDeterminate(workunit, estimate);
+    protected void progress( int workunit ) {
+        progress.progressDeterminate( workunit, estimate );
     }
 
     public final boolean cancel() {
-        synchronized(awtLock) {
-            if (future != null)
-                return future.cancel(true);
-            else
+        synchronized ( awtLock ) {
+            if ( future != null ) {
+                return future.cancel( true );
+            } else {
                 return false;
+            }
         }
-        
+
     }
-    
+
     private void taskDone() {
         finished();
         progress.finished();
         finished = true;
-        
-        TaskCompletedEvent event = new TaskCompletedEvent(this);
-        VideoManagerApp.getInstance().getEventBus().fireEvent(event);
+
+        TaskCompletedEvent event = new TaskCompletedEvent( this );
+        VideoManagerApp.getInstance().getEventBus().fireEvent( event );
     }
 
     public boolean isFinished() {
         return finished;
     }
-    
-    
+
     private class RunTask implements Runnable {
-        
+
         @Override
         public void run() {
-            synchronized(awtLock) {
+            synchronized ( awtLock ) {
 //                if (isCancellable())
 //                    progressHandle = ProgressHandleFactory.createHandle(name, NBTask.this);
 //                else
@@ -200,122 +201,122 @@ public abstract class NBTask<R,I> {
             Throwable t = null;
             try {
                 result = doInBackground();
-            } catch (Throwable e) {
+            } catch ( Throwable e ) {
                 t = e;
             }
 
             Runnable r;
-            if (future.isCancelled()) {
+            if ( future.isCancelled() ) {
                 r = new CancelledRunnable();
-            } else if (t != null) {
-                r = new FailureRunnable(t);
+            } else if ( t != null ) {
+                r = new FailureRunnable( t );
             } else {
-                r = new SuccessRunnable(result);
+                r = new SuccessRunnable( result );
             }
 
-            SwingUtilities.invokeLater(r);
+            SwingUtilities.invokeLater( r );
 
         }
     }
-    
+
     private class FailureRunnable implements Runnable {
 
         private Throwable t;
 
-        public FailureRunnable(Throwable t) {
+        public FailureRunnable( Throwable t ) {
             this.t = t;
         }
-        
-        
+
         @Override
         public void run() {
-            failure(t);
+            failure( t );
             taskDone();
         }
-        
+
     }
-    
+
     private class SuccessRunnable implements Runnable {
 
         private R t;
 
-        public SuccessRunnable(R t) {
+        public SuccessRunnable( R t ) {
             this.t = t;
         }
-        
-        
+
         @Override
         public void run() {
-            success(t);
+            success( t );
             taskDone();
         }
-        
+
     }
-    
+
     private class CancelledRunnable implements Runnable {
 
         public CancelledRunnable() {
-            
+
         }
-        
-        
+
         @Override
         public void run() {
             cancelled();
             taskDone();
         }
-        
+
     }
-    
+
     protected class NBTaskProgressInputStream extends ProxyInputStream {
 
         private long maxSize;
         private long progress;
         private double scale;
-        
-        public NBTaskProgressInputStream(InputStream in, long maxSize) {
-            super(in);
-            
+
+        public NBTaskProgressInputStream( InputStream in, long maxSize ) {
+            super( in );
+
             this.maxSize = maxSize;
             progress = 0;
-            
-            if (maxSize > Integer.MAX_VALUE) {
-                scale = (double)maxSize / (double)Integer.MAX_VALUE;
-            } else
+
+            if ( maxSize > Integer.MAX_VALUE ) {
+                scale = (double) maxSize / (double) Integer.MAX_VALUE;
+            } else {
                 scale = 1;
-            
-            if (started) {
-                switchToDeterminate((int)Math.round(maxSize / scale));
-            } else
-                start((int)Math.round(maxSize / scale));
+            }
+
+            if ( started ) {
+                switchToDeterminate( (int) Math.round( maxSize / scale ) );
+            } else {
+                start( (int) Math.round( maxSize / scale ) );
+            }
         }
 
         @Override
         public int read() throws IOException {
             int result = super.read();
-            if (result >= 0)
-                increaseCount(1);
+            if ( result >= 0 ) {
+                increaseCount( 1 );
+            }
             return result;
         }
 
         @Override
-        public int read(byte[] bts) throws IOException {
-            int result = super.read(bts);
-            increaseCount(result);
+        public int read( byte[] bts ) throws IOException {
+            int result = super.read( bts );
+            increaseCount( result );
             return result;
         }
 
         @Override
-        public int read(byte[] bts, int off, int len) throws IOException {
-            int result = super.read(bts, off, len);
-            increaseCount(result);
+        public int read( byte[] bts, int off, int len ) throws IOException {
+            int result = super.read( bts, off, len );
+            increaseCount( result );
             return result;
         }
-        
-        private void increaseCount(int count) {
+
+        private void increaseCount( int count ) {
             progress += count;
-            progress((int)Math.round(progress / scale));
+            progress( (int) Math.round( progress / scale ) );
         }
-        
+
     }
 }

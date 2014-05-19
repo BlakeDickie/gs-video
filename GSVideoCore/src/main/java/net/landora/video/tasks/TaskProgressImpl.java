@@ -1,25 +1,24 @@
 /**
- *     Copyright (C) 2012 Blake Dickie
+ * Copyright (C) 2012-2014 Blake Dickie
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.landora.video.tasks;
 
+import net.landora.video.utils.UIUtils;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import net.landora.video.utils.UIUtils;
 
 /**
  *
@@ -29,18 +28,17 @@ public class TaskProgressImpl implements TaskProgress {
 
     public TaskProgressImpl() {
     }
-    
-    
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
+    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport( this );
+
+    public void addPropertyChangeListener( PropertyChangeListener listener ) {
+        propertyChangeSupport.addPropertyChangeListener( listener );
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener(listener);
+    public void removePropertyChangeListener( PropertyChangeListener listener ) {
+        propertyChangeSupport.removePropertyChangeListener( listener );
     }
-    
+
     protected String name;
     public static final String PROP_NAME = "name";
 
@@ -49,16 +47,16 @@ public class TaskProgressImpl implements TaskProgress {
     }
 
     @Override
-    public void setName(final String name) {
+    public void setName( final String name ) {
         Runnable runnable = new Runnable() {
 
             public void run() {
                 String oldName = TaskProgressImpl.this.name;
                 TaskProgressImpl.this.name = name;
-                propertyChangeSupport.firePropertyChange(PROP_NAME, oldName, name);
+                propertyChangeSupport.firePropertyChange( PROP_NAME, oldName, name );
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
 
     protected String message;
@@ -69,16 +67,16 @@ public class TaskProgressImpl implements TaskProgress {
     }
 
     @Override
-    public void setMessage(final String message) {
+    public void setMessage( final String message ) {
         Runnable runnable = new Runnable() {
 
             public void run() {
                 String oldMessage = TaskProgressImpl.this.message;
                 TaskProgressImpl.this.message = message;
-                propertyChangeSupport.firePropertyChange(PROP_MESSAGE, oldMessage, message);
+                propertyChangeSupport.firePropertyChange( PROP_MESSAGE, oldMessage, message );
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
 
     protected boolean determinate;
@@ -88,10 +86,10 @@ public class TaskProgressImpl implements TaskProgress {
         return determinate;
     }
 
-    public void setDeterminate(boolean determinate) {
+    public void setDeterminate( boolean determinate ) {
         boolean oldDeterminate = this.determinate;
         this.determinate = determinate;
-        propertyChangeSupport.firePropertyChange(PROP_DETERMINATE, oldDeterminate, determinate);
+        propertyChangeSupport.firePropertyChange( PROP_DETERMINATE, oldDeterminate, determinate );
     }
 
     protected int progress;
@@ -101,87 +99,86 @@ public class TaskProgressImpl implements TaskProgress {
         return progress;
     }
 
-    public void setProgress(int progress) {
+    public void setProgress( int progress ) {
         double oldProgress = this.progress;
         this.progress = progress;
-        propertyChangeSupport.firePropertyChange(PROP_PROGRESS, oldProgress, progress);
+        propertyChangeSupport.firePropertyChange( PROP_PROGRESS, oldProgress, progress );
     }
 
-    
     @Override
-    public void startDeterminate(final String name, final long current, final long total) {
+    public void startDeterminate( final String name, final long current, final long total ) {
         Runnable runnable = new Runnable() {
 
             public void run() {
-                setName(name);
-                progressDeterminate(current, total);
+                setName( name );
+                progressDeterminate( current, total );
                 start();
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
-    
+
     @Override
-    public void startDeterminate(final String name, final double current, final double total) {
+    public void startDeterminate( final String name, final double current, final double total ) {
         Runnable runnable = new Runnable() {
 
             public void run() {
-                setName(name);
-                progressDeterminate(current, total);
+                setName( name );
+                progressDeterminate( current, total );
                 start();
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
-    
+
     @Override
-    public void startIndeterminate(final String name) {
+    public void startIndeterminate( final String name ) {
         Runnable runnable = new Runnable() {
 
             public void run() {
-                setName(name);
+                setName( name );
                 progressIndeterminate();
                 start();
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
-    
+
     @Override
-    public void progressDeterminate(final long current, final long total) {
+    public void progressDeterminate( final long current, final long total ) {
         Runnable runnable = new Runnable() {
 
             public void run() {
-                setDeterminate(true);
-                setProgress((int)Math.round(100 * (double) current / (double) total));
+                setDeterminate( true );
+                setProgress( (int) Math.round( 100 * (double) current / (double) total ) );
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
-    
+
     @Override
-    public void progressDeterminate(final double current, final double total) {
+    public void progressDeterminate( final double current, final double total ) {
         Runnable runnable = new Runnable() {
 
             public void run() {
-                setDeterminate(true);
-                setProgress((int)Math.round(100 * (double) current / (double) total));
+                setDeterminate( true );
+                setProgress( (int) Math.round( 100 * (double) current / (double) total ) );
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
-    
+
     @Override
     public void progressIndeterminate() {
         Runnable runnable = new Runnable() {
 
             public void run() {
-                setDeterminate(false);
+                setDeterminate( false );
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
+        UIUtils.invokeInSwingThread( runnable );
     }
-    
+
     @Override
     public void finished() {
         Runnable runnable = new Runnable() {
@@ -190,15 +187,14 @@ public class TaskProgressImpl implements TaskProgress {
                 finishedImpl();
             }
         };
-        UIUtils.invokeInSwingThread(runnable);
-    }
-    
-    private void start() {
-        TaskProgressManager.getInstance().fireTaskStarted(this);
+        UIUtils.invokeInSwingThread( runnable );
     }
 
-    
+    private void start() {
+        TaskProgressManager.getInstance().fireTaskStarted( this );
+    }
+
     private void finishedImpl() {
-        TaskProgressManager.getInstance().fireTaskFinished(this);
+        TaskProgressManager.getInstance().fireTaskFinished( this );
     }
 }

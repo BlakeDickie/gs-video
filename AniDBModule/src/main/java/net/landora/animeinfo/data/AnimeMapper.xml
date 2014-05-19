@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-        Copyright (C) 2012 Blake Dickie
+        Copyright (C) 2012-2014 Blake Dickie
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -26,68 +26,68 @@
 
     <insert id="insertAnime" parameterType="Anime">
         Insert Into Anime (
-            anime_id,
-            last_loaded,
-            name_main,
-            name_english,
-            episode_count,
-            type,
-            description,
-            start_date,
-            end_date,
-            rating_permanent,
-            rating_permanent_votes,
-            rating_temp,
-            rating_temp_votes,
-            hentai,
-            picture_filename
+        anime_id,
+        last_loaded,
+        name_main,
+        name_english,
+        episode_count,
+        type,
+        description,
+        start_date,
+        end_date,
+        rating_permanent,
+        rating_permanent_votes,
+        rating_temp,
+        rating_temp_votes,
+        hentai,
+        picture_filename
         ) Values (
-            #{animeId},
-            #{lastLoaded,jdbcType=TIMESTAMP},
-            #{nameMain,jdbcType=VARCHAR},
-            #{nameEnglish,jdbcType=VARCHAR},
-            #{episodeCount,jdbcType=INTEGER},
-            #{type,jdbcType=VARCHAR},
-            #{description,jdbcType=CLOB},
-            #{startDate,jdbcType=DATE},
-            #{endDate,jdbcType=DATE},
-            #{ratingPermanent,jdbcType=NUMERIC},
-            #{ratingPermanentVotes,jdbcType=INTEGER},
-            #{ratingTemporary,jdbcType=NUMERIC},
-            #{ratingTemporaryVotes,jdbcType=INTEGER},
-            #{hentai,jdbcType=BOOLEAN},
-            #{pictureFileName,jdbcType=VARCHAR}
+        #{animeId},
+        #{lastLoaded,jdbcType=TIMESTAMP},
+        #{nameMain,jdbcType=VARCHAR},
+        #{nameEnglish,jdbcType=VARCHAR},
+        #{episodeCount,jdbcType=INTEGER},
+        #{type,jdbcType=VARCHAR},
+        #{description,jdbcType=CLOB},
+        #{startDate,jdbcType=DATE},
+        #{endDate,jdbcType=DATE},
+        #{ratingPermanent,jdbcType=NUMERIC},
+        #{ratingPermanentVotes,jdbcType=INTEGER},
+        #{ratingTemporary,jdbcType=NUMERIC},
+        #{ratingTemporaryVotes,jdbcType=INTEGER},
+        #{hentai,jdbcType=BOOLEAN},
+        #{pictureFileName,jdbcType=VARCHAR}
 
         );
     </insert>
 
     <update id="updateAnime" parameterType="Anime">
-		Update Anime Set
+        Update Anime Set
 		
-			last_loaded = #{lastLoaded,jdbcType=TIMESTAMP},
-			name_main = #{nameMain,jdbcType=VARCHAR},
-			name_english = #{nameEnglish,jdbcType=VARCHAR},
-			episode_count = #{episodeCount,jdbcType=INTEGER},
-			type = #{type,jdbcType=VARCHAR},
-			description = #{description,jdbcType=CLOB},
-			start_date = #{startDate,jdbcType=DATE},
-			end_date = #{endDate,jdbcType=DATE},
-			rating_permanent = #{ratingPermanent,jdbcType=NUMERIC},
-			rating_permanent_votes = #{ratingPermanentVotes,jdbcType=INTEGER},
-			rating_temp = #{ratingTemporary,jdbcType=NUMERIC},
-			rating_temp_votes = #{ratingTemporaryVotes,jdbcType=INTEGER},
-			hentai = #{hentai,jdbcType=BOOLEAN},
-			picture_filename = #{pictureFileName,jdbcType=VARCHAR}
+        last_loaded = #{lastLoaded,jdbcType=TIMESTAMP},
+        name_main = #{nameMain,jdbcType=VARCHAR},
+        name_english = #{nameEnglish,jdbcType=VARCHAR},
+        episode_count = #{episodeCount,jdbcType=INTEGER},
+        type = #{type,jdbcType=VARCHAR},
+        description = #{description,jdbcType=CLOB},
+        start_date = #{startDate,jdbcType=DATE},
+        end_date = #{endDate,jdbcType=DATE},
+        rating_permanent = #{ratingPermanent,jdbcType=NUMERIC},
+        rating_permanent_votes = #{ratingPermanentVotes,jdbcType=INTEGER},
+        rating_temp = #{ratingTemporary,jdbcType=NUMERIC},
+        rating_temp_votes = #{ratingTemporaryVotes,jdbcType=INTEGER},
+        hentai = #{hentai,jdbcType=BOOLEAN},
+        picture_filename = #{pictureFileName,jdbcType=VARCHAR}
         Where anime_id = #{animeId}
     </update>
 
     <update id="deleteAnime" parameterType="AnimeStub">
-		Delete From Anime
+        Delete From Anime
         Where anime_id = #{animeId}
     </update>
 
     <update id="deleteAnimeById" parameterType="int">
-		Delete From Anime
+        Delete From Anime
         Where anime_id = #{animeId}
     </update>
 
@@ -149,8 +149,8 @@
         <include refid="animeNameColumns"/>
 
         From Anime As A
-		Left Outer Join AnimeName as AN
-			ON AN.anime_id = A.anime_id
+        Left Outer Join AnimeName as AN
+        ON AN.anime_id = A.anime_id
         Where A.anime_id = #{id}
     </select>
 
@@ -162,15 +162,15 @@
     
     <insert id="insertAnimeName" parameterType="AnimeName">
         Insert Into AnimeName (
-            anime_id,
-            anime_name,
-            name_type,
-            name_lang
+        anime_id,
+        anime_name,
+        name_type,
+        name_lang
         ) Values (
-            #{anime.animeId,jdbcType=INTEGER},
-            #{name,jdbcType=VARCHAR},
-            #{type,jdbcType=VARCHAR},
-            #{language,jdbcType=VARCHAR}
+        #{anime.animeId,jdbcType=INTEGER},
+        #{name,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{language,jdbcType=VARCHAR}
         );
     </insert>
     
@@ -200,13 +200,13 @@
 
     <insert id="insertAnimeCategoryWeight" parameterType="AnimeCategoryWeight">
         Insert Into AnimeCategoryMapping (
-            anime_id,
-            category_id,
-            weight
+        anime_id,
+        category_id,
+        weight
         ) Values (
-            #{anime.animeId,jdbcType=INTEGER},
-            #{category.id,jdbcType=INTEGER},
-            #{weight,jdbcType=INTEGER}
+        #{anime.animeId,jdbcType=INTEGER},
+        #{category.id,jdbcType=INTEGER},
+        #{weight,jdbcType=INTEGER}
         );
     </insert>
 
@@ -226,7 +226,7 @@
 
     <select id="selectCategoriesForAnime" parameterType="int" resultMap="animeCategoryWeightResult">
         Select
-            <include refid="animeCategoryWeightColumns"/>
+        <include refid="animeCategoryWeightColumns"/>
         From AnimeCategoryMapping ACM
         Where ACM.anime_id = #{id}
         Order By ACM.weight
@@ -242,13 +242,13 @@
 
     <insert id="insertAnimeRelation" parameterType="AnimeRelation">
         Insert Into AnimeRelation (
-            anime_id,
-            related_anime_id,
-            relation_type_id
+        anime_id,
+        related_anime_id,
+        relation_type_id
         ) Values (
-            #{anime.animeId,jdbcType=INTEGER},
-            #{relatedAnimeId,jdbcType=INTEGER},
-            #{relationTypeId,jdbcType=INTEGER}
+        #{anime.animeId,jdbcType=INTEGER},
+        #{relatedAnimeId,jdbcType=INTEGER},
+        #{relationTypeId,jdbcType=INTEGER}
         );
     </insert>
 
@@ -268,7 +268,7 @@
 
     <select id="selectAnimeRelationForAnime" parameterType="int" resultMap="animeRelationResult">
         Select
-            <include refid="animeRelationColumns"/>
+        <include refid="animeRelationColumns"/>
         From AnimeRelation AR
         Where AR.anime_id = #{id}
     </select>
@@ -280,27 +280,27 @@
 
     <insert id="insertCategory" parameterType="AnimeCategory">
         Insert Into AnimeCategory (
-            category_id,
-            category_name,
-            category_desc,
-            hentai,
-            parent_category_id
+        category_id,
+        category_name,
+        category_desc,
+        hentai,
+        parent_category_id
         ) Values (
-            #{id,jdbcType=INTEGER},
-            #{name,jdbcType=VARCHAR},
-            #{description,jdbcType=VARCHAR},
-            #{hentai,jdbcType=BOOLEAN},
-            #{parentCategory.id,jdbcType=INTEGER}
+        #{id,jdbcType=INTEGER},
+        #{name,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR},
+        #{hentai,jdbcType=BOOLEAN},
+        #{parentCategory.id,jdbcType=INTEGER}
         );
     </insert>
 
     <update id="updateCategory" parameterType="AnimeCategory">
-		Update AnimeCategory Set
+        Update AnimeCategory Set
                 
-                category_name = #{name,jdbcType=VARCHAR},
-                category_desc = #{description,jdbcType=CLOB},
-                hentai = #{hentai,jdbcType=BOOLEAN},
-                parent_category_id = #{parentCategory.id,jdbcType=INTEGER}
+        category_name = #{name,jdbcType=VARCHAR},
+        category_desc = #{description,jdbcType=CLOB},
+        hentai = #{hentai,jdbcType=BOOLEAN},
+        parent_category_id = #{parentCategory.id,jdbcType=INTEGER}
 
         Where category_id = #{id,jdbcType=INTEGER}
     </update>
@@ -335,45 +335,45 @@
 
     <insert id="insertEpisode" parameterType="AnimeEpisode">
         Insert Into AnimeEpisode (
-            episode_id,
-            anime_id,
-            episode_number,
-            length,
-            rating,
-            rating_votes,
-            name_english,
-            name_romaji,
-            name_kanji,
-            air_date,
-            normal_episode_number
+        episode_id,
+        anime_id,
+        episode_number,
+        length,
+        rating,
+        rating_votes,
+        name_english,
+        name_romaji,
+        name_kanji,
+        air_date,
+        normal_episode_number
         ) Values (
-            #{episodeId,jdbcType=INTEGER},
-            #{anime.animeId,jdbcType=INTEGER},
-            #{episodeNumber,jdbcType=VARCHAR},
-            #{length,jdbcType=INTEGER},
-            #{rating,jdbcType=NUMERIC},
-            #{ratingVotes,jdbcType=INTEGER},
-            #{nameEnglish,jdbcType=VARCHAR},
-            #{nameRomaji,jdbcType=VARCHAR},
-            #{nameKanji,jdbcType=VARCHAR},
-            #{airDate,jdbcType=DATE},
-            #{normalEpisodeNumber,jdbcType=INTEGER}
+        #{episodeId,jdbcType=INTEGER},
+        #{anime.animeId,jdbcType=INTEGER},
+        #{episodeNumber,jdbcType=VARCHAR},
+        #{length,jdbcType=INTEGER},
+        #{rating,jdbcType=NUMERIC},
+        #{ratingVotes,jdbcType=INTEGER},
+        #{nameEnglish,jdbcType=VARCHAR},
+        #{nameRomaji,jdbcType=VARCHAR},
+        #{nameKanji,jdbcType=VARCHAR},
+        #{airDate,jdbcType=DATE},
+        #{normalEpisodeNumber,jdbcType=INTEGER}
             
         );
     </insert>
 
     <update id="updateEpisode" parameterType="AnimeEpisode">
         Update AnimeEpisode Set
-                anime_id = #{anime.animeId,jdbcType=INTEGER},
-                episode_number = #{episodeNumber,jdbcType=VARCHAR},
-                length = #{length,jdbcType=INTEGER},
-                rating = #{rating,jdbcType=NUMERIC},
-                rating_votes = #{ratingVotes,jdbcType=INTEGER},
-                name_english = #{nameEnglish,jdbcType=VARCHAR},
-                name_romaji = #{nameRomaji,jdbcType=VARCHAR},
-                name_kanji = #{nameKanji,jdbcType=VARCHAR},
-                air_date = #{airDate,jdbcType=DATE},
-                normal_episode_number = #{normalEpisodeNumber,jdbcType=INTEGER}
+        anime_id = #{anime.animeId,jdbcType=INTEGER},
+        episode_number = #{episodeNumber,jdbcType=VARCHAR},
+        length = #{length,jdbcType=INTEGER},
+        rating = #{rating,jdbcType=NUMERIC},
+        rating_votes = #{ratingVotes,jdbcType=INTEGER},
+        name_english = #{nameEnglish,jdbcType=VARCHAR},
+        name_romaji = #{nameRomaji,jdbcType=VARCHAR},
+        name_kanji = #{nameKanji,jdbcType=VARCHAR},
+        air_date = #{airDate,jdbcType=DATE},
+        normal_episode_number = #{normalEpisodeNumber,jdbcType=INTEGER}
         Where episode_id = #{episodeId,jdbcType=INTEGER}
     </update>
 
@@ -436,26 +436,26 @@
 
     <insert id="insertGroup" parameterType="AnimeGroup">
         Insert Into AnimeGroup (
-            group_id,
-            name_short,
-            name_long,
-            group_url,
-            group_full
+        group_id,
+        name_short,
+        name_long,
+        group_url,
+        group_full
         ) Values (
-            #{groupId,jdbcType=INTEGER},
-            #{shortName,jdbcType=VARCHAR},
-            #{lostName,jdbcType=VARCHAR},
-            #{url,jdbcType=VARCHAR},
-            #{fullyLoaded,jdbcType=BOOLEAN}
+        #{groupId,jdbcType=INTEGER},
+        #{shortName,jdbcType=VARCHAR},
+        #{lostName,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR},
+        #{fullyLoaded,jdbcType=BOOLEAN}
         );
     </insert>
 
     <update id="updateGroup" parameterType="AnimeGroup">
         Update AnimeGroup Set
-                name_short = #{shortName,jdbcType=VARCHAR},
-                name_long = #{lostName,jdbcType=VARCHAR},
-                group_url = #{url,jdbcType=VARCHAR},
-                group_full = #{fullyLoaded,jdbcType=BOOLEAN}
+        name_short = #{shortName,jdbcType=VARCHAR},
+        name_long = #{lostName,jdbcType=VARCHAR},
+        group_url = #{url,jdbcType=VARCHAR},
+        group_full = #{fullyLoaded,jdbcType=BOOLEAN}
         Where group_id = #{groupId,jdbcType=INTEGER}
     </update>
 
@@ -490,53 +490,53 @@
 
     <insert id="insertFile" parameterType="AnimeFile">
         Insert Into AnimeFile (
-            file_id,
-            episode_id,
-            group_id,
-            ed2k,
-            file_length,
-            crc_valid,
-            version,
-            censored,
-            source,
-            videoCodec,
-            videoResolution,
-            fileType,
-            save_revision,
-            generic_file
+        file_id,
+        episode_id,
+        group_id,
+        ed2k,
+        file_length,
+        crc_valid,
+        version,
+        censored,
+        source,
+        videoCodec,
+        videoResolution,
+        fileType,
+        save_revision,
+        generic_file
         ) Values (
-            #{fileId,jdbcType=INTEGER},
-            #{episode.episodeId,jdbcType=INTEGER},
-            #{group.groupId,jdbcType=INTEGER},
-            #{ed2k,jdbcType=VARCHAR},
-            #{size,jdbcType=BIGINT},
-            #{crcValid,jdbcType=BOOLEAN},
-            #{version,jdbcType=INTEGER},
-            #{censored,jdbcType=BOOLEAN},
-            #{source,jdbcType=VARCHAR},
-            #{videoCodec,jdbcType=VARCHAR},
-            #{videoResolution,jdbcType=VARCHAR},
-            #{fileType,jdbcType=VARCHAR},
-            #{currentSaveRevision,jdbcType=INTEGER},
-            #{generic,jdbcType=BOOLEAN}
+        #{fileId,jdbcType=INTEGER},
+        #{episode.episodeId,jdbcType=INTEGER},
+        #{group.groupId,jdbcType=INTEGER},
+        #{ed2k,jdbcType=VARCHAR},
+        #{size,jdbcType=BIGINT},
+        #{crcValid,jdbcType=BOOLEAN},
+        #{version,jdbcType=INTEGER},
+        #{censored,jdbcType=BOOLEAN},
+        #{source,jdbcType=VARCHAR},
+        #{videoCodec,jdbcType=VARCHAR},
+        #{videoResolution,jdbcType=VARCHAR},
+        #{fileType,jdbcType=VARCHAR},
+        #{currentSaveRevision,jdbcType=INTEGER},
+        #{generic,jdbcType=BOOLEAN}
         );
     </insert>
 
     <update id="updateFile" parameterType="AnimeFile">
         Update AnimeFile Set
-                episode_id = #{episode.episodeId,jdbcType=INTEGER},
-                group_id = #{group.groupId,jdbcType=INTEGER},
-                ed2k = #{ed2k,jdbcType=VARCHAR},
-                file_length = #{size,jdbcType=BIGINT},
-                crc_valid = #{crcValid,jdbcType=BOOLEAN},
-                version = #{version,jdbcType=INTEGER},
-                censored = #{censored,jdbcType=BOOLEAN},
-                source = #{source,jdbcType=VARCHAR},
-                videoCodec = #{videoCodec,jdbcType=VARCHAR},
-                videoResolution = #{videoResolution,jdbcType=VARCHAR},
-                fileType = #{fileType,jdbcType=VARCHAR},
-                save_revision = #{currentSaveRevision,jdbcType=INTEGER},
-                generic_file = #{generic,jdbcType=BOOLEAN}
+        episode_id = #{episode.episodeId,jdbcType=INTEGER},
+        group_id = #{group.groupId,jdbcType=INTEGER},
+        ed2k = #{ed2k,jdbcType=VARCHAR},
+        file_length = #{size,jdbcType=BIGINT},
+        crc_valid = #{crcValid,jdbcType=BOOLEAN},
+        version = #{version,jdbcType=INTEGER},
+        censored = #{censored,jdbcType=BOOLEAN},
+        source = #{source,jdbcType=VARCHAR},
+        videoCodec = #{videoCodec,jdbcType=VARCHAR},
+        videoResolution = #{videoResolution,jdbcType=VARCHAR},
+        fileType = #{fileType,jdbcType=VARCHAR},
+        save_revision = #{currentSaveRevision,jdbcType=INTEGER},
+        generic_file = #{generic,jdbcType=BOOLEAN}
         Where file_id = #{fileId,jdbcType=INTEGER}
     </update>
 
@@ -580,9 +580,9 @@
         <include refid="episodeColumns"/>
         From AnimeFile As AF
         Left Outer Join AnimeGroup As AG
-            On AF.group_id = AG.group_id
+        On AF.group_id = AG.group_id
         Inner Join AnimeEpisode As AE
-            On AF.episode_id = AE.episode_id
+        On AF.episode_id = AE.episode_id
         Where AF.file_id = #{id}
     </select>
 
@@ -593,9 +593,9 @@
         <include refid="episodeColumns"/>
         From AnimeFile As AF
         Left Outer Join AnimeGroup As AG
-            On AF.group_id = AG.group_id
+        On AF.group_id = AG.group_id
         Inner Join AnimeEpisode As AE
-            On AF.episode_id = AE.episode_id
+        On AF.episode_id = AE.episode_id
         Where AF.ed2k = #{0}
         AND AF.file_length = #{1}
     </select>
@@ -607,9 +607,9 @@
         <include refid="episodeColumns"/>
         From AnimeFile As AF
         Left Outer Join AnimeGroup As AG
-            On AF.group_id = AG.group_id
+        On AF.group_id = AG.group_id
         Inner Join AnimeEpisode As AE
-            On AF.episode_id = AE.episode_id
+        On AF.episode_id = AE.episode_id
         Where AF.episode_id = #{episodeId,jdbcType=INTEGER}
         AND generic_file = TRUE
     </select>
@@ -622,35 +622,35 @@
 
     <insert id="insertListItem" parameterType="AnimeListItem">
         Insert Into AnimeMyList (
-            file_id,
-            state,
-            file_state,
-            added_date,
-            view_date,
-            storage,
-            source,
-            other
+        file_id,
+        state,
+        file_state,
+        added_date,
+        view_date,
+        storage,
+        source,
+        other
         ) Values (
-            #{file.fileId,jdbcType=INTEGER},
-            #{state.stateId,jdbcType=INTEGER},
-            #{fileState.stateId,jdbcType=INTEGER},
-            #{addedDate,jdbcType=TIMESTAMP},
-            #{viewDate,jdbcType=TIMESTAMP},
-            #{storage,jdbcType=VARCHAR},
-            #{source,jdbcType=VARCHAR},
-            #{other,jdbcType=VARCHAR}
+        #{file.fileId,jdbcType=INTEGER},
+        #{state.stateId,jdbcType=INTEGER},
+        #{fileState.stateId,jdbcType=INTEGER},
+        #{addedDate,jdbcType=TIMESTAMP},
+        #{viewDate,jdbcType=TIMESTAMP},
+        #{storage,jdbcType=VARCHAR},
+        #{source,jdbcType=VARCHAR},
+        #{other,jdbcType=VARCHAR}
         );
     </insert>
 
     <update id="updateListItem" parameterType="AnimeListItem">
         Update AnimeMyList Set
-                state = #{state.stateId,jdbcType=INTEGER},
-                file_state = #{fileState.stateId,jdbcType=INTEGER},
-                added_date = #{addedDate,jdbcType=TIMESTAMP},
-                view_date = #{viewDate,jdbcType=TIMESTAMP},
-                storage = #{storage,jdbcType=VARCHAR},
-                source = #{source,jdbcType=VARCHAR},
-                other = #{other,jdbcType=VARCHAR}
+        state = #{state.stateId,jdbcType=INTEGER},
+        file_state = #{fileState.stateId,jdbcType=INTEGER},
+        added_date = #{addedDate,jdbcType=TIMESTAMP},
+        view_date = #{viewDate,jdbcType=TIMESTAMP},
+        storage = #{storage,jdbcType=VARCHAR},
+        source = #{source,jdbcType=VARCHAR},
+        other = #{other,jdbcType=VARCHAR}
         Where file_id = #{file.fileId,jdbcType=INTEGER}
     </update>
 
@@ -675,11 +675,11 @@
     <sql id="myListTables">
         AnimeMyList As AL
         Inner Join AnimeFile As AF
-            On AL.file_id = AF.file_id
+        On AL.file_id = AF.file_id
         Inner Join AnimeEpisode As AE
-            On AF.episode_id = AE.episode_id
+        On AF.episode_id = AE.episode_id
         Left Outer Join AnimeGroup As AG
-            On AF.group_id = AG.group_id
+        On AF.group_id = AG.group_id
     </sql>
 
     <resultMap id="mylistResult" type="AnimeListItem">
@@ -709,37 +709,37 @@
 
     <insert id="insertAnimeNotification" parameterType="AnimeNotification">
         Insert Into AnimeNotification (
-            file_id,
-            added_date,
-            view_date,
-            removed_date,
-            type_id
+        file_id,
+        added_date,
+        view_date,
+        removed_date,
+        type_id
         ) Values (
-            #{file.fileId,jdbcType=INTEGER},
-            #{addedDate,jdbcType=TIMESTAMP},
-            #{viewDate,jdbcType=TIMESTAMP},
-            #{removedDate,jdbcType=TIMESTAMP},
-            #{typeId,jdbcType=INTEGER}
+        #{file.fileId,jdbcType=INTEGER},
+        #{addedDate,jdbcType=TIMESTAMP},
+        #{viewDate,jdbcType=TIMESTAMP},
+        #{removedDate,jdbcType=TIMESTAMP},
+        #{typeId,jdbcType=INTEGER}
         );
     </insert>
 
     <update id="updateAnimeNotification" parameterType="AnimeNotification">
         Update AnimeNotification Set
-                added_date = #{addedDate,jdbcType=TIMESTAMP},
-                view_date = #{viewDate,jdbcType=TIMESTAMP},
-                removed_date = #{removedDate,jdbcType=TIMESTAMP},
-                type_id = #{typeId,jdbcType=INTEGER}
+        added_date = #{addedDate,jdbcType=TIMESTAMP},
+        view_date = #{viewDate,jdbcType=TIMESTAMP},
+        removed_date = #{removedDate,jdbcType=TIMESTAMP},
+        type_id = #{typeId,jdbcType=INTEGER}
         Where file_id = #{file.fileId,jdbcType=INTEGER}
     </update>
 
     <sql id="AnimeNotificationTables">
         AnimeNotification As AN
         Inner Join AnimeFile As AF
-            On AN.file_id = AF.file_id
+        On AN.file_id = AF.file_id
         Inner Join AnimeEpisode As AE
-            On AF.episode_id = AE.episode_id
+        On AF.episode_id = AE.episode_id
         Left Outer Join AnimeGroup As AG
-            On AF.group_id = AG.group_id
+        On AF.group_id = AG.group_id
     </sql>
 
     <sql id="AnimeNotificationColumns">
@@ -791,9 +791,9 @@
         Select AE.anime_id From
         AnimeNotification As AN
         Inner Join AnimeFile As AF
-            On AN.file_id = AF.file_id
+        On AN.file_id = AF.file_id
         Inner Join AnimeEpisode As AE
-            On AF.episode_id = AE.episode_id
+        On AF.episode_id = AE.episode_id
         Where AN.removed_date Is Null
         )
     </select>
@@ -818,11 +818,11 @@
         From AnimeEpisode As AE
         Where AE.anime_id = #{id} AND
         episode_id IN (
-            Select AF.episode_id From
-            AnimeNotification As AN
-            Inner Join AnimeFile As AF
-                On AN.file_id = AF.file_id
-            Where AN.removed_date Is Null
+        Select AF.episode_id From
+        AnimeNotification As AN
+        Inner Join AnimeFile As AF
+        On AN.file_id = AF.file_id
+        Where AN.removed_date Is Null
         )
     </select>
 
@@ -839,32 +839,32 @@
 
     <insert id="insertAnimeMessage" parameterType="AnimeMessage">
         Insert Into AnimeMessage (
-            messageId,
-            msg_date,
-            removed_date,
-            type_id,
-            from_user,
-            title,
-            body
+        messageId,
+        msg_date,
+        removed_date,
+        type_id,
+        from_user,
+        title,
+        body
         ) Values (
-            #{messageId,jdbcType=INTEGER},
-            #{date,jdbcType=TIMESTAMP},
-            #{removedDate,jdbcType=TIMESTAMP},
-            #{typeId,jdbcType=INTEGER},
-            #{fromUser,jdbcType=VARCHAR},
-            #{title,jdbcType=VARCHAR},
-            #{body,jdbcType=VARCHAR}
+        #{messageId,jdbcType=INTEGER},
+        #{date,jdbcType=TIMESTAMP},
+        #{removedDate,jdbcType=TIMESTAMP},
+        #{typeId,jdbcType=INTEGER},
+        #{fromUser,jdbcType=VARCHAR},
+        #{title,jdbcType=VARCHAR},
+        #{body,jdbcType=VARCHAR}
         );
     </insert>
 
     <update id="updateAnimeMessage" parameterType="AnimeMessage">
         Update AnimeMessage Set
-                msg_date = #{date,jdbcType=TIMESTAMP},
-                removed_date = #{removedDate,jdbcType=TIMESTAMP},
-                type_id = #{typeId,jdbcType=INTEGER},
-                from_user = #{fromUser,jdbcType=VARCHAR},
-                title = #{title,jdbcType=VARCHAR},
-                body = #{body,jdbcType=VARCHAR}
+        msg_date = #{date,jdbcType=TIMESTAMP},
+        removed_date = #{removedDate,jdbcType=TIMESTAMP},
+        type_id = #{typeId,jdbcType=INTEGER},
+        from_user = #{fromUser,jdbcType=VARCHAR},
+        title = #{title,jdbcType=VARCHAR},
+        body = #{body,jdbcType=VARCHAR}
         Where messageId = #{messageId,jdbcType=INTEGER}
     </update>
 
@@ -924,13 +924,13 @@
 
     <insert id="addCachedED2K" parameterType="list">
         Insert Into AnimeED2KCaching (
-            ed2k,
-            file_length,
-            episode_id
+        ed2k,
+        file_length,
+        episode_id
         ) Values (
-            #{0,jdbcType=VARCHAR},
-            #{1,jdbcType=BIGINT},
-            #{2,jdbcType=INTEGER}
+        #{0,jdbcType=VARCHAR},
+        #{1,jdbcType=BIGINT},
+        #{2,jdbcType=INTEGER}
         );
     </insert>
 
@@ -949,13 +949,13 @@
 
     <insert id="addCachedED2KFileFailure" parameterType="list">
         Insert Into AnimeED2KLookupFailureCaching (
-            ed2k,
-            file_length,
-            last_attempt
+        ed2k,
+        file_length,
+        last_attempt
         ) Values (
-            #{0,jdbcType=VARCHAR},
-            #{1,jdbcType=BIGINT},
-            current_timestamp
+        #{0,jdbcType=VARCHAR},
+        #{1,jdbcType=BIGINT},
+        current_timestamp
         );
     </insert>
 
@@ -977,11 +977,11 @@
     
     <insert id="insertAnimePicture" parameterType="list">
         Insert Into AnimePictures (
-            filename,
-            image_data
+        filename,
+        image_data
         ) Values (
-            #{0,jdbcType=VARCHAR},
-            #{1,jdbcType=BLOB}
+        #{0,jdbcType=VARCHAR},
+        #{1,jdbcType=BLOB}
         );
     </insert>
     
