@@ -21,11 +21,8 @@
 package net.landora.xbmc;
 
 import net.landora.video.addons.AbstractAddon;
-import net.landora.video.info.file.FileInfoManager;
-import net.landora.video.info.file.FileManager;
 import net.landora.video.manager.ManagerAddon;
 import net.landora.video.preferences.PreferencesAddon;
-import net.landora.xbmc.nfo.NFOManager;
 
 /**
  *
@@ -36,16 +33,14 @@ public class XBMCAddon extends AbstractAddon {
     public static final String ID = XBMCAddon.class.getName();
 
     public XBMCAddon() {
-        super(ID, "XBMC Support", PreferencesAddon.ID, ManagerAddon.ID);
+        super( ID, "XBMC Support", PreferencesAddon.ID, ManagerAddon.ID );
     }
-
-    private NFOManager nfoManager;
 
     @Override
     public void start() {
-        nfoManager = new NFOManager();
-        FileManager.getInstance().addCheckFileExtension(nfoManager);
-        FileInfoManager.getInstance().addFileInfoChangedListener(nfoManager);
+//        nfoManager = new NFOManager();
+//        FileManager.getInstance().addCheckFileExtension(nfoManager);
+//        FileInfoManager.getInstance().addFileInfoChangedListener(nfoManager);
     }
 
 }

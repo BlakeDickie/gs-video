@@ -1,6 +1,0 @@
-{
-  "id": "Global.String.NotEmpty", 
-  "minLength": 1, 
-  "type": "string", 
-  "default": ""
-}
