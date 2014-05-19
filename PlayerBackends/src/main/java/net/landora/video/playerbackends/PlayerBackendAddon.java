@@ -43,6 +43,7 @@ public class PlayerBackendAddon extends AbstractAddon {
 
         ProgramsAddon.getInstance().registerProgram(vlcProgram);
         ProgramsAddon.getInstance().registerProgram(smplayerProgram);
+        ProgramsAddon.getInstance().registerProgram(mpvProgram);
 
         ModulesManager.getInstance().addModule(VideoFilePlayer.class, new SMPlayerBackend());
         ModulesManager.getInstance().addModule(VideoFilePlayer.class, new VLCBackend());
@@ -55,5 +56,6 @@ public class PlayerBackendAddon extends AbstractAddon {
 
     public static final Program smplayerProgram = new Program("playerbackend.smplayer", "SMPlayer", "smplayer", Collections.singletonList("-h"));
     public static final Program vlcProgram = new Program("playerbackend.vlc", "VLC", "vlc", Collections.singletonList("-h"));
+    public static final Program mpvProgram = new Program("playerbackend.mpv", "MPV", "mpv", Collections.singletonList("-h"));
 
 }

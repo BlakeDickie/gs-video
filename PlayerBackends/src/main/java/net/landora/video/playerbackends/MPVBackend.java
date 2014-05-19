@@ -20,15 +20,15 @@ package net.landora.video.playerbackends;
  *
  * @author bdickie
  */
-public class VLCBackend extends GenericPlayerBackend {
+public class MPVBackend extends GenericPlayerBackend {
 
-    public VLCBackend() {
+    public MPVBackend() {
         super(PlayerBackendAddon.vlcProgram, "--play-and-exit", "--fullscreen");
     }
 
     @Override
     public int getModulePriority() {
-        return MODULE_PRIORITY_FALLBACK + 2;
+        return MODULE_PRIORITY_FALLBACK + 1;
     }
 
 }
